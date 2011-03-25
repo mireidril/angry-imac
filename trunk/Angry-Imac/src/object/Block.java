@@ -34,6 +34,13 @@ public class Block {
 		this.width = width;
 		this.height = height;
 		
+		if(s == Shape.CIRCLE){
+			if(height < width)
+				height = width;
+			else
+				width = height;
+		}
+		
 		switch (m) {
 			case WOOD : 
 				mat = new Wood();
