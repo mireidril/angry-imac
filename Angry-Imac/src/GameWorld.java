@@ -45,7 +45,16 @@ public class GameWorld implements Runnable{
 	                g2.setColor(tmp.getMaterial().getColor());
 	                g2.translate(body.getWorldCenter().x, body.getWorldCenter().y);
 	                g2.rotate(body.getAngle());
-	                g2.fillRect((int)(-tmp.getWidth()/2), (int)(-tmp.getHeight()/2),(int)(tmp.getWidth()), (int)(tmp.getHeight()));
+	                switch(tmp.getShape()){
+		                case CIRCLE :
+		                	g2.fillOval((int)(-tmp.getWidth()/2), (int)(-tmp.getHeight()/2),(int)(tmp.getWidth()), (int)(tmp.getHeight()));
+		                	break;
+		                case BOX :
+		                	g2.fillRect((int)(-tmp.getWidth()/2), (int)(-tmp.getHeight()/2),(int)(tmp.getWidth()), (int)(tmp.getHeight()));
+		                	break;
+		                default :
+		                	break;
+	                }
             	}
             }
 			
@@ -98,7 +107,7 @@ public class GameWorld implements Runnable{
         m_world.createBody(bd).createShape(sd);
 
         addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(30.0f, 150.0f), 0.0f, Mat.METAL));
-        addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(49.0f, 10.0f), 0.0f, Mat.WOOD));
+        addBlock(new Block(Shape.CIRCLE, 50.0f, 50.0f, new Vec2(49.0f, 10.0f), 0.0f, Mat.WOOD));
         addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(110.0f, 10.0f), 0.0f, Mat.WOOD));
         addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(150.0f, 10.0f), (float)Math.PI/4, Mat.ICE));
         addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(180.0f, 10.0f), 0.0f, Mat.ICE));
@@ -112,22 +121,34 @@ public class GameWorld implements Runnable{
 	}
 	
 	public void addBlock(Block block){
-		PolygonDef shapeDef = new PolygonDef();
+		
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set((int)(block.getPosition().x), (int)(block.getPosition().y)); //worldposition
         bodyDef.angle=block.getAngle();
-        shapeDef.density = block.getMaterial().getDensity(); //density defined -> dynamic object
-        shapeDef.friction = block.getMaterial().getFriction();
-        shapeDef.restitution = block.getMaterial().getRestitution(); //bouncy
+        Body physicalBody = m_world.createBody(bodyDef);
         
-        switch(block.getMaterialEnum()){
-        	default :
+        
+        switch(block.getShape()){
+        	case CIRCLE :
+        		CircleDef circleDef = new CircleDef();
+        		circleDef.density = block.getMaterial().getDensity(); //density defined -> dynamic object
+        		circleDef.friction = block.getMaterial().getFriction();
+        		circleDef.restitution = block.getMaterial().getRestitution(); //bouncy
+        		circleDef.radius = block.getWidth()/2.0f;
+        		physicalBody.createShape(circleDef);
+        		break;
+        	case BOX :
+        		PolygonDef shapeDef = new PolygonDef();
+                shapeDef.density = block.getMaterial().getDensity(); //density defined -> dynamic object
+                shapeDef.friction = block.getMaterial().getFriction();
+                shapeDef.restitution = block.getMaterial().getRestitution(); //bouncy
         		shapeDef.setAsBox(block.getWidth()/2.0f, block.getHeight()/2.0f);
+        		physicalBody.createShape(shapeDef);
+        		break;
+        	default :
         		break;
         }
-        Body physicalBody = m_world.createBody(bodyDef);
-
-        physicalBody.createShape(shapeDef);
+        
         physicalBody.setMassFromShapes();
         physicalBody.setBullet(false);
         physicalBody.setUserData(block);
