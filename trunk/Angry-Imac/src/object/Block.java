@@ -1,4 +1,6 @@
 package object;
+import java.util.List;
+
 import object.materials.*;
 
 import org.jbox2d.common.Vec2;
@@ -12,6 +14,7 @@ public class Block {
 	private float height;
 	private float width;
 	private Mat enumMat;
+	private List<Vec2> vertices;
 	
 /**
 	 * 	Constructeur d'un Block. 
@@ -33,14 +36,15 @@ public class Block {
 		enumMat = m;
 		this.width = width;
 		this.height = height;
+		this.vertices = null;
 		
-		if(s == Shape.CIRCLE){
+		if(s == Shape.CIRCLE || s == Shape.TRIANGLE){
 			if(height < width)
 				height = width;
 			else
 				width = height;
 		}
-		
+
 		switch (m) {
 			case WOOD : 
 				mat = new Wood();
@@ -90,6 +94,14 @@ public class Block {
 
 	public float getWidth() {
 		return width;
+	}
+	
+	public void setVertices(List<Vec2> vert){
+		vertices = vert;
+	}
+	
+	public List<Vec2> getVertices(){
+		return vertices;
 	}
 
 }
