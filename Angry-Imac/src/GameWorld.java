@@ -1,8 +1,10 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Polygon;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
+import java.util.List;
 import java.lang.Thread;
 
 import javax.swing.JPanel;
@@ -46,6 +48,14 @@ public class GameWorld implements Runnable{
 	                g2.translate(body.getWorldCenter().x, body.getWorldCenter().y);
 	                g2.rotate(body.getAngle());
 	                switch(tmp.getShape()){
+		                case RAMP :
+		                case TRIANGLE :
+		                	Polygon p = new Polygon();
+		                	List<Vec2> list = tmp.getVertices();
+		                	for(int id = 0; id < 3; id++)
+		                		p.addPoint((int)(list.get(id).x),(int)(list.get(id).y+0.2*tmp.getWidth()));
+		                	g2.fillPolygon(p);
+		                	break;
 		                case CIRCLE :
 		                	g2.fillOval((int)(-tmp.getWidth()/2), (int)(-tmp.getHeight()/2),(int)(tmp.getWidth()), (int)(tmp.getHeight()));
 		                	break;
@@ -106,15 +116,15 @@ public class GameWorld implements Runnable{
         sd.setAsBox(1024, 1);
         m_world.createBody(bd).createShape(sd);
 
-        addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(30.0f, 150.0f), 0.0f, Mat.METAL));
+        addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(30.0f, 150.0f), -0.8f, Mat.METAL));
         addBlock(new Block(Shape.CIRCLE, 50.0f, 50.0f, new Vec2(49.0f, 10.0f), 0.0f, Mat.WOOD));
         addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(110.0f, 10.0f), 0.0f, Mat.WOOD));
         addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(150.0f, 10.0f), (float)Math.PI/4, Mat.ICE));
-        addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(180.0f, 10.0f), 0.0f, Mat.ICE));
+        addBlock(new Block(Shape.TRIANGLE, 60.0f, 60.0f, new Vec2(180.0f, 10.0f), 1.40f, Mat.ICE));
 		addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(250.0f, 10.0f), 0.0f, Mat.ROCK));
-		addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(220.0f, 10.0f), 0.0f, Mat.METAL));
+		addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(223.0f, 10.0f), 0.0f, Mat.METAL));
 		addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(220.0f, 150.0f), 0.0f, Mat.WOOD));
-		
+		//addBlock(new Block(Shape.RAMP, 20.0f, 50.0f, new Vec2(260.0f, 150.0f), 0.0f, Mat.WOOD));
 		
 		step_count = 0;
 		step_time = System.currentTimeMillis();
@@ -129,6 +139,23 @@ public class GameWorld implements Runnable{
         
         
         switch(block.getShape()){
+	        case RAMP :
+	        	System.out.println("RAMPE : PAS ENCORE FAIT");
+	        	System.exit(0);
+	        	break;
+        	case TRIANGLE :
+        		PolygonDef triangleDef = new PolygonDef();
+        		triangleDef.density = block.getMaterial().getDensity(); //density defined -> dynamic object
+        		triangleDef.friction = block.getMaterial().getFriction();
+        		triangleDef.restitution = block.getMaterial().getRestitution(); //bouncy
+        		//triangleDef.setAsBox(block.getWidth()/2.0f, block.getHeight()/2.0f);
+        		triangleDef.clearVertices();
+        		triangleDef.addVertex(new Vec2(-block.getWidth()/2.0f,-block.getHeight()/2.0f));
+        		triangleDef.addVertex(new Vec2(block.getWidth()/2.0f,-block.getHeight()/2.0f));
+        		triangleDef.addVertex(new Vec2(0.0f,(float)(block.getHeight()*Math.sqrt(3.0)/2.0f-block.getHeight()/2.0f)));
+        		block.setVertices(triangleDef.getVertexList());
+        		physicalBody.createShape(triangleDef);
+        		break;
         	case CIRCLE :
         		CircleDef circleDef = new CircleDef();
         		circleDef.density = block.getMaterial().getDensity(); //density defined -> dynamic object
@@ -154,23 +181,6 @@ public class GameWorld implements Runnable{
         physicalBody.setUserData(block);
         physicalBodies.add(physicalBody);
 	}
-
-	public void addBox(int x, int y) {
-        PolygonDef shapeDef = new PolygonDef();
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set(x, y); //worldposition
-        bodyDef.angle=(float)(Math.PI*Math.random());
-        shapeDef.density = 25.0f; //density defined -> dynamic object
-        shapeDef.friction = 0.35f;
-        shapeDef.restitution = 0.3f; //bouncy
-        shapeDef.setAsBox(10, 10);
-        Body physicalBody = m_world.createBody(bodyDef);
-
-        physicalBody.createShape(shapeDef);
-        physicalBody.setMassFromShapes();
-        physicalBody.setBullet(false);
-        physicalBodies.add(physicalBody);
-    }
 
 	@Override
 	public void run() {
