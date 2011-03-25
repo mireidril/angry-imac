@@ -11,6 +11,9 @@ import org.jbox2d.dynamics.*;
 import org.jbox2d.collision.*;
 import org.jbox2d.common.*;
 
+import object.*;
+import object.Shape;
+
 
 public class GameWorld implements Runnable{
 	private class GameGraphic extends JPanel {
@@ -37,10 +40,12 @@ public class GameWorld implements Runnable{
             	if(body != null)
             	{
 	                resetTrans(g2);
-	                g2.setColor(new Color(50, 200, 50));
+	                Block tmp = (Block) body.getUserData();
+	                
+	                g2.setColor(tmp.getMaterial().getColor());
 	                g2.translate(body.getWorldCenter().x, body.getWorldCenter().y);
 	                g2.rotate(body.getAngle());
-	                g2.fillRect(-10, -10, 20, 20);
+	                g2.fillRect((int)(-tmp.getWidth()/2), (int)(-tmp.getHeight()/2),(int)(tmp.getWidth()), (int)(tmp.getHeight()));
             	}
             }
 			
@@ -73,10 +78,8 @@ public class GameWorld implements Runnable{
 		sd.setAsBox(1024.0f, 40.0f);
 		BodyDef bd = new BodyDef();
 		bd.position.set(0.0f, 560.0f);
-		Vec2 size = new Vec2(1024, 40);
 		ground = m_world.createBody(bd);
 		ground.createShape(sd);
-		ground.setUserData(size);
 		
 		//definition des murs
         // Left
@@ -93,20 +96,42 @@ public class GameWorld implements Runnable{
         bd.position.set(0, 0);
         sd.setAsBox(1024, 1);
         m_world.createBody(bd).createShape(sd);
-		
-		addBox(50,10);
-		addBox(30,10);
-		addBox(100,10);
-		addBox(70,10);
-		addBox(130,10);
-		addBox(543,10);
-		addBox(256,10);
-		addBox(250,10);
-		addBox(250,50);
+
+        addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(30.0f, 150.0f), 0.0f, Mat.METAL));
+        addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(49.0f, 10.0f), 0.0f, Mat.WOOD));
+        addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(110.0f, 10.0f), 0.0f, Mat.WOOD));
+        addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(150.0f, 10.0f), (float)Math.PI/4, Mat.ICE));
+        addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(180.0f, 10.0f), 0.0f, Mat.ICE));
+		addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(250.0f, 10.0f), 0.0f, Mat.ROCK));
+		addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(220.0f, 10.0f), 0.0f, Mat.METAL));
+		addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(220.0f, 150.0f), 0.0f, Mat.WOOD));
 		
 		
 		step_count = 0;
 		step_time = System.currentTimeMillis();
+	}
+	
+	public void addBlock(Block block){
+		PolygonDef shapeDef = new PolygonDef();
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.position.set((int)(block.getPosition().x), (int)(block.getPosition().y)); //worldposition
+        bodyDef.angle=block.getAngle();
+        shapeDef.density = block.getMaterial().getDensity(); //density defined -> dynamic object
+        shapeDef.friction = block.getMaterial().getFriction();
+        shapeDef.restitution = block.getMaterial().getRestitution(); //bouncy
+        
+        switch(block.getMaterialEnum()){
+        	default :
+        		shapeDef.setAsBox(block.getWidth()/2.0f, block.getHeight()/2.0f);
+        		break;
+        }
+        Body physicalBody = m_world.createBody(bodyDef);
+
+        physicalBody.createShape(shapeDef);
+        physicalBody.setMassFromShapes();
+        physicalBody.setBullet(false);
+        physicalBody.setUserData(block);
+        physicalBodies.add(physicalBody);
 	}
 
 	public void addBox(int x, int y) {
@@ -156,7 +181,7 @@ public class GameWorld implements Runnable{
         }
         if(nb == i)
         {
-        	System.out.println("Stable héhé");
+        	System.out.println("Stable hehe");
         	alive = false;
         }
 	}

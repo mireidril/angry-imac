@@ -31,5 +31,9 @@ public abstract class Material {
 	public float getWeightFactor() {
 		return weightFactor;
 	}
+	
+	public Color getColor(){
+		return color;
+	}
 
 }

@@ -4,15 +4,14 @@ import object.materials.*;
 import org.jbox2d.common.Vec2;
 
 public class Block {
-	public static enum shape{TRIANGLE, CIRCLE, BOX , RAMP}; 
-	public static enum material{WOOD, METAL, ICE , ROCK}; 
-	
-	private shape sh;
+
+	private Shape sh;
 	private Vec2 position;
 	private float angle;
 	private Material mat;
-	private int height;
-	private int width;
+	private float height;
+	private float width;
+	private Mat enumMat;
 	
 /**
 	 * 	Constructeur d'un Block. 
@@ -27,10 +26,13 @@ public class Block {
 	@param  m	Le materiau du bloc (proprietes physique).
 	 *                   
 */
-	public Block(shape s, int width, int height, Vec2 pos, float angle, material m) {
+	public Block(Shape s, float width, float height, Vec2 pos, float angle, Mat m) {
 		sh = s;
 		position = pos;
 		this.angle = angle;
+		enumMat = m;
+		this.width = width;
+		this.height = height;
 		
 		switch (m) {
 			case WOOD : 
@@ -55,7 +57,7 @@ public class Block {
 		}
 	}
 	
-	public shape getShape(){
+	public Shape getShape(){
 		return sh;
 	}
 	
@@ -70,12 +72,16 @@ public class Block {
 	public Material getMaterial(){
 		return mat;
 	}
+	
+	public Mat getMaterialEnum(){
+		return enumMat;
+	}
 
-	public int getHeight() {
+	public float getHeight() {
 		return height;
 	}
 
-	public int getWidth() {
+	public float getWidth() {
 		return width;
 	}
 
