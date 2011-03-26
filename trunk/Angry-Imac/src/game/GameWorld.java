@@ -46,7 +46,6 @@ public class GameWorld implements Runnable{
             	if(body != null){
 	                resetTrans(g2);
 	                Block tmp = (Block) body.getUserData(); // recuperation du block lie a l'objet pour avoir ses caracteristiques
-	                	System.out.println(); 
 		                g2.setColor(tmp.getMaterial().getColor());
 		                g2.translate(body.getWorldCenter().x, body.getWorldCenter().y);
 		                g2.rotate(body.getAngle());
@@ -110,6 +109,9 @@ public class GameWorld implements Runnable{
 		boolean doSleep = true;
 		m_world = new World(m_worldAABB, gravity, doSleep);
 		m_world.setWarmStarting(true);
+		
+		CollisionsListener listener = new CollisionsListener();
+		m_world.setContactListener(listener);
 	}
 	
 	private void defineWalls(){
