@@ -18,9 +18,11 @@ import object.Shape;
 
 
 public class GameWorld implements Runnable{
-	private class GameGraphic extends JPanel {
+	
+	
+	private class GameGraphic extends JPanel{
 		
-        public void resetTrans(Graphics2D g2) {
+        public void resetTrans(Graphics2D g2){
             AffineTransform at = new AffineTransform();
             at.setToIdentity();
             g2.setTransform(at);
@@ -29,26 +31,26 @@ public class GameWorld implements Runnable{
 		public void paintComponent(Graphics g){
 			super.paintComponent(g);
 			
-			//affichage du ciel
+			//********************************* affichage du ciel *********************************
 			g.setColor(new Color(150, 150, 255));
 			g.fillRect(0, 0, 1024, 600);
 			
-			//affichage rectangle du sol
+			//********************************* affichage rectangle du sol *************************
 			g.setColor(new Color(255, 150, 0));
 			g.fillRect(0, 520, 1024, 80);
 
+			//********************************* affichage des objets mouvants **********************
 			Graphics2D g2 = (Graphics2D) g;
-            for (Body body : physicalBodies) {
-            	if(body != null)
-            	{
+            for (Body body : physicalBodies){
+            	if(body != null){
 	                resetTrans(g2);
-	                Block tmp = (Block) body.getUserData();
-	                
+	                Block tmp = (Block) body.getUserData(); // recuperation du block lie a l'objet pour avoir ses caracteristiques
 	                g2.setColor(tmp.getMaterial().getColor());
 	                g2.translate(body.getWorldCenter().x, body.getWorldCenter().y);
 	                g2.rotate(body.getAngle());
+	                
 	                switch(tmp.getShape()){
-		                case RAMP :
+		                case RAMP : // meme tracet que pour triangle
 		                case TRIANGLE :
 		                	Polygon p = new Polygon();
 		                	List<Vec2> list = tmp.getVertices();
@@ -67,7 +69,6 @@ public class GameWorld implements Runnable{
 	                }
             	}
             }
-			
 	  } 
 	}
 	
@@ -83,7 +84,8 @@ public class GameWorld implements Runnable{
 	
 	public GameWorld(){
 		alive = true;
-		//creation du monde
+		
+		//********************************* creation du monde *********************************
         AABB m_worldAABB = new AABB();
 		m_worldAABB.lowerBound = new Vec2(0.0f, 0.0f);
 		m_worldAABB.upperBound = new Vec2(1000.0f, 1000.0f);
@@ -92,7 +94,7 @@ public class GameWorld implements Runnable{
 		m_world = new World(m_worldAABB, gravity, doSleep);
 		m_world.setWarmStarting(true);
 		
-        //definition du sol
+        //********************************* definition du sol *********************************
 		PolygonDef sd = new PolygonDef();
 		sd.setAsBox(1024.0f, 40.0f);
 		BodyDef bd = new BodyDef();
@@ -100,7 +102,7 @@ public class GameWorld implements Runnable{
 		ground = m_world.createBody(bd);
 		ground.createShape(sd);
 		
-		//definition des murs
+		//********************************* definition des murs *********************************
         // Left
         bd.position.set(1, 600);
         sd.friction = 1.0f;
@@ -115,7 +117,9 @@ public class GameWorld implements Runnable{
         bd.position.set(0, 0);
         sd.setAsBox(1024, 1);
         m_world.createBody(bd).createShape(sd);
-
+        
+        
+      //********************************* Creation des objets *********************************
         addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(30.0f, 150.0f), -0.8f, Mat.METAL));
         addBlock(new Block(Shape.CIRCLE, 50.0f, 50.0f, new Vec2(49.0f, 10.0f), 0.0f, Mat.WOOD));
         addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(110.0f, 10.0f), 0.0f, Mat.WOOD));
@@ -126,56 +130,17 @@ public class GameWorld implements Runnable{
 		addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(220.0f, 150.0f), 0.0f, Mat.WOOD));
 		//addBlock(new Block(Shape.RAMP, 20.0f, 50.0f, new Vec2(260.0f, 150.0f), 0.0f, Mat.WOOD));
 		
+		//********************************* parametrage pour le framerate *********************
 		step_count = 0;
 		step_time = System.currentTimeMillis();
 	}
 	
 	public void addBlock(Block block){
-		
         BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set((int)(block.getPosition().x), (int)(block.getPosition().y)); //worldposition
+        bodyDef.position.set((int)(block.getPosition().x), (int)(block.getPosition().y));
         bodyDef.angle=block.getAngle();
         Body physicalBody = m_world.createBody(bodyDef);
-        
-        
-        switch(block.getShape()){
-	        case RAMP :
-	        	System.out.println("RAMPE : PAS ENCORE FAIT");
-	        	System.exit(0);
-	        	break;
-        	case TRIANGLE :
-        		PolygonDef triangleDef = new PolygonDef();
-        		triangleDef.density = block.getMaterial().getDensity(); //density defined -> dynamic object
-        		triangleDef.friction = block.getMaterial().getFriction();
-        		triangleDef.restitution = block.getMaterial().getRestitution(); //bouncy
-        		//triangleDef.setAsBox(block.getWidth()/2.0f, block.getHeight()/2.0f);
-        		triangleDef.clearVertices();
-        		triangleDef.addVertex(new Vec2(-block.getWidth()/2.0f,-block.getHeight()/2.0f));
-        		triangleDef.addVertex(new Vec2(block.getWidth()/2.0f,-block.getHeight()/2.0f));
-        		triangleDef.addVertex(new Vec2(0.0f,(float)(block.getHeight()*Math.sqrt(3.0)/2.0f-block.getHeight()/2.0f)));
-        		block.setVertices(triangleDef.getVertexList());
-        		physicalBody.createShape(triangleDef);
-        		break;
-        	case CIRCLE :
-        		CircleDef circleDef = new CircleDef();
-        		circleDef.density = block.getMaterial().getDensity(); //density defined -> dynamic object
-        		circleDef.friction = block.getMaterial().getFriction();
-        		circleDef.restitution = block.getMaterial().getRestitution(); //bouncy
-        		circleDef.radius = block.getWidth()/2.0f;
-        		physicalBody.createShape(circleDef);
-        		break;
-        	case BOX :
-        		PolygonDef shapeDef = new PolygonDef();
-                shapeDef.density = block.getMaterial().getDensity(); //density defined -> dynamic object
-                shapeDef.friction = block.getMaterial().getFriction();
-                shapeDef.restitution = block.getMaterial().getRestitution(); //bouncy
-        		shapeDef.setAsBox(block.getWidth()/2.0f, block.getHeight()/2.0f);
-        		physicalBody.createShape(shapeDef);
-        		break;
-        	default :
-        		break;
-        }
-        
+        physicalBody.createShape(block.getShapeDef());
         physicalBody.setMassFromShapes();
         physicalBody.setBullet(false);
         physicalBody.setUserData(block);
@@ -187,7 +152,6 @@ public class GameWorld implements Runnable{
 		while(alive){
 			long tmpTime = System.currentTimeMillis();
 			if(tmpTime-step_time > 6){
-				//System.out.println("Step ! number : "+step_count);
 				step_count++;
 				step_time = System.currentTimeMillis();
 				
@@ -196,7 +160,6 @@ public class GameWorld implements Runnable{
 				
 				detectStable();
 			}
-			//Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
 		}
 	}
 	
@@ -204,17 +167,15 @@ public class GameWorld implements Runnable{
 		int nb = physicalBodies.size();
 		int i = 0;
         for (Body body : physicalBodies) {
-        	if(body != null)
-        	{
+        	if(body != null){
         		if(body.isSleeping())
         			i++;
         	}
         }
-        if(nb == i)
-        {
+        if(nb == i){
         	System.out.println("Stable hehe");
         	alive = false;
         }
 	}
-
+	
 }
