@@ -1,3 +1,4 @@
+package game;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -15,6 +16,7 @@ import org.jbox2d.common.*;
 
 import object.*;
 import object.Shape;
+import parser.ParserXML;
 
 
 public class GameWorld implements Runnable{
@@ -77,6 +79,7 @@ public class GameWorld implements Runnable{
 	public  ArrayList<Body> physicalBodies = new ArrayList<Body>();
 	public GameGraphic gg = new GameGraphic();
 	private boolean alive;
+	private ParserXML parser;
 	
 	private int step_count;
 	private long step_time;
@@ -86,15 +89,31 @@ public class GameWorld implements Runnable{
 		alive = true;
 		
 		//********************************* creation du monde *********************************
-        AABB m_worldAABB = new AABB();
+		createWorld();
+		defineWalls();
+
+		//********************************* Creation des objets *******************************
+        parser = new ParserXML(this,"map1.xml",false);
+        parser.parseAllAndCreatorLevel();
+		
+		//********************************* parametrage pour le framerate *********************
+		step_count = 0;
+		step_time = System.currentTimeMillis();
+	}
+	
+	private void createWorld(){
+		// creation du monde physique
+		AABB m_worldAABB = new AABB();
 		m_worldAABB.lowerBound = new Vec2(0.0f, 0.0f);
 		m_worldAABB.upperBound = new Vec2(1000.0f, 1000.0f);
 		Vec2 gravity = new Vec2(0.0f, 10.0f);
 		boolean doSleep = true;
 		m_world = new World(m_worldAABB, gravity, doSleep);
 		m_world.setWarmStarting(true);
-		
-        //********************************* definition du sol *********************************
+	}
+	
+	private void defineWalls(){
+		// Ground
 		PolygonDef sd = new PolygonDef();
 		sd.setAsBox(1024.0f, 40.0f);
 		BodyDef bd = new BodyDef();
@@ -102,7 +121,6 @@ public class GameWorld implements Runnable{
 		ground = m_world.createBody(bd);
 		ground.createShape(sd);
 		
-		//********************************* definition des murs *********************************
         // Left
         bd.position.set(1, 600);
         sd.friction = 1.0f;
@@ -117,22 +135,6 @@ public class GameWorld implements Runnable{
         bd.position.set(0, 0);
         sd.setAsBox(1024, 1);
         m_world.createBody(bd).createShape(sd);
-        
-        
-      //********************************* Creation des objets *********************************
-        addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(30.0f, 150.0f), -0.8f, Mat.METAL));
-        addBlock(new Block(Shape.CIRCLE, 50.0f, 50.0f, new Vec2(49.0f, 10.0f), 0.0f, Mat.WOOD));
-        addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(110.0f, 10.0f), 0.0f, Mat.WOOD));
-        addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(150.0f, 10.0f), (float)Math.PI/4, Mat.ICE));
-        addBlock(new Block(Shape.TRIANGLE, 60.0f, 60.0f, new Vec2(180.0f, 10.0f), 1.40f, Mat.ICE));
-		addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(250.0f, 10.0f), 0.0f, Mat.ROCK));
-		addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(223.0f, 10.0f), 0.0f, Mat.METAL));
-		addBlock(new Block(Shape.BOX, 20.0f, 50.0f, new Vec2(220.0f, 150.0f), 0.0f, Mat.WOOD));
-		//addBlock(new Block(Shape.RAMP, 20.0f, 50.0f, new Vec2(260.0f, 150.0f), 0.0f, Mat.WOOD));
-		
-		//********************************* parametrage pour le framerate *********************
-		step_count = 0;
-		step_time = System.currentTimeMillis();
 	}
 	
 	public void addBlock(Block block){

@@ -1,3 +1,4 @@
+package game;
 
 public class AngrImac {
 	public static void main(String[] args) {
