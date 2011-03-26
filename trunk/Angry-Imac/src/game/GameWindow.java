@@ -1,6 +1,5 @@
 package game;
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.FlowLayout;
 
 import java.awt.event.ActionEvent;
@@ -13,7 +12,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 
-
+@SuppressWarnings("serial")
 public class GameWindow extends JFrame implements ActionListener{
 	private JButton quitButton;
 	private JButton pauseButton;

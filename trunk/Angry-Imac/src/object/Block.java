@@ -1,6 +1,7 @@
 package object;
 import java.util.List;
 
+
 import object.materials.*;
 
 import org.jbox2d.collision.CircleDef;
@@ -19,6 +20,7 @@ public class Block {
 	private Mat enumMat;
 	private List<Vec2> vertices;
 	private ShapeDef shapeDef;
+	
 	
 /**
 	 * 	Constructeur d'un Block. 
@@ -41,7 +43,7 @@ public class Block {
 		this.width = width;
 		this.height = height;
 		this.vertices = null;
-		
+
 		//********************************* verif des longueurs *********************************
 		if(s == Shape.CIRCLE || s == Shape.TRIANGLE){
 			if(height < width)

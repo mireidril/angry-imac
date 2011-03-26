@@ -6,7 +6,7 @@ import java.awt.Polygon;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
-import java.lang.Thread;
+//import java.lang.Thread;
 
 import javax.swing.JPanel;
 
@@ -15,13 +15,12 @@ import org.jbox2d.collision.*;
 import org.jbox2d.common.*;
 
 import object.*;
-import object.Shape;
 import parser.ParserXML;
 
 
 public class GameWorld implements Runnable{
 	
-	
+	@SuppressWarnings("serial")
 	private class GameGraphic extends JPanel{
 		
         public void resetTrans(Graphics2D g2){
@@ -47,28 +46,29 @@ public class GameWorld implements Runnable{
             	if(body != null){
 	                resetTrans(g2);
 	                Block tmp = (Block) body.getUserData(); // recuperation du block lie a l'objet pour avoir ses caracteristiques
-	                g2.setColor(tmp.getMaterial().getColor());
-	                g2.translate(body.getWorldCenter().x, body.getWorldCenter().y);
-	                g2.rotate(body.getAngle());
-	                
-	                switch(tmp.getShape()){
-		                case RAMP : // meme tracet que pour triangle
-		                case TRIANGLE :
-		                	Polygon p = new Polygon();
-		                	List<Vec2> list = tmp.getVertices();
-		                	for(int id = 0; id < 3; id++)
-		                		p.addPoint((int)(list.get(id).x),(int)(list.get(id).y+0.2*tmp.getWidth()));
-		                	g2.fillPolygon(p);
-		                	break;
-		                case CIRCLE :
-		                	g2.fillOval((int)(-tmp.getWidth()/2), (int)(-tmp.getHeight()/2),(int)(tmp.getWidth()), (int)(tmp.getHeight()));
-		                	break;
-		                case BOX :
-		                	g2.fillRect((int)(-tmp.getWidth()/2), (int)(-tmp.getHeight()/2),(int)(tmp.getWidth()), (int)(tmp.getHeight()));
-		                	break;
-		                default :
-		                	break;
-	                }
+	                	System.out.println(); 
+		                g2.setColor(tmp.getMaterial().getColor());
+		                g2.translate(body.getWorldCenter().x, body.getWorldCenter().y);
+		                g2.rotate(body.getAngle());
+		                
+		                switch(tmp.getShape()){
+			                case RAMP : // meme tracet que pour triangle
+			                case TRIANGLE :
+			                	Polygon p = new Polygon();
+			                	List<Vec2> list = tmp.getVertices();
+			                	for(int id = 0; id < 3; id++)
+			                		p.addPoint((int)(list.get(id).x),(int)(list.get(id).y+0.2*tmp.getWidth()));
+			                	g2.fillPolygon(p);
+			                	break;
+			                case CIRCLE :
+			                	g2.fillOval((int)(-tmp.getWidth()/2), (int)(-tmp.getHeight()/2),(int)(tmp.getWidth()), (int)(tmp.getHeight()));
+			                	break;
+			                case BOX :
+			                	g2.fillRect((int)(-tmp.getWidth()/2), (int)(-tmp.getHeight()/2),(int)(tmp.getWidth()), (int)(tmp.getHeight()));
+			                	break;
+			                default :
+			                	break;
+		                }
             	}
             }
 	  } 

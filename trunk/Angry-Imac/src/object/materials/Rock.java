@@ -9,7 +9,7 @@ public class Rock extends Material{
 		restitution = 0.01f;
 		weightFactor = 0;
 		breakable = false;
-		breakableForce = 0;
+		breakableForce = 0.5f;
 		color = new Color(82, 82, 82);
 	}
 }
