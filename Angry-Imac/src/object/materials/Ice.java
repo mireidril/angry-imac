@@ -9,7 +9,7 @@ public class Ice  extends Material{
 		restitution = 0.01f;
 		weightFactor = 0;
 		breakable = true;
-		breakableForce = 0;
+		breakableForce = 0.5f;
 		color = new Color(126, 186, 190);
 	}
 }

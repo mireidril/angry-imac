@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 
+@SuppressWarnings("serial")
 public class AProposAction extends AbstractAction {
 	private GameWindow fenetre;
 	

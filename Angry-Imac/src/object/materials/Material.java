@@ -35,5 +35,9 @@ public abstract class Material {
 	public Color getColor(){
 		return color;
 	}
+	
+	public float getBreakableForce(){
+		return breakableForce;
+	}
 
 }
