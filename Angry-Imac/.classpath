@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="lib" path="/Users/timotheeroldao/Documents/Cours/IMAC/IMAC2/Java/MondeSimple/library/jbox2d-2.0.1-library-only.jar"/>
+	<classpathentry kind="lib" path="D:/JavaWorkspaceEclipse/jbox2d-2.0.1-full.jar"/>
+	<classpathentry kind="lib" path="D:/JavaWorkspaceEclipse/Angry-Imac/library/jdom.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
