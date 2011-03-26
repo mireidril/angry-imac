@@ -9,7 +9,7 @@ public class Metal  extends Material{
 		restitution = 0.05f;
 		weightFactor = 0;
 		breakable = false;
-		breakableForce = 0.5f;
+		breakableForce = 50.0f;
 		color = new Color(161, 161, 161);
 	}
 }
