@@ -2,10 +2,15 @@ package game;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.MouseInfo;
 import java.awt.Polygon;
+import java.awt.dnd.MouseDragGestureRecognizer;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.Point;
 //import java.lang.Thread;
 
 import javax.swing.JPanel;
@@ -70,6 +75,8 @@ public class GameWorld implements Runnable{
 		                }
             	}
             }
+            
+         
 	  } 
 	}
 	
@@ -98,6 +105,72 @@ public class GameWorld implements Runnable{
 		//********************************* parametrage pour le framerate *********************
 		step_count = 0;
 		step_time = System.currentTimeMillis();
+		
+		gg.addMouseListener(new MouseListener(){
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				 //Force de l'impulsion (en newton)
+	    		Vec2 force = new Vec2(1000000,-1000000);
+	    		//Position de l'impulsion : soit un point fixe soit la pos de la souris
+	    		//Vec2 point = new Vec2(200000,-150000);
+	    		
+	    		/***
+	    		
+	    		pour la puissance en newton : calculer la distance entre physicalBodies.x/sourisPos.x 
+	    		
+	    		***/
+	    		Point sourisPos = MouseInfo.getPointerInfo().getLocation();
+	    		Vec2 mouse = new Vec2(physicalBodies.get(0).getPosition().x,physicalBodies.get(0).getPosition().y);//sourisPos.x, sourisPos.y);
+	    		System.out.println(mouse);
+	    		//Impulsion sur l'objet 0 en fonction de la pos de la souris
+
+	    		physicalBodies.get(0).applyImpulse(force, mouse);
+	    		
+	    		/* Système de drag & drop a revoir
+	    		MouseListener listMouse;
+	    		MouseEvent evt;
+	    		addMouseListener(listMouse);
+	    		MouseDragGestureRecognizer.mouseClicked(evt);*/
+	    		
+	    		
+	    		/***************** Infos trouvées sur forums******************
+	    		 * 
+	    		 * Pour les projectiles : 
+	    		 * 1.Calculer l'angle, en fonction du point de clik. (utiliser Math.atan2(dy, dx)pour trouver l'angle ?)
+	    		 * 2.Calculer la distance entre le curseur et le lance pierre : vélocité "vel", en fonction de la distance.
+	    		 * 3.Calculer la force (vel*cos(angle),vel *sin(angle))
+	    		 * 4.utiliser ApplyImpulse(vel,body->GetPosition())
+	    		 * 
+	    		****************************************************************/
+	    		
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 	
 	private void createWorld(){
@@ -137,6 +210,7 @@ public class GameWorld implements Runnable{
         bd.position.set(0, 0);
         sd.setAsBox(1024, 1);
         m_world.createBody(bd).createShape(sd);
+               
 	}
 	
 	public void addBlock(Block block){
@@ -163,6 +237,7 @@ public class GameWorld implements Runnable{
 				gg.repaint();
 				
 				detectStable();
+			
 			}
 		}
 	}
