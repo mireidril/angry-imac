@@ -12,15 +12,21 @@ public class CollisionsListener implements ContactListener {
 		Block block2 = (Block) arg0.shape2.getBody().getUserData();
 		
 		if(block1 != null){
-			if(block1.getMaterial().getBreakableForce() <= arg0.velocity.normalize())
-				//arg0.shape1.m_body.m_world.destroyBody(arg0.shape1.m_body);
-				System.out.println("destruction objet 1 => "+arg0.velocity.normalize());
+			if(block1.getMaterial().getBreakableForce() <= arg0.velocity.length()){
+				arg0.shape1.m_body.m_world.destroyBody(arg0.shape1.m_body);
+				arg0.shape1.destructor();
+				//System.out.println("destruction objet 1 => "+arg0.velocity.length());
+				//System.out.println("BOOMM !!");
+			}
 		}
 		
 		if(block2 != null){
-			if(block2.getMaterial().getBreakableForce() <= arg0.velocity.normalize())
-				//arg0.shape2.m_body.m_world.destroyBody(arg0.shape2.m_body);
-				System.out.println("destruction objet 2 => "+arg0.velocity.normalize());
+			if(block2.getMaterial().getBreakableForce() <= arg0.velocity.length()){
+				arg0.shape2.m_body.m_world.destroyBody(arg0.shape1.m_body);
+				arg0.shape2.destructor();
+				//System.out.println("destruction objet 2 => "+arg0.velocity.length());
+				//System.out.println("BOOMM !!");
+			}
 		}
 	}
 
