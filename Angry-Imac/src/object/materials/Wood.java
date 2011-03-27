@@ -9,7 +9,7 @@ public class Wood extends Material{
 		restitution = 0.3f;
 		weightFactor = 0;
 		breakable = true;
-		breakableForce = 0.5f;
+		breakableForce = 100.0f;
 		color = new Color(165, 89, 4);
 	}
 }
