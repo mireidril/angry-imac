@@ -5,6 +5,10 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -12,8 +16,11 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 
+import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.Body;
+
 @SuppressWarnings("serial")
-public class GameWindow extends JFrame implements ActionListener{
+public class GameWindow extends JFrame implements ActionListener, MouseListener{
 	private JButton quitButton;
 	private JButton pauseButton;
 	private JMenuBar menuBar;
@@ -22,10 +29,14 @@ public class GameWindow extends JFrame implements ActionListener{
 	private Thread gw;
 	private boolean alive = true;
 	
+	private Vec2 posBaseSouris;
+	private final float tensionElastique = 10;
+	
 	public GameWindow(){
 		super();
 		g = new GameWorld();
 		gw = new Thread(g);
+		posBaseSouris = new Vec2();
 		buildWindow();
 		gw.start();
 	}
@@ -47,6 +58,8 @@ public class GameWindow extends JFrame implements ActionListener{
 		
 		//creation de la zone de jeu
 		contenu.add(g.gg,"Center");
+		
+		this.addMouseListener(this);
 		
 		setContentPane(contenu);
 
@@ -107,6 +120,33 @@ public class GameWindow extends JFrame implements ActionListener{
 			System.out.println("Pause");	
 		}
 	}
-	
 
+	@Override
+	public void mouseClicked(MouseEvent evt) {
+		//L'action se fait une fois qu'on a relaché le doigt sur la souris
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent evt) {
+		//System.out.println("Enter !");
+	}
+
+	@Override
+	public void mouseExited(MouseEvent evt) {
+		//System.out.println("Exit ! ");
+	}
+
+	@Override
+	public void mousePressed(MouseEvent evt) {
+		//System.out.println("Pressed !");
+		posBaseSouris = new Vec2(evt.getX(), evt.getY());
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent evt) {
+		//System.out.println("released !");
+		Body b = g.physicalBodies.get(0);
+		Vec2 vectForce = new Vec2((posBaseSouris.x - evt.getX()) *b.getMass()*tensionElastique, (posBaseSouris.y - evt.getY())*b.getMass()*tensionElastique);
+		b.applyForce(vectForce, b.getPosition());
+	}
 }
