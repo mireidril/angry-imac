@@ -23,6 +23,7 @@ import org.jbox2d.dynamics.Body;
 public class GameWindow extends JFrame implements ActionListener, MouseListener{
 	private JButton quitButton;
 	private JButton pauseButton;
+	private JButton resetButton;
 	private JMenuBar menuBar;
 	private JPanel contenu;
 	private GameWorld g; 
@@ -45,7 +46,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener{
 	public void buildWindow(){
 		setTitle("AngrIMAC");
 		setSize(1024,700);
-		setLocationRelativeTo(null); //On centre la fen�tre sur l'Žcran
+		setLocationRelativeTo(null); //On centre la fenetre sur l'ecran
 		setResizable(false); //On interdit pour le moment le redimensionnement
 		contenu = new JPanel();
 		contenu.setLayout(new BorderLayout());
@@ -95,6 +96,10 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener{
 		pauseButton.addActionListener(this);
 		buttonPanel.add(pauseButton);
 		
+		resetButton = new JButton("Reset");
+		resetButton.addActionListener(this);
+		buttonPanel.add(resetButton);
+		
 		return buttonPanel;
 	}
 	
@@ -118,6 +123,12 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener{
 				alive = true;
 			}
 			System.out.println("Pause");	
+		}
+		else if(source == resetButton){
+			/*gw.stop();
+			g = new GameWorld();
+			gw = new Thread(g);
+			gw.start();*/
 		}
 	}
 
