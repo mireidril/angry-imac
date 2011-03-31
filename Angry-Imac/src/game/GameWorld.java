@@ -2,17 +2,26 @@ package game;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.MouseInfo;
 import java.awt.Polygon;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.TexturePaint;
 import java.awt.dnd.MouseDragGestureRecognizer;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.Point;
+import java.io.File;
+import java.io.IOException;
 //import java.lang.Thread;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import org.jbox2d.dynamics.*;
@@ -36,17 +45,23 @@ public class GameWorld implements Runnable{
         
 		public void paintComponent(Graphics g){
 			super.paintComponent(g);
+			Graphics2D g2 = (Graphics2D) g;
 			
 			//********************************* affichage du ciel *********************************
-			g.setColor(new Color(150, 150, 255));
-			g.fillRect(0, 0, 1024, 600);
+			g2.setPaint(textSky);
+			//g2.setColor(new Color(150, 150, 255));
+			g2.fillRect(0, 0, 1024, 600);
 			
 			//********************************* affichage rectangle du sol *************************
+			//chargemen de la texture
 			g.setColor(new Color(255, 150, 0));
 			g.fillRect(0, 520, 1024, 80);
+			
 
 			//********************************* affichage des objets mouvants **********************
-			Graphics2D g2 = (Graphics2D) g;
+			//Graphics2D g2 = (Graphics2D) g;
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+            
             for (Body body : physicalBodies){
             	if(body != null){
 	                resetTrans(g2);
@@ -54,6 +69,10 @@ public class GameWorld implements Runnable{
 		                g2.setColor(tmp.getMaterial().getColor());
 		                g2.translate(body.getWorldCenter().x, body.getWorldCenter().y);
 		                g2.rotate(body.getAngle());
+		               
+		               
+		                //chargemen de la texture
+		                g2.setPaint(tmp.getMaterial().getTexture());
 		                
 		                switch(tmp.getShape()){
 			                case RAMP : // meme tracet que pour triangle
@@ -86,6 +105,8 @@ public class GameWorld implements Runnable{
 	public GameGraphic gg = new GameGraphic();
 	private boolean alive;
 	private ParserXML parser;
+	private TexturePaint textSky;
+	private TexturePaint textGround;
 	
 	private int step_count;
 	private long step_time;
@@ -183,6 +204,27 @@ public class GameWorld implements Runnable{
 		m_world = new World(m_worldAABB, gravity, doSleep);
 		m_world.setWarmStarting(true);
 		
+		//chargement texture fond
+		Image img=null;
+		try {
+        	img=ImageIO.read(new File("textures/ciel.jpg"));
+        }
+        catch(IOException e){
+        	System.out.println("ok");System.exit(0);
+        }
+        this.textSky = new TexturePaint((BufferedImage) img, new Rectangle(0, 0,1024, 600));
+		
+        //texture herbe
+        /*img=null;
+        try {
+        	img=ImageIO.read(new File("textures/ciel.jpg"));
+        }
+        catch(IOException e){
+        	System.out.println("ok");System.exit(0);
+        }
+        this.textGround = new TexturePaint((BufferedImage) img, new Rectangle((int)(-img.getWidth(null)/2), (int)(-img.getHeight(null)/2),(int)(img.getWidth(null)), (int)(img.getHeight(null))));
+		*/
+        
 		CollisionsListener listener = new CollisionsListener();
 		m_world.setContactListener(listener);
 	}

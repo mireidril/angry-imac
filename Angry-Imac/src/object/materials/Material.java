@@ -1,6 +1,7 @@
 package object.materials;
 
 import java.awt.Color;
+import java.awt.TexturePaint;
 
 public abstract class Material {
 	protected float density;
@@ -10,6 +11,7 @@ public abstract class Material {
 	protected boolean breakable;
 	protected float breakableForce;
 	protected Color color;
+	protected TexturePaint texture;
 
 
 	public boolean isBreakable() {
@@ -38,6 +40,10 @@ public abstract class Material {
 	
 	public float getBreakableForce(){
 		return breakableForce;
+	}
+	
+	public TexturePaint getTexture(){
+		return texture;
 	}
 
 }
