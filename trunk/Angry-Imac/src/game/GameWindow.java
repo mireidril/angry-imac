@@ -31,13 +31,14 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener{
 	private boolean alive = true;
 	
 	private Vec2 posBaseSouris;
-	private final float tensionElastique = 10;
+	private Vec2 posDragSouris;
 	
 	public GameWindow(){
 		super();
 		g = new GameWorld();
 		gw = new Thread(g);
 		posBaseSouris = new Vec2();
+		posDragSouris = new Vec2();
 		buildWindow();
 		gw.start();
 	}
@@ -149,15 +150,34 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener{
 
 	@Override
 	public void mousePressed(MouseEvent evt) {
-		//System.out.println("Pressed !");
-		posBaseSouris = new Vec2(evt.getX(), evt.getY());
+		System.out.println(evt.getX() + ", " + evt.getY());
+		if(evt.getX() >= 105 && evt.getX() <= 136 && evt.getY() >= 485 && evt.getY() <= 529) {
+			posBaseSouris = new Vec2(evt.getX(), evt.getY());
+			
+			/*Body b = g.rope.get(5);
+			Vec2 vectForce = new Vec2((posDragSouris.x - evt.getX()) *b.getMass()*40, (posDragSouris.y - evt.getY())*b.getMass()*40);
+			b.applyForce(vectForce, b.getPosition());
+			posDragSouris = new Vec2(evt.getX(), evt.getY());*/
+		}
+		else {
+			posBaseSouris = new Vec2(0, 0);
+		}
+		
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent evt) {
 		//System.out.println("released !");
-		Body b = g.physicalBodies.get(0);
-		Vec2 vectForce = new Vec2((posBaseSouris.x - evt.getX()) *b.getMass()*tensionElastique, (posBaseSouris.y - evt.getY())*b.getMass()*tensionElastique);
-		b.applyForce(vectForce, b.getPosition());
+		if(posBaseSouris.x != 0 && posBaseSouris.y != 0) {
+			Body b = g.physicalBodies.get(2);
+			Vec2 vectForce = new Vec2((posBaseSouris.x - evt.getX()) *b.getMass()*g.catapult.getElasticTension(), (posBaseSouris.y - evt.getY())*b.getMass()*g.catapult.getElasticTension());
+			b.applyForce(vectForce, b.getPosition());
+			posBaseSouris.x = 0;
+			posBaseSouris.y = 0;
+		}
+		else {
+			System.out.println("lol");
+			
+		}
 	}
 }

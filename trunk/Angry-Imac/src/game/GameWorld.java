@@ -25,6 +25,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import org.jbox2d.dynamics.*;
+import org.jbox2d.dynamics.joints.RevoluteJointDef;
 import org.jbox2d.collision.*;
 import org.jbox2d.common.*;
 
@@ -57,6 +58,10 @@ public class GameWorld implements Runnable{
 			g.setColor(new Color(255, 150, 0));
 			g.fillRect(0, 520, 1024, 80);
 			
+			//********************************* affichage de la catapulte *************************
+			g2.setPaint(textCatapult);
+			//g2.setColor(new Color(150, 150, 255));
+			g2.fillRect(100, 430, 43, 107);
 
 			//********************************* affichage des objets mouvants **********************
 			//Graphics2D g2 = (Graphics2D) g;
@@ -95,17 +100,29 @@ public class GameWorld implements Runnable{
             	}
             }
             
+            //********************************* affichage de rope **********************
+			for (int i = 0; i < rope.size(); i++){
+            	Body link = rope.get(i);
+            	if(link != null){
+            		 resetTrans(g2);
+            		 g2.setColor(new Color(255, 0, 0));
+            		 g2.fillRect((int)link.getPosition().x, (int) link.getPosition().x, 10, 30);
+            	}
+            }            
          
 	  } 
 	}
 	
 	private World m_world;
 	private Body ground;
+	public Launcher catapult; 
 	public  ArrayList<Body> physicalBodies = new ArrayList<Body>();
+	public  ArrayList<Body> rope = new ArrayList<Body>();
 	public GameGraphic gg = new GameGraphic();
 	private boolean alive;
 	private ParserXML parser;
 	private TexturePaint textSky;
+	private TexturePaint textCatapult;
 	private TexturePaint textGround;
 	
 	private int step_count;
@@ -114,6 +131,7 @@ public class GameWorld implements Runnable{
 	
 	public GameWorld(){
 		alive = true;
+		catapult = new Launcher();
 		
 		//********************************* creation du monde *********************************
 		createWorld();
@@ -126,72 +144,6 @@ public class GameWorld implements Runnable{
 		//********************************* parametrage pour le framerate *********************
 		step_count = 0;
 		step_time = System.currentTimeMillis();
-		
-		gg.addMouseListener(new MouseListener(){
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {
-				 //Force de l'impulsion (en newton)
-	    		Vec2 force = new Vec2(1000000,-1000000);
-	    		//Position de l'impulsion : soit un point fixe soit la pos de la souris
-	    		//Vec2 point = new Vec2(200000,-150000);
-	    		
-	    		/***
-	    		
-	    		pour la puissance en newton : calculer la distance entre physicalBodies.x/sourisPos.x 
-	    		
-	    		***/
-	    		Point sourisPos = MouseInfo.getPointerInfo().getLocation();
-	    		Vec2 mouse = new Vec2(physicalBodies.get(0).getPosition().x,physicalBodies.get(0).getPosition().y);//sourisPos.x, sourisPos.y);
-	    		System.out.println(mouse);
-	    		//Impulsion sur l'objet 0 en fonction de la pos de la souris
-
-	    		physicalBodies.get(0).applyImpulse(force, mouse);
-	    		
-	    		/* Système de drag & drop a revoir
-	    		MouseListener listMouse;
-	    		MouseEvent evt;
-	    		addMouseListener(listMouse);
-	    		MouseDragGestureRecognizer.mouseClicked(evt);*/
-	    		
-	    		
-	    		/***************** Infos trouvées sur forums******************
-	    		 * 
-	    		 * Pour les projectiles : 
-	    		 * 1.Calculer l'angle, en fonction du point de clik. (utiliser Math.atan2(dy, dx)pour trouver l'angle ?)
-	    		 * 2.Calculer la distance entre le curseur et le lance pierre : vélocité "vel", en fonction de la distance.
-	    		 * 3.Calculer la force (vel*cos(angle),vel *sin(angle))
-	    		 * 4.utiliser ApplyImpulse(vel,body->GetPosition())
-	    		 * 
-	    		****************************************************************/
-	    		
-				
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
 	}
 	
 	private void createWorld(){
@@ -225,6 +177,17 @@ public class GameWorld implements Runnable{
         this.textGround = new TexturePaint((BufferedImage) img, new Rectangle((int)(-img.getWidth(null)/2), (int)(-img.getHeight(null)/2),(int)(img.getWidth(null)), (int)(img.getHeight(null))));
 		*/
         
+        //chargement texture catapult
+		img = null;
+		try {
+        	img=ImageIO.read(new File("textures/catapult.png"));
+        }
+        catch(IOException e){
+        	System.out.println("ok");System.exit(0);
+        }
+        this.textCatapult = new TexturePaint((BufferedImage) img, new Rectangle(10, 0, 43, 107));
+		
+        
 		CollisionsListener listener = new CollisionsListener();
 		m_world.setContactListener(listener);
 	}
@@ -246,13 +209,52 @@ public class GameWorld implements Runnable{
 
         // Right
         bd.position.set(1023, 600);
+        sd.friction = 1.0f;
+        sd.setAsBox(1, 600);
         m_world.createBody(bd).createShape(sd);
 
         // Top
         bd.position.set(0, 0);
         sd.setAsBox(1024, 1);
         m_world.createBody(bd).createShape(sd);
+        
+        /* TEST CORDE/ELASTIQUE CELINE - 
+        // Support Rope
+        bd.position.x=8.5f;
+        bd.position.y=0;
+		PolygonDef bdef = new PolygonDef();
+		bdef.setAsBox(2, 0.5f);
+		bdef.density=0;
+		bdef.friction=0.5f;
+		bdef.restitution=0.2f;
+		Body body=m_world.createBody(bd);
+        body.createShape(bdef);
+        Body link = body;
                
+        // Rope
+		for (int i = 1; i <= 10; i++) {
+			// rope segment
+			BodyDef bodyDef = new BodyDef();
+			bodyDef.position.x= 8.5f;
+			bodyDef.position.y= i*30;
+			PolygonDef boxDef = new PolygonDef();
+			boxDef.setAsBox(10, 30);
+			boxDef.density=100;
+			boxDef.friction=0.5f;
+			boxDef.restitution=0.2f;
+			body=m_world.createBody(bodyDef);
+			body.createShape(boxDef);
+			// joint
+			RevoluteJointDef revolute_joint = new RevoluteJointDef();
+			revolute_joint.initialize(link, body, link.getPosition());
+			m_world.createJoint(revolute_joint);
+			body.setMassFromShapes();
+			// saving the reference of the last placed link
+			link=body;
+			rope.add(body);
+		}
+
+        */
 	}
 	
 	public void addBlock(Block block){
