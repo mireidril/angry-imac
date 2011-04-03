@@ -23,17 +23,15 @@ public class Block {
 	
 	
 /**
-	 * 	Constructeur d'un Block. 
-	 *  Construit un bloc avec toutes ses proprietes physique.
-	 *  
-	                          
+* 	Constructeur d'un Block. 
+*  	Construit un bloc avec toutes ses proprietes physique.
+*  
 	@param  s	La forme qu'aura le bloc.
 	@param  width	La largeur du bloc.
 	@param  height	La hauteur du bloc.
 	@param  pos	Position du bloc (Vec2).
 	@param  angle	Angle d'inclinaison du bloc.
-	@param  m	Le materiau du bloc (proprietes physique).
-	 *                   
+	@param  m	Le materiau du bloc (proprietes physique).                   
 */
 	public Block(Shape s, float width, float height, Vec2 pos, float angle, Mat m) {
 		sh = s;
@@ -111,42 +109,82 @@ public class Block {
 	}
 	
 	//********************************* getter / setter *********************************
+/**
+ * 	accesseur (Get) de la Forme du Block                         
+	@return sh La forme du block                
+*/
 	public Shape getShape(){
 		return sh;
 	}
-	
+
+/**
+ * 	accesseur (Get) de la position du Block                          
+	@return position La position du block                
+*/
 	public Vec2 getPosition(){
 		return position;
 	}
 	
+/**
+ * 	accesseur (Get) de l'angle de rotation du Block                          
+	@return angle L'angle du block                
+*/
 	public float getAngle(){
 		return angle;
 	}
-	
+
+/**
+ * 	accesseur (Get) du materiau du Block                          
+	@return mat Le materiau du block                
+*/
 	public Material getMaterial(){
 		return mat;
 	}
 	
+/**
+ * 	accesseur (Get) de l'enum du materiau du Block                          
+	@return enumMat L'enum du materiau du block                
+*/
 	public Mat getMaterialEnum(){
 		return enumMat;
 	}
 
+/**
+ * 	accesseur (Get) de la hauteur du Block                          
+	@return height La hauteur du Block               
+*/
 	public float getHeight() {
 		return height;
 	}
 
+/**
+ * 	accesseur (Get) de la largeur du Block                          
+	@return width La largeur du Block               
+*/
 	public float getWidth() {
 		return width;
 	}
-	
+
+/**
+ * 	accesseur (Set) des vertices du Block                          
+	@param vert Les vertices (Vec2) du Block               
+*/	
 	public void setVertices(List<Vec2> vert){
 		vertices = vert;
 	}
-	
+
+/**
+ * 	accesseur (Get) des vertices du Block                          
+	@return vertices Les vertices (Vec2) du Block               
+*/	
 	public List<Vec2> getVertices(){
 		return vertices;
 	}
-	
+
+/**
+ * 	accesseur (Get) de la definission de la forme du Block                          
+	@return shapeDef La definission de la forme du Block               
+*/	
 	public ShapeDef getShapeDef(){
 		return shapeDef;
 	}

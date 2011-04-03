@@ -5,8 +5,5 @@ public class AngrImac {
 		//création de la fenetre
 		GameWindow window = new GameWindow();
 		window.setVisible(true);
-		
-		
-		
 	}
 }

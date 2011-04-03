@@ -67,7 +67,7 @@ public class GameWorld implements Runnable{
 			//Graphics2D g2 = (Graphics2D) g;
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
             
-            for (Body body : physicalBodies){
+            for (Body body : m_world.physicalBodies){
             	if(body != null){
 	                resetTrans(g2);
 	                Block tmp = (Block) body.getUserData(); // recuperation du block lie a l'objet pour avoir ses caracteristiques
@@ -113,10 +113,10 @@ public class GameWorld implements Runnable{
 	  } 
 	}
 	
-	private World m_world;
+	private GWorld m_world;
 	private Body ground;
 	public Launcher catapult; 
-	public  ArrayList<Body> physicalBodies = new ArrayList<Body>();
+	//public  ArrayList<Body> physicalBodies = new ArrayList<Body>();
 	public  ArrayList<Body> rope = new ArrayList<Body>();
 	public GameGraphic gg = new GameGraphic();
 	private boolean alive;
@@ -153,7 +153,7 @@ public class GameWorld implements Runnable{
 		m_worldAABB.upperBound = new Vec2(1000.0f, 1000.0f);
 		Vec2 gravity = new Vec2(0.0f, 10.0f);
 		boolean doSleep = true;
-		m_world = new World(m_worldAABB, gravity, doSleep);
+		setWorld(new GWorld(m_worldAABB, gravity, doSleep));
 		m_world.setWarmStarting(true);
 		
 		//chargement texture fond
@@ -177,7 +177,7 @@ public class GameWorld implements Runnable{
         this.textGround = new TexturePaint((BufferedImage) img, new Rectangle((int)(-img.getWidth(null)/2), (int)(-img.getHeight(null)/2),(int)(img.getWidth(null)), (int)(img.getHeight(null))));
 		*/
         
-        //chargement texture catapult
+        //chargement texture catapulte
 		img = null;
 		try {
         	img=ImageIO.read(new File("textures/catapult.png"));
@@ -266,7 +266,7 @@ public class GameWorld implements Runnable{
         physicalBody.setMassFromShapes();
         physicalBody.setBullet(false);
         physicalBody.setUserData(block);
-        physicalBodies.add(physicalBody);
+        m_world.physicalBodies.add(physicalBody);
 	}
 
 	@Override
@@ -287,9 +287,9 @@ public class GameWorld implements Runnable{
 	}
 	
 	private void detectStable(){
-		int nb = physicalBodies.size();
+		int nb = m_world.physicalBodies.size();
 		int i = 0;
-        for (Body body : physicalBodies) {
+        for (Body body : m_world.physicalBodies) {
         	if(body != null){
         		if(body.isSleeping())
         			i++;
@@ -299,6 +299,14 @@ public class GameWorld implements Runnable{
         	System.out.println("Stable hehe");
         	alive = false;
         }
+	}
+
+	public void setWorld(GWorld m_world) {
+		this.m_world = m_world;
+	}
+
+	public GWorld getWorld() {
+		return m_world;
 	}
 	
 }
