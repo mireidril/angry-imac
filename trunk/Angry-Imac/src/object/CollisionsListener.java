@@ -1,5 +1,7 @@
 package object;
 
+import game.GWorld;
+
 import org.jbox2d.dynamics.*;
 import org.jbox2d.dynamics.contacts.ContactPoint;
 import org.jbox2d.dynamics.contacts.ContactResult;
@@ -15,17 +17,19 @@ public class CollisionsListener implements ContactListener {
 			if(block1.getMaterial().getBreakableForce() <= arg0.velocity.length()){
 				arg0.shape1.m_body.m_world.destroyBody(arg0.shape1.m_body);
 				arg0.shape1.destructor();
-				//System.out.println("destruction objet 1 => "+arg0.velocity.length());
-				//System.out.println("BOOMM !!");
+				GWorld world = (GWorld) arg0.shape1.m_body.m_world;
+				world.physicalBodies.remove(arg0.shape1.m_body);
+				//System.out.println("destruction d'un block => "+arg0.velocity.length());
 			}
 		}
 		
 		if(block2 != null){
 			if(block2.getMaterial().getBreakableForce() <= arg0.velocity.length()){
-				arg0.shape2.m_body.m_world.destroyBody(arg0.shape1.m_body);
+				arg0.shape2.m_body.m_world.destroyBody(arg0.shape2.m_body);
 				arg0.shape2.destructor();
-				//System.out.println("destruction objet 2 => "+arg0.velocity.length());
-				//System.out.println("BOOMM !!");
+				GWorld world = (GWorld) arg0.shape2.m_body.m_world;
+				world.physicalBodies.remove(arg0.shape2.m_body);
+				//System.out.println("destruction d'un block => "+arg0.velocity.length());
 			}
 		}
 	}
