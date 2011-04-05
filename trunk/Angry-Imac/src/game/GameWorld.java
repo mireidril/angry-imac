@@ -25,6 +25,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import org.jbox2d.dynamics.*;
+import org.jbox2d.dynamics.joints.DistanceJoint;
+import org.jbox2d.dynamics.joints.DistanceJointDef;
 import org.jbox2d.dynamics.joints.RevoluteJointDef;
 import org.jbox2d.collision.*;
 import org.jbox2d.common.*;
@@ -101,14 +103,22 @@ public class GameWorld implements Runnable{
             }
             
             //********************************* affichage de rope **********************
-			for (int i = 0; i < rope.size(); i++){
-            	Body link = rope.get(i);
+			for (int i = 0; i < catapult.getRope().size(); i++){
+            	Body link = catapult.getRope().get(i);
             	if(link != null){
             		 resetTrans(g2);
             		 g2.setColor(new Color(255, 0, 0));
-            		 g2.fillRect((int)link.getPosition().x, (int) link.getPosition().x, 10, 30);
+            		 g2.fillRect((int)link.getPosition().x, (int)link.getPosition().y, 10, 10);
             	}
-            }            
+            }
+			for (int i = 0; i < catapult.getRopeJoints().size(); i++){
+            	RevoluteJointDef link = catapult.getRopeJoints().get(i);
+            	if(link != null){
+            		 resetTrans(g2);
+            		 g2.setColor(new Color(0, 255, 0));
+            		 g2.fillRect((int)link.localAnchor1.x, (int)link.localAnchor1.y, 10, 10);
+            	}
+            }   
          
 	  } 
 	}
@@ -117,7 +127,6 @@ public class GameWorld implements Runnable{
 	private Body ground;
 	public Launcher catapult; 
 	//public  ArrayList<Body> physicalBodies = new ArrayList<Body>();
-	public  ArrayList<Body> rope = new ArrayList<Body>();
 	public GameGraphic gg = new GameGraphic();
 	private boolean alive;
 	private ParserXML parser;
@@ -218,43 +227,9 @@ public class GameWorld implements Runnable{
         sd.setAsBox(1024, 1);
         m_world.createBody(bd).createShape(sd);
         
-        /* TEST CORDE/ELASTIQUE CELINE - 
-        // Support Rope
-        bd.position.x=8.5f;
-        bd.position.y=0;
-		PolygonDef bdef = new PolygonDef();
-		bdef.setAsBox(2, 0.5f);
-		bdef.density=0;
-		bdef.friction=0.5f;
-		bdef.restitution=0.2f;
-		Body body=m_world.createBody(bd);
-        body.createShape(bdef);
-        Body link = body;
-               
-        // Rope
-		for (int i = 1; i <= 10; i++) {
-			// rope segment
-			BodyDef bodyDef = new BodyDef();
-			bodyDef.position.x= 8.5f;
-			bodyDef.position.y= i*30;
-			PolygonDef boxDef = new PolygonDef();
-			boxDef.setAsBox(10, 30);
-			boxDef.density=100;
-			boxDef.friction=0.5f;
-			boxDef.restitution=0.2f;
-			body=m_world.createBody(bodyDef);
-			body.createShape(boxDef);
-			// joint
-			RevoluteJointDef revolute_joint = new RevoluteJointDef();
-			revolute_joint.initialize(link, body, link.getPosition());
-			m_world.createJoint(revolute_joint);
-			body.setMassFromShapes();
-			// saving the reference of the last placed link
-			link=body;
-			rope.add(body);
-		}
-
-        */
+        //TEST CORDE/ELASTIQUE CELINE - 
+        //catapult.createElastic(m_world);
+        
 	}
 	
 	public void addBlock(Block block){
