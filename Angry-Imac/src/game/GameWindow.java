@@ -150,16 +150,26 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener{
 
 	@Override
 	public void mousePressed(MouseEvent evt) {
-		System.out.println(evt.getX() + ", " + evt.getY());
-		if(evt.getX() >= 105 && evt.getX() <= 136 && evt.getY() >= 485 && evt.getY() <= 529) {
+		System.out.println("Souris : ("+evt.getX()+", "+evt.getY()+")");
+		
+		/*for(Body link : g.catapult.getRope()) {
+			System.out.println("Souris : ("+evt.getX()+", "+evt.getY()+") Link : (" + link.getPosition().x + ", "+ link.getPosition().y);
+			if( evt.getX() >= link.getPosition().x && evt.getX() <= (link.getPosition().x + 10))
+			{
+				posBaseSouris = new Vec2(evt.getX(), evt.getY());
+				System.out.println("rope");
+				Vec2 vectForce = new Vec2((posDragSouris.x - evt.getX()) *link.getMass()*400, (posDragSouris.y - evt.getY())*link.getMass()*400);
+				link.applyForce(vectForce, link.getPosition());
+				posDragSouris = new Vec2(evt.getX(), evt.getY());
+			}
+		}*/
+		
+		if( (evt.getX() >= 105 && evt.getX() <= 136) && (evt.getY() >= 485 && evt.getY() <= 529)) 
+		{
 			posBaseSouris = new Vec2(evt.getX(), evt.getY());
-			
-			/*Body b = g.rope.get(5);
-			Vec2 vectForce = new Vec2((posDragSouris.x - evt.getX()) *b.getMass()*40, (posDragSouris.y - evt.getY())*b.getMass()*40);
-			b.applyForce(vectForce, b.getPosition());
-			posDragSouris = new Vec2(evt.getX(), evt.getY());*/
 		}
-		else {
+		else
+		{
 			posBaseSouris = new Vec2(0, 0);
 		}
 		
