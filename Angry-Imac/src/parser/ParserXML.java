@@ -87,6 +87,46 @@ public class ParserXML
          gameworld.addBlock(new Block(shape, width, height, new Vec2(x, y), angle, material));
          
       }
+      
+      List<?> listTargets = racine.getChildren("target");
+
+      Iterator<?> iTargets = listTargets.iterator();
+      while(iTargets.hasNext())
+      {
+         Element current = (Element)iTargets.next();
+
+         if(display){
+	         System.out.println("New target : \t"
+	        		 				+current.getAttributeValue("shape")+"/"
+	        		 				+Float.parseFloat(current.getAttributeValue("width"))+"/"
+	        		 				+Float.parseFloat(current.getAttributeValue("height"))+"/"
+	        		 				+Float.parseFloat(current.getAttributeValue("posX"))+"/"
+	        		 				+Float.parseFloat(current.getAttributeValue("posY"))+"/"
+	        		 				+Float.parseFloat(current.getAttributeValue("angle"))+"/"
+	        		 				+current.getAttributeValue("type"));
+	         System.out.println("_____________________");
+         }
+         
+         Shape shape = Shape.BOX;
+         if(current.getAttributeValue("shape").equals("circle")){
+        	 shape = Shape.CIRCLE;
+         }
+         else if(current.getAttributeValue("shape").equals("triangle")){
+        	 shape = Shape.TRIANGLE;
+         }
+         else if(current.getAttributeValue("shape").equals("ramp")){
+        	 shape = Shape.RAMP;
+         }
+         
+         float width = Float.parseFloat(current.getAttributeValue("width"));
+         float height = Float.parseFloat(current.getAttributeValue("height"));
+         float x = Float.parseFloat(current.getAttributeValue("posX"));
+         float y = Float.parseFloat(current.getAttributeValue("posY"));
+         float angle = Float.parseFloat(current.getAttributeValue("angle"));
+         Mat material = Mat.TARGET;
+         
+         gameworld.addBlock(new Block(shape, width, height, new Vec2(x, y), angle, material));
+      }
       /*
       List<?> listWeapons = racine.getChildren("weapon");
       Iterator<?> iWeapons = listWeapons.iterator();

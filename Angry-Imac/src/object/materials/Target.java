@@ -12,13 +12,13 @@ import javax.imageio.ImageIO;
 
 public class Target  extends Material{
 	public Target(){
-		density = 0.9f;
-		friction = 0.03f;
-		restitution = 0.01f;
+		density = 7.32f;
+		friction = 0.2f;
+		restitution = 0.05f;
 		weightFactor = 0;
 		breakable = true;
-		breakableForce = 50.0f;
-		color = new Color(126, 186, 190);
+		breakableForce = 500.0f;
+		color = new Color(161, 161, 161);
 		
 		Image img=null;
         try {

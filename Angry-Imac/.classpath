@@ -3,5 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Angry-Imac"/>
+	<classpathentry kind="lib" path="/Users/adrienbruneliere/Documents/IMAC/4e semestre/java/workspace/Angry-Imac/library/jbox2d-2.0.1-library-only.jar"/>
+	<classpathentry kind="lib" path="/Users/adrienbruneliere/Documents/IMAC/4e semestre/java/workspace/Angry-Imac/library/jdom.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
