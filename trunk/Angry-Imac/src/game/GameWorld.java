@@ -77,7 +77,6 @@ public class GameWorld implements Runnable{
 		                g2.translate(body.getWorldCenter().x, body.getWorldCenter().y);
 		                g2.rotate(body.getAngle());
 		               
-		               
 		                //chargemen de la texture
 		                g2.setPaint(tmp.getMaterial().getTexture());
 		                
@@ -95,6 +94,13 @@ public class GameWorld implements Runnable{
 			                	break;
 			                case BOX :
 			                	g2.fillRect((int)(-tmp.getWidth()/2), (int)(-tmp.getHeight()/2),(int)(tmp.getWidth()), (int)(tmp.getHeight()));
+			                	break;
+			                case TARGET :
+			                	Polygon pTar = new Polygon();
+			                	List<Vec2> listTar = tmp.getVertices();
+			                	for(int id = 0; id < listTar.size(); id++)
+			                		pTar.addPoint((int)(listTar.get(id).x),(int)(listTar.get(id).y+0.2*tmp.getWidth()));
+			                	g2.fillPolygon(pTar);
 			                	break;
 			                default :
 			                	break;
@@ -147,7 +153,7 @@ public class GameWorld implements Runnable{
 		defineWalls();
 
 		//********************************* Creation des objets *******************************
-        parser = new ParserXML(this,"map1.xml",false);
+        parser = new ParserXML(this,"levels/Niveau3.xml",false);
         parser.parseAllAndCreatorLevel();
 		
 		//********************************* parametrage pour le framerate *********************
@@ -159,7 +165,7 @@ public class GameWorld implements Runnable{
 		// creation du monde physique
 		AABB m_worldAABB = new AABB();
 		m_worldAABB.lowerBound = new Vec2(0.0f, 0.0f);
-		m_worldAABB.upperBound = new Vec2(1000.0f, 1000.0f);
+		m_worldAABB.upperBound = new Vec2(2000.0f, 2000.0f);
 		Vec2 gravity = new Vec2(0.0f, 10.0f);
 		boolean doSleep = true;
 		setWorld(new GWorld(m_worldAABB, gravity, doSleep));

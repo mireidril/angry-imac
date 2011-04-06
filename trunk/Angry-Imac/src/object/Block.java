@@ -102,6 +102,17 @@ public class Block {
 				System.out.println("RAMPE : PAS ENCORE FAIT");
 	        	System.exit(0);
 	        	break;
+			case TARGET :
+				PolygonDef shapeTarTmp = new PolygonDef();
+				shapeTarTmp.clearVertices();
+				shapeTarTmp.addVertex(new Vec2(getWidth()/2.0f,0.0f));
+				shapeTarTmp.addVertex(new Vec2(getWidth()/4.0f,getHeight()/2.0f));
+				shapeTarTmp.addVertex(new Vec2(-getWidth()/4.0f,getHeight()/2.0f));
+				shapeTarTmp.addVertex(new Vec2(-getWidth()/2.0f,0.0f));
+				
+	    		setVertices(shapeTarTmp.getVertexList());
+	    		shapeDef = (ShapeDef)shapeTarTmp;
+				break;
 			default :
 				break;
 		}

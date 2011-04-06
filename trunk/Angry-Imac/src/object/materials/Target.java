@@ -12,17 +12,17 @@ import javax.imageio.ImageIO;
 
 public class Target  extends Material{
 	public Target(){
-		density = 7.32f;
-		friction = 0.2f;
-		restitution = 0.05f;
+		density = 0.6f;
+		friction = 0.3f;
+		restitution = 0.3f;
 		weightFactor = 0;
 		breakable = true;
-		breakableForce = 500.0f;
+		breakableForce = 30.0f;
 		color = new Color(161, 161, 161);
 		
 		Image img=null;
         try {
-        	img=ImageIO.read(new File("textures/cible.jpg"));
+        	img=ImageIO.read(new File("textures/egg.png"));
         }
         catch(IOException e){
         	System.out.println("ok");System.exit(0);
@@ -30,5 +30,6 @@ public class Target  extends Material{
         
         ///g2.drawImage(img,0, 0, gg);
         this.texture = new TexturePaint((BufferedImage) img, new Rectangle((int)(-img.getWidth(null)/2), (int)(-img.getHeight(null)/2),(int)(img.getWidth(null)), (int)(img.getHeight(null))));
+		
 	}
 }
