@@ -67,6 +67,10 @@ public class Block {
 			case ROCK : 
 				mat = new Rock();
 				break;
+				
+			case TARGET :
+				mat = new object.materials.Target();
+				break;
 			
 			default :
 				mat = new Wood();

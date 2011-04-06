@@ -11,5 +11,4 @@ public class Target extends Block{
 	public Target(Shape s, float width, float height, Vec2 pos, float angle) {
 		super(s, width, height, pos, angle, enumMat);
 	}
-
 }
