@@ -67,6 +67,9 @@ public class ParserXML
          else if(current.getAttributeValue("shape").equals("ramp")){
         	 shape = Shape.RAMP;
          }
+         else if(current.getAttributeValue("shape").equals("target")){
+        	 shape = Shape.TARGET;
+         }
          
          float width = Float.parseFloat(current.getAttributeValue("width"));
          float height = Float.parseFloat(current.getAttributeValue("height"));
@@ -82,6 +85,9 @@ public class ParserXML
          }
          else if(current.getAttributeValue("type").equals("wood")){
         	 material = Mat.WOOD;
+         }
+         else if(current.getAttributeValue("type").equals("target")){
+        	 material = Mat.TARGET;
          }
          
          gameworld.addBlock(new Block(shape, width, height, new Vec2(x, y), angle, material));
@@ -117,15 +123,18 @@ public class ParserXML
          else if(current.getAttributeValue("shape").equals("ramp")){
         	 shape = Shape.RAMP;
          }
+         else if(current.getAttributeValue("shape").equals("target")){
+        	 shape = Shape.TARGET;
+         }
          
          float width = Float.parseFloat(current.getAttributeValue("width"));
          float height = Float.parseFloat(current.getAttributeValue("height"));
          float x = Float.parseFloat(current.getAttributeValue("posX"));
          float y = Float.parseFloat(current.getAttributeValue("posY"));
          float angle = Float.parseFloat(current.getAttributeValue("angle"));
-         Mat material = Mat.TARGET;
-         
-         gameworld.addBlock(new Block(shape, width, height, new Vec2(x, y), angle, material));
+         //Mat material = Mat.TARGET;
+         Target t = new object.Target(shape, width, height, new Vec2(x, y), angle);
+         gameworld.addBlock(t);
       }
       /*
       List<?> listWeapons = racine.getChildren("weapon");
