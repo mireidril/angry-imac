@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<angrImac>
+    <block shape="circle" width="20" height="20" posX="50" posY="180" angle="0" type="wood"/>
+    <block shape="box" width="20" height="350" posX="650" posY="360" angle="0" type="metal"/>
+	<block shape="box" width="20" height="380" posX="710" posY="340" angle="0" type="metal"/>
+</angrImac>
