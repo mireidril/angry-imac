@@ -179,7 +179,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener{
 	public void mouseReleased(MouseEvent evt) {
 		//System.out.println("released !");
 		if(posBaseSouris.x != 0 && posBaseSouris.y != 0) {
-			Body b = g.getWorld().physicalBodies.get(2);
+			Body b = g.getWorld().physicalBodies.get(0);
 			Vec2 vectForce = new Vec2((posBaseSouris.x - evt.getX()) *b.getMass()*g.catapult.getElasticTension(), (posBaseSouris.y - evt.getY())*b.getMass()*g.catapult.getElasticTension());
 			b.applyForce(vectForce, b.getPosition());
 			posBaseSouris.x = 0;
