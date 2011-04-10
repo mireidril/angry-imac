@@ -130,6 +130,8 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener{
 			g = new GameWorld();
 			gw = new Thread(g);
 			gw.start();*/
+			System.out.println("reset");
+			g.resetWorld();
 		}
 	}
 

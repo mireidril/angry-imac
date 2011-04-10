@@ -1,7 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <angrImac>
-    <block shape="circle" width="20" height="20" posX="50" posY="180" angle="0" type="wood"/>
-    <block shape="box" width="20" height="350" posX="650" posY="360" angle="0" type="metal"/>
-	<block shape="box" width="20" height="380" posX="710" posY="340" angle="0" type="metal"/>
-    <target shape="circle" width="30" height="40" posX="680" posY="420" angle="0" type="target"/>
+    <block shape="circle" width="20" height="20" posX="50" posY="180" angle="0" type="metal"/>
+    
+    <block shape="box" width="10" height="70" posX="750" posY="500" angle="0" type="rock"/>
+	<block shape="box" width="10" height="70" posX="850" posY="500" angle="0" type="rock"/>
+	<block shape="box" width="250" height="10" posX="800" posY="450" angle="0" type="rock"/>
+	
+	<block shape="box" width="10" height="70" posX="750" posY="390" angle="0" type="rock"/>
+	<block shape="box" width="10" height="70" posX="850" posY="390" angle="0" type="rock"/>
+	<block shape="box" width="250" height="10" posX="800" posY="350" angle="0" type="rock"/>
+	
+	<block shape="box" width="10" height="70" posX="750" posY="320" angle="0" type="rock"/>
+	<block shape="box" width="10" height="70" posX="850" posY="320" angle="0" type="rock"/>
+	<block shape="box" width="250" height="10" posX="800" posY="270" angle="0" type="rock"/>
+	
+	<block shape="box" width="10" height="70" posX="750" posY="250" angle="0" type="rock"/>
+	<block shape="box" width="10" height="70" posX="850" posY="250" angle="0" type="rock"/>
+	<block shape="box" width="250" height="10" posX="800" posY="200" angle="0" type="rock"/>
+	
+	<block shape="box" width="10" height="70" posX="750" posY="170" angle="0" type="rock"/>
+	<block shape="box" width="10" height="70" posX="850" posY="170" angle="0" type="rock"/>
+	<block shape="box" width="250" height="10" posX="800" posY="120" angle="0" type="rock"/>
+	
+	<block shape="box" width="10" height="70" posX="750" posY="90" angle="0" type="rock"/>
+	<block shape="box" width="10" height="70" posX="850" posY="90" angle="0" type="rock"/>
+	<block shape="box" width="110" height="10" posX="800" posY="40" angle="0" type="rock"/>
+	
+<target shape="circle" width="20" height="40" posX="800" posY="500" angle="0" type="target"/>
+
 </angrImac>
+

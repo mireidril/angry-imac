@@ -181,6 +181,7 @@ public class GameWorld implements Runnable{
 	private TexturePaint textSky;
 	private TexturePaint textCatapult;
 	private TexturePaint textGround;
+	private String lvl;
 	
 	private int step_count;
 	private long step_time;
@@ -192,6 +193,7 @@ public class GameWorld implements Runnable{
 	public GameWorld(){
 		alive = true;
 		catapult = new Launcher();
+		lvl = "levels/Niveau1Munition.xml";
 		
 		//********************************* creation du monde *********************************
 		createWorld();
@@ -371,6 +373,21 @@ public class GameWorld implements Runnable{
 		{
 			return false;
 		}
+	}
+	
+	public void resetWorld() {
+		
+		//********************************* creation du monde *********************************
+		createWorld();
+		defineWalls();
+
+		//********************************* Creation des objets *******************************
+        parser = new ParserXML(this, lvl,false);
+        parser.parseAllAndCreatorLevel();
+		
+		//********************************* parametrage pour le framerate *********************
+		step_count = 0;
+		step_time = System.currentTimeMillis();
 	}
 	
 }
