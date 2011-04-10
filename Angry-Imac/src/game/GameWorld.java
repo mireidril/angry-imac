@@ -64,6 +64,48 @@ public class GameWorld implements Runnable{
 			g2.setPaint(textCatapult);
 			//g2.setColor(new Color(150, 150, 255));
 			g2.fillRect(100, 430, 43, 107);
+			
+			//********************************* affichage des munitions/projectiles *****************
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+            
+            for (Body body : m_world.munitions){
+            	if(body != null){
+	                resetTrans(g2);
+	                Block tmp = (Block) body.getUserData(); // recuperation du block lie a l'objet pour avoir ses caracteristiques
+		                g2.setColor(tmp.getMaterial().getColor());
+		                g2.translate(body.getWorldCenter().x, body.getWorldCenter().y);
+		                g2.rotate(body.getAngle());
+		               
+		                //chargemen de la texture
+		                g2.setPaint(tmp.getMaterial().getTexture());
+		                
+		                switch(tmp.getShape()){
+			                case RAMP : // meme tracet que pour triangle
+			                case TRIANGLE :
+			                	Polygon p = new Polygon();
+			                	List<Vec2> list = tmp.getVertices();
+			                	for(int id = 0; id < 3; id++)
+			                		p.addPoint((int)(list.get(id).x),(int)(list.get(id).y+0.2*tmp.getWidth()));
+			                	g2.fillPolygon(p);
+			                	break;
+			                case CIRCLE :
+			                	g2.fillOval((int)(-tmp.getWidth()/2), (int)(-tmp.getHeight()/2),(int)(tmp.getWidth()), (int)(tmp.getHeight()));
+			                	break;
+			                case BOX :
+			                	g2.fillRect((int)(-tmp.getWidth()/2), (int)(-tmp.getHeight()/2),(int)(tmp.getWidth()), (int)(tmp.getHeight()));
+			                	break;
+			                case TARGET :
+			                	Polygon pTar = new Polygon();
+			                	List<Vec2> listTar = tmp.getVertices();
+			                	for(int id = 0; id < listTar.size(); id++)
+			                		pTar.addPoint((int)(listTar.get(id).x),(int)(listTar.get(id).y+0.2*tmp.getWidth()));
+			                	g2.fillPolygon(pTar);
+			                	break;
+			                default :
+			                	break;
+		                }
+            	}
+            }
 
 			//********************************* affichage des objets mouvants **********************
 			//Graphics2D g2 = (Graphics2D) g;
@@ -143,6 +185,9 @@ public class GameWorld implements Runnable{
 	private int step_count;
 	private long step_time;
 	
+	//Celine : a virer plus tard
+	private int actualMunition = 0;
+	
 	
 	public GameWorld(){
 		alive = true;
@@ -153,7 +198,7 @@ public class GameWorld implements Runnable{
 		defineWalls();
 
 		//********************************* Creation des objets *******************************
-        parser = new ParserXML(this,"levels/Niveau3.xml",false);
+        parser = new ParserXML(this,"levels/Niveau1Munition.xml",false);
         parser.parseAllAndCreatorLevel();
 		
 		//********************************* parametrage pour le framerate *********************
@@ -239,7 +284,7 @@ public class GameWorld implements Runnable{
 	}
 	
 	public void addBlock(Block block){
-        BodyDef bodyDef = new BodyDef();
+		BodyDef bodyDef = new BodyDef();
         bodyDef.position.set((int)(block.getPosition().x), (int)(block.getPosition().y));
         bodyDef.angle=block.getAngle();
         Body physicalBody = m_world.createBody(bodyDef);
@@ -248,6 +293,18 @@ public class GameWorld implements Runnable{
         physicalBody.setBullet(false);
         physicalBody.setUserData(block);
         m_world.physicalBodies.add(physicalBody);
+	}
+	
+	public void addMunition(Projectile p){
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.position.set((int)(p.getPosition().x), (int)(p.getPosition().y));
+        bodyDef.angle=p.getAngle();
+        Body physicalBody = m_world.createBody(bodyDef);
+        physicalBody.createShape(p.getShapeDef());
+        physicalBody.setMassFromShapes();
+        physicalBody.setBullet(false);
+        physicalBody.setUserData(p);        
+        m_world.munitions.add(physicalBody);
 	}
 
 	@Override
@@ -261,16 +318,23 @@ public class GameWorld implements Runnable{
 				m_world.step(1.0f/30.0f, 10);
 				gg.repaint();
 				
-				detectStable();
+				//Génant maintenant qu'on tire au lance-pierre 
+				//detectStable();
 			
 			}
 		}
 	}
 	
 	private void detectStable(){
-		int nb = m_world.physicalBodies.size();
+		int nb = m_world.physicalBodies.size() + m_world.munitions.size();
 		int i = 0;
         for (Body body : m_world.physicalBodies) {
+        	if(body != null){
+        		if(body.isSleeping())
+        			i++;
+        	}
+        }
+        for (Body body : m_world.munitions) {
         	if(body != null){
         		if(body.isSleeping())
         			i++;
@@ -280,6 +344,7 @@ public class GameWorld implements Runnable{
         	System.out.println("Stable hehe");
         	alive = false;
         }
+		
 	}
 
 	public void setWorld(GWorld m_world) {
@@ -288,6 +353,24 @@ public class GameWorld implements Runnable{
 
 	public GWorld getWorld() {
 		return m_world;
+	}
+	
+	public Body getActualMunition() {
+		if(actualMunition < m_world.munitions.size())
+			return m_world.munitions.get(actualMunition);
+		else
+			return null;
+	}
+	
+	public boolean incrementsActualMunition() {
+		if(actualMunition < m_world.munitions.size()) {
+			actualMunition++;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 }

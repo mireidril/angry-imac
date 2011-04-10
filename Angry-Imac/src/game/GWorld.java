@@ -2,6 +2,8 @@ package game;
 
 import java.util.ArrayList;
 
+import object.Projectile;
+
 import org.jbox2d.collision.AABB;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
@@ -20,4 +22,5 @@ public class GWorld extends World{
 	}
 
 	public  ArrayList<Body> physicalBodies = new ArrayList<Body>();
+	public ArrayList<Body> munitions = new ArrayList<Body>();
 }

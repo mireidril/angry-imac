@@ -8,7 +8,7 @@ public class Projectile extends Block{
 	 * Projectile's constructor
 	 * 
 	 */
-	Projectile(Shape s, int width, int height, Vec2 pos, float angle, Mat m) {
+	public Projectile(Shape s, int width, int height, Vec2 pos, float angle, Mat m) {
 		super(s, width, height, pos, angle, m);
 	}
 }

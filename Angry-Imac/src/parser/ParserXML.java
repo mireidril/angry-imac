@@ -32,6 +32,42 @@ public class ParserXML
 
    public void parseAllAndCreatorLevel()
    {
+	   /*Récupération des munitions */
+	   List<?> listMunitions = racine.getChildren("munition");
+	   Iterator<?> iMunitions = listMunitions.iterator();
+	   while(iMunitions.hasNext()) {
+		   Element current = (Element)iMunitions.next();
+		   
+		   Shape shape = Shape.BOX;
+		   if(current.getAttributeValue("shape").equals("circle")) {
+			   shape = Shape.CIRCLE;
+		   }
+		   else if(current.getAttributeValue("shape").equals("triangle")){
+			   shape = Shape.TRIANGLE;
+		   }
+		   else if(current.getAttributeValue("shape").equals("ramp")){
+			   shape = Shape.RAMP;
+		   }
+		   
+		   int width = Integer.parseInt(current.getAttributeValue("width"));
+		   int height = Integer.parseInt(current.getAttributeValue("height"));
+		   float x = Float.parseFloat(current.getAttributeValue("posX"));
+		   float y = Float.parseFloat(current.getAttributeValue("posY"));
+		   float angle = Float.parseFloat(current.getAttributeValue("angle"));
+		   Mat material = Mat.ICE;
+		   if(current.getAttributeValue("type").equals("metal")){
+			   material = Mat.METAL;
+		   }
+		   else if(current.getAttributeValue("type").equals("rock")){
+			   material = Mat.ROCK;
+		   }
+		   else if(current.getAttributeValue("type").equals("wood")){
+			   material = Mat.WOOD;
+		   }
+		   
+		   gameworld.addMunition(new Projectile(shape, width, height, new Vec2(x, y), angle, material));
+      }  
+	   
       //On cree une Liste contenant tous les noeuds "block" de l'Element racine
       List<?> listBlocks = racine.getChildren("block");
 
@@ -89,7 +125,6 @@ public class ParserXML
          else if(current.getAttributeValue("type").equals("target")){
         	 material = Mat.TARGET;
          }
-         
          gameworld.addBlock(new Block(shape, width, height, new Vec2(x, y), angle, material));
          
       }
@@ -136,29 +171,6 @@ public class ParserXML
          Target t = new object.Target(shape, width, height, new Vec2(x, y), angle);
          gameworld.addBlock(t);
       }
-      /*
-      List<?> listWeapons = racine.getChildren("weapon");
-      Iterator<?> iWeapons = listWeapons.iterator();
-      while(iWeapons.hasNext())
-      {
-         Element current = (Element)iWeapons.next();
-         System.out.println("Type de weapon : "+current.getAttributeValue("type"));
-         //current.getAttributeValue("type") retourne l'attribut"type" de l'element courant
-         
-         if(current.getChild("width")!=null)
-        	 System.out.println("--Largeur weapon: "+current.getChild("width").getText());
-         	 //current.getChild("width").getText() retourne le nom de la balise width qui est un fils de l'element courant
-         if(current.getChild("height")!=null)
-        	 System.out.println("--Hauteur weapon: "+current.getChild("height").getText());
-         if(current.getChild("posX")!=null && current.getChild("posY")!=null)
-        	 System.out.println("--PosX: "+current.getChild("posX").getText()+" PosY: "+current.getChild("posY").getText());
-         if(current.getChild("angle")!=null)
-        	 System.out.println("--Angle weapon: "+current.getChild("angle").getText());
-         if(current.getChild("color")!=null)
-        	 System.out.println("--Color weapon: "+current.getChild("color").getText());
-         System.out.println("_____________________");
-      }
-      */
    }
    
   /*
