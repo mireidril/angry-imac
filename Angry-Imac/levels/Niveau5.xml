@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <angrImac>
-    <block shape="circle" width="20" height="20" posX="50" posY="180" angle="0" type="wood"/>
-    
-    <block shape="box" width="30" height="50" posX="550" posY="500" angle="0" type="wood"/>
-	<block shape="box" width="30" height="50" posX="750" posY="500" angle="0" type="wood"/>
-	<block shape="box" width="250" height="50" posX="650" posY="450" angle="0" type="wood"/>
-	<block shape="box" width="30" height="50" posX="570" posY="390" angle="0" type="ice"/>
-	<block shape="box" width="30" height="50" posX="730" posY="390" angle="0" type="ice"/>
-	<block shape="box" width="200" height="30" posX="650" posY="350" angle="0" type="wood"/>
-	<block shape="box" width="30" height="50" posX="600" posY="320" angle="0" type="ice"/>
-	<block shape="box" width="30" height="50" posX="700" posY="320" angle="0" type="ice"/>
-	<block shape="triangle" width="200" height="100" posX="660" posY="250" angle="3.14159" type="wood"/>
-    <target shape="circle" width="30" height="40" posX="660" posY="500" angle="0" type="target"/>
+    <block shape="circle" width="20" height="20" posX="50" posY="180" angle="0" type="metal"/>
+    <block shape="box" width="40" height="70" posX="500" posY="480" angle="0" type="metal"/>
+	<block shape="circle" width="50" height="50" posX="690" posY="500" angle="0" type="wood"/>
+	<block shape="box" width="50" height="150" posX="690" posY="400" angle="0" type="metal"/>
+	
+	<target shape="circle" width="20" height="40" posX="550" posY="500" angle="0" type="target"/>
 </angrImac>

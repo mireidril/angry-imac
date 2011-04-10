@@ -11,7 +11,6 @@
 	<block shape="box" width="10" height="70" posX="550" posY="320" angle="0" type="rock"/>
 	<block shape="box" width="10" height="70" posX="750" posY="320" angle="0" type="rock"/>
 	<block shape="box" width="250" height="100" posX="660" posY="250" angle="3.14159" type="rock"/>
-    <target shape="circle" width="30" height="40" posX="660" posY="300" angle="0" type="target"/>
-    <target shape="circle" width="30" height="40" posX="660" posY="400" angle="0" type="target"/>
-    <target shape="circle" width="30" height="40" posX="660" posY="500" angle="0" type="target"/>
+	
+	<target shape="circle" width="20" height="40" posX="650" posY="500" angle="0" type="target"/>
 </angrImac>
