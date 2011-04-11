@@ -193,14 +193,14 @@ public class GameWorld implements Runnable{
 	public GameWorld(){
 		alive = true;
 		catapult = new Launcher();
-		lvl = "levels/Niveau1Munition.xml";
+		lvl = "levels/Niveau1.xml";
 		
 		//********************************* creation du monde *********************************
 		createWorld();
 		defineWalls();
 
 		//********************************* Creation des objets *******************************
-        parser = new ParserXML(this,"levels/Niveau1Munition.xml",false);
+        parser = new ParserXML(this,lvl,false);
         parser.parseAllAndCreatorLevel();
 		
 		//********************************* parametrage pour le framerate *********************
@@ -343,8 +343,8 @@ public class GameWorld implements Runnable{
         	}
         }
         if(nb == i){
-        	System.out.println("Stable hehe");
-        	alive = false;
+        	//System.out.println("Stable hehe");
+        	//alive = false;
         }
 		
 	}
