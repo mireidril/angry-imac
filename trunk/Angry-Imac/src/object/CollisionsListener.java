@@ -1,4 +1,6 @@
-package object;
+//Plus besoin car intégré à GWorld
+
+/*package object;
 
 import game.GWorld;
 
@@ -13,12 +15,14 @@ public class CollisionsListener implements ContactListener {
 		Block block1 = (Block) arg0.shape1.getBody().getUserData();
 		Block block2 = (Block) arg0.shape2.getBody().getUserData();
 		
+		//System.out.println("size de départ : "+ world.physicalBodies.size());
+		
 		if(block1 != null){
 			if(block1.getMaterial().getBreakableForce() <= arg0.velocity.length()){
 				GWorld world = (GWorld) arg0.shape1.m_body.m_world;
 				world.destroyBody(arg0.shape1.m_body);
-				world.physicalBodies.remove(arg0.shape1.m_body);
-				arg0.shape1.destructor();
+				//world.physicalBodies.remove(arg0.shape1.m_body);
+				//arg0.shape1.destructor();
 				//System.out.println("destruction d'un block => "+arg0.velocity.length());
 			}
 		}
@@ -27,8 +31,8 @@ public class CollisionsListener implements ContactListener {
 			if(block2.getMaterial().getBreakableForce() <= arg0.velocity.length()){
 				GWorld world = (GWorld) arg0.shape2.m_body.m_world;
 				world.destroyBody(arg0.shape2.m_body);
-				world.physicalBodies.remove(arg0.shape2.m_body);
-				arg0.shape2.destructor();
+				//world.physicalBodies.remove(arg0.shape2.m_body);
+				//arg0.shape2.destructor();
 				//System.out.println("destruction d'un block => "+arg0.velocity.length());
 			}
 		}
@@ -49,4 +53,4 @@ public class CollisionsListener implements ContactListener {
 		// TODO Auto-generated method stub
 	}
 	
-}
+}*/

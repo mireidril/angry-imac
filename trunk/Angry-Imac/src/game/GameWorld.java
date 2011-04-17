@@ -61,49 +61,58 @@ public class GameWorld implements Runnable{
 			g.fillRect(0, 520, 1024, 80);
 			
 			//********************************* affichage de la catapulte *************************
-			g2.setPaint(textCatapult);
+			g2.setPaint(catapult.textCatapult);
 			//g2.setColor(new Color(150, 150, 255));
 			g2.fillRect(100, 430, 43, 107);
 			
 			//********************************* affichage des munitions/projectiles *****************
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
             
-            for (Body body : m_world.munitions){
-            	if(body != null){
-	                resetTrans(g2);
-	                Block tmp = (Block) body.getUserData(); // recuperation du block lie a l'objet pour avoir ses caracteristiques
-		                g2.setColor(tmp.getMaterial().getColor());
-		                g2.translate(body.getWorldCenter().x, body.getWorldCenter().y);
-		                g2.rotate(body.getAngle());
-		               
-		                //chargemen de la texture
-		                g2.setPaint(tmp.getMaterial().getTexture());
-		                
-		                switch(tmp.getShape()){
-			                case RAMP : // meme tracet que pour triangle
-			                case TRIANGLE :
-			                	Polygon p = new Polygon();
-			                	List<Vec2> list = tmp.getVertices();
-			                	for(int id = 0; id < 3; id++)
-			                		p.addPoint((int)(list.get(id).x),(int)(list.get(id).y+0.2*tmp.getWidth()));
-			                	g2.fillPolygon(p);
-			                	break;
-			                case CIRCLE :
-			                	g2.fillOval((int)(-tmp.getWidth()/2), (int)(-tmp.getHeight()/2),(int)(tmp.getWidth()), (int)(tmp.getHeight()));
-			                	break;
-			                case BOX :
-			                	g2.fillRect((int)(-tmp.getWidth()/2), (int)(-tmp.getHeight()/2),(int)(tmp.getWidth()), (int)(tmp.getHeight()));
-			                	break;
-			                case TARGET :
-			                	Polygon pTar = new Polygon();
-			                	List<Vec2> listTar = tmp.getVertices();
-			                	for(int id = 0; id < listTar.size(); id++)
-			                		pTar.addPoint((int)(listTar.get(id).x),(int)(listTar.get(id).y+0.2*tmp.getWidth()));
-			                	g2.fillPolygon(pTar);
-			                	break;
-			                default :
-			                	break;
-		                }
+            for (int i = 0; i < catapult.projectiles.size(); i++){
+            	resetTrans(g2);          	
+            	Projectile p = catapult.projectiles.get(i);
+            	
+            	if(p != null) {
+            		g2.setColor(p.getMaterial().getColor());
+                	g2.rotate(p.getAngle());
+                	
+            		if(p.active == true){
+            			Body b = m_world.munitions.get(i);
+            			p = (Projectile) b.getUserData();            	
+            			g2.translate(b.getWorldCenter().x, b.getWorldCenter().y);
+            		}
+            		else {
+            			g2.translate(p.getPosition().x, p.getPosition().y);
+            		}
+	               
+	                //chargemen de la texture
+	                g2.setPaint(p.getMaterial().getTexture());
+	                
+	                switch(p.getShape()){
+		                case RAMP : // meme tracet que pour triangle
+		                case TRIANGLE :
+		                	Polygon pol = new Polygon();
+		                	List<Vec2> list = p.getVertices();
+		                	for(int id = 0; id < 3; id++)
+		                		pol.addPoint((int)(list.get(id).x),(int)(list.get(id).y+0.2*p.getWidth()));
+		                	g2.fillPolygon(pol);
+		                	break;
+		                case CIRCLE :
+		                	g2.fillOval((int)(-p.getWidth()/2), (int)(-p.getHeight()/2),(int)(p.getWidth()), (int)(p.getHeight()));
+		                	break;
+		                case BOX :
+		                	g2.fillRect((int)(-p.getWidth()/2), (int)(-p.getHeight()/2),(int)(p.getWidth()), (int)(p.getHeight()));
+		                	break;
+		                case TARGET :
+		                	Polygon pTar = new Polygon();
+		                	List<Vec2> listTar = p.getVertices();
+		                	for(int id = 0; id < listTar.size(); id++)
+		                		pTar.addPoint((int)(listTar.get(id).x),(int)(listTar.get(id).y+0.2*p.getWidth()));
+		                	g2.fillPolygon(pTar);
+		                	break;
+		                default :
+		                	break;
+	                }
             	}
             }
 
@@ -179,7 +188,6 @@ public class GameWorld implements Runnable{
 	private boolean alive;
 	private ParserXML parser;
 	private TexturePaint textSky;
-	private TexturePaint textCatapult;
 	private TexturePaint textGround;
 	private String lvl;
 	
@@ -187,13 +195,13 @@ public class GameWorld implements Runnable{
 	private long step_time;
 	
 	//Celine : a virer plus tard
-	private int actualMunition = 0;
+	
 	
 	
 	public GameWorld(){
 		alive = true;
 		catapult = new Launcher();
-		lvl = "levels/Niveau1.xml";
+		lvl = "levels/Niveau1Munition.xml";
 		
 		//********************************* creation du monde *********************************
 		createWorld();
@@ -239,19 +247,8 @@ public class GameWorld implements Runnable{
         this.textGround = new TexturePaint((BufferedImage) img, new Rectangle((int)(-img.getWidth(null)/2), (int)(-img.getHeight(null)/2),(int)(img.getWidth(null)), (int)(img.getHeight(null))));
 		*/
         
-        //chargement texture catapulte
-		img = null;
-		try {
-        	img=ImageIO.read(new File("textures/catapult.png"));
-        }
-        catch(IOException e){
-        	System.out.println("ok");System.exit(0);
-        }
-        this.textCatapult = new TexturePaint((BufferedImage) img, new Rectangle(10, 0, 43, 107));
-		
-        
-		CollisionsListener listener = new CollisionsListener();
-		m_world.setContactListener(listener);
+		/*CollisionsListener listener = new CollisionsListener();
+		m_world.setContactListener(listener);*/
 	}
 	
 	private void defineWalls(){
@@ -298,14 +295,22 @@ public class GameWorld implements Runnable{
 	}
 	
 	public void addMunition(Projectile p){
-        BodyDef bodyDef = new BodyDef();
+		catapult.projectiles.add(p);
+		if(catapult.getActualMunition() == catapult.projectiles.size() - 1) {
+			setProjectileToActive(p);
+		}
+	}
+	
+	public void setProjectileToActive(Projectile p) {
+		p.active = true;
+		BodyDef bodyDef = new BodyDef();
         bodyDef.position.set((int)(p.getPosition().x), (int)(p.getPosition().y));
         bodyDef.angle=p.getAngle();
         Body physicalBody = m_world.createBody(bodyDef);
         physicalBody.createShape(p.getShapeDef());
         physicalBody.setMassFromShapes();
         physicalBody.setBullet(false);
-        physicalBody.setUserData(p);        
+        physicalBody.setUserData(p);
         m_world.munitions.add(physicalBody);
 	}
 
@@ -316,6 +321,16 @@ public class GameWorld implements Runnable{
 			if(tmpTime-step_time > 6){
 				step_count++;
 				step_time = System.currentTimeMillis();
+				
+				//On vérifie qu'il n'y a pas des objets à supprimer
+				for(int i = 0; i < m_world.physicalBodies.size(); i++) {
+					Block block = (Block) m_world.physicalBodies.get(i).getUserData();
+					if(block.getToDelete() == true) {
+						m_world.destroyBody(m_world.physicalBodies.get(i));
+						m_world.physicalBodies.remove(m_world.physicalBodies.get(i));
+						System.out.println("nb de body : "+ m_world.getBodyCount());
+					}
+				}
 				
 				m_world.step(1.0f/30.0f, 10);
 				gg.repaint();
@@ -357,17 +372,21 @@ public class GameWorld implements Runnable{
 		return m_world;
 	}
 	
-	public Body getActualMunition() {
-		if(actualMunition < m_world.munitions.size())
-			return m_world.munitions.get(actualMunition);
+	public Body getActualMunitionBody() {
+		if(catapult.getActualMunition() < m_world.munitions.size())
+			return m_world.munitions.get(catapult.getActualMunition());
 		else
 			return null;
 	}
 	
 	public boolean incrementsActualMunition() {
-		if(actualMunition < m_world.munitions.size()) {
-			actualMunition++;
+		if(catapult.getActualMunition() < m_world.munitions.size()) {
+			catapult.incrementsActualMunition();
+			if(catapult.getActualMunition() < catapult.projectiles.size()) {
+				setProjectileToActive(catapult.projectiles.get(catapult.getActualMunition()));
+			}
 			return true;
+			
 		}
 		else
 		{

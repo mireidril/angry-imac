@@ -181,24 +181,21 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener{
 	public void mouseReleased(MouseEvent evt) {
 		//System.out.println("released !");
 		if(posBaseSouris.x != 0 && posBaseSouris.y != 0) {
-			Body munition = g.getActualMunition();
+			Body munition = g.getActualMunitionBody();
 			if(munition != null && g.incrementsActualMunition()) {
 				Vec2 vectForce = new Vec2((posBaseSouris.x - evt.getX()) *munition.getMass()*g.catapult.getElasticTension(), (posBaseSouris.y - evt.getY())*munition.getMass()*g.catapult.getElasticTension());
 				munition.applyForce(vectForce, munition.getPosition());
 				
 				//Déplacement de la munition suivante sur le lance-pierre
-				Body nextMunition = g.getActualMunition();
+				Body nextMunition = g.getActualMunitionBody();
 				if(nextMunition != null) {
-					nextMunition.setXForm(new Vec2(125, 450), 0);
+					nextMunition.setXForm(new Vec2(120, 505), 0);
 				}
 			}
 			posBaseSouris.x = 0;
 			posBaseSouris.y = 0;
-			
 		}
 		else {
-			System.out.println("lol");
-			
 		}
 	}
 }

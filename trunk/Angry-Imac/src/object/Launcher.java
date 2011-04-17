@@ -2,7 +2,15 @@ package object;
 
 import game.GWorld;
 
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.TexturePaint;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 import org.jbox2d.collision.PolygonDef;
 import org.jbox2d.common.Vec2;
@@ -15,9 +23,22 @@ public class Launcher {
 	private final float elasticTension = 35;
 	private ArrayList<Body> rope = new ArrayList<Body>();
 	private ArrayList<RevoluteJointDef> jointsRope = new ArrayList<RevoluteJointDef>();
+	public TexturePaint textCatapult;
+	
+	public ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
+	
+	private int actualMunition = 0;
 	
 	public Launcher() {
-		
+		 //chargement texture catapulte
+		Image img = null;
+		try {
+        	img=ImageIO.read(new File("textures/catapult.png"));
+        }
+        catch(IOException e){
+        	System.out.println("ok");System.exit(0);
+        }
+        this.textCatapult = new TexturePaint((BufferedImage) img, new Rectangle(10, 0, 43, 107));
 	}
 	
 	public void createElastic(GWorld gameWorld) {
@@ -115,6 +136,14 @@ public class Launcher {
 		body.setMassFromShapes();
 		
 		rope.add(body);
+	}
+	
+	public int getActualMunition() {
+		return actualMunition;
+	}
+	
+	public void incrementsActualMunition() {
+		actualMunition++;
 	}
 	
 	public float getElasticTension() {
