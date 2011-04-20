@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<angrImac>
+    <block shape="circle" width="20" height="20" posX="50" posY="180" angle="0" type="metal"/>
+    
+    
+    <block shape="triangle" width="290" height="290" posX="500" posY="380" angle="3.14159" type="metal"/>  
+        
+    <block shape="box" width="200" height="250" posX="900" posY="390" angle="0" type="metal"/>
+    <block shape="box" width="550" height="60" posX="750" posY="240" angle="0" type="wood"/>
+    <block shape="box" width="150" height="60" posX="900" posY="180" angle="0" type="metal"/>
+    
+    <block shape="circle" width="60" height="60" posX="550" posY="180" angle="0" type="wood"/>
+    
+        
+    <target shape="circle" width="20" height="50" posX="750" posY="500" angle="0" type="target"/>
+    <target shape="circle" width="20" height="50" posX="700" posY="500" angle="0" type="target"/>
+    
+</angrImac>

@@ -201,7 +201,7 @@ public class GameWorld implements Runnable{
 	public GameWorld(){
 		alive = true;
 		catapult = new Launcher();
-		lvl = "levels/Niveau1Munition.xml";
+		lvl = "levels/Niveau15.xml";
 		
 		//********************************* creation du monde *********************************
 		createWorld();
