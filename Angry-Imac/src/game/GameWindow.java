@@ -1,26 +1,32 @@
 package game;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Image;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
 
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JButton;
-
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 
 @SuppressWarnings("serial")
-public class GameWindow extends JFrame implements ActionListener, MouseListener{
+public class GameWindow extends JFrame implements ActionListener, MouseListener, KeyListener{
 	private JButton quitButton;
 	private JButton pauseButton;
 	private JButton resetButton;
@@ -29,18 +35,16 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener{
 	private GameWorld g; 
 	private Thread gw;
 	private boolean alive = true;
+	private JPanel start;
 	
 	private Vec2 posBaseSouris;
 	private Vec2 posDragSouris;
 	
 	public GameWindow(){
 		super();
-		g = new GameWorld();
-		gw = new Thread(g);
-		posBaseSouris = new Vec2();
-		posDragSouris = new Vec2();
 		buildWindow();
-		gw.start();
+		this.setFocusable(true);
+		this.requestFocus();
 	}
 	
 	//creation de la fenetre
@@ -55,13 +59,25 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener{
 		buildMenu();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		//ajout des boutons
-		contenu.add("South", buildButtons());
+		start = new JPanel(){
+			public void paint(Graphics g){
+				//chargement texture start
+				Image img=null;
+				try {
+		        	img=ImageIO.read(new File("textures/start.jpg"));
+		        	g.drawImage(img, 0, 0, null);
+		        }
+		        catch(IOException e){
+		        	System.out.println("ok");System.exit(0);
+		        }
+			}
+			
+		};
+		start.setSize(1024, 600);
+		contenu.add(start, "Center");
 		
-		//creation de la zone de jeu
-		contenu.add(g.gg,"Center");
 		
-		this.addMouseListener(this);
+		this.addKeyListener(this);
 		
 		setContentPane(contenu);
 
@@ -126,10 +142,6 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener{
 			System.out.println("Pause");	
 		}
 		else if(source == resetButton){
-			/*gw.stop();
-			g = new GameWorld();
-			gw = new Thread(g);
-			gw.start();*/
 			System.out.println("reset");
 			g.resetWorld();
 		}
@@ -197,5 +209,42 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener{
 		}
 		else {
 		}
+	}
+	
+	@Override
+	public void keyTyped(KeyEvent evt) {
+
+		if(evt.getKeyChar() == ' '){
+			System.out.println("test : touche espace appuye");
+			
+			//ajout des boutons
+			contenu.add("South", buildButtons());
+			
+			//suppression de l'ecran d'accueil
+			contenu.remove(start);
+			
+			//creation du monde et de son thread
+			g = new GameWorld();
+			gw = new Thread(g);
+			posBaseSouris = new Vec2();
+			posDragSouris = new Vec2();
+			gw.start();
+			
+			//creation de la zone de jeu
+			contenu.add(g.gg,"Center");
+			
+			setContentPane(contenu);
+			
+			//ajout du listener de la souris
+			this.addMouseListener(this);
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
 	}
 }
