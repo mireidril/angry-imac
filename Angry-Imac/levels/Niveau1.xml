@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <angrImac>
-    <block shape="circle" width="20" height="20" posX="50" posY="180" angle="0" type="wood"/>
+	<munition shape="circle" width="30" height="30" posX="120" posY="505" angle="0" type="metal"/>
+
     
     <block shape="box" width="30" height="50" posX="550" posY="500" angle="0" type="wood"/>
 	<block shape="box" width="30" height="50" posX="750" posY="500" angle="0" type="wood"/>

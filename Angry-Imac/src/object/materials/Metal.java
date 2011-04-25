@@ -13,7 +13,7 @@ import javax.imageio.ImageIO;
 public class Metal  extends Material{
 	public Metal(){
 		density = 7.32f;
-		friction = 0.2f;
+		friction = 0.4f;
 		restitution = 0.05f;
 		weightFactor = 0;
 		breakable = false;

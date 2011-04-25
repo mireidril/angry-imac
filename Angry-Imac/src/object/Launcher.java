@@ -157,4 +157,8 @@ public class Launcher {
 	public ArrayList<RevoluteJointDef> getRopeJoints() {
 		return jointsRope;
 	}
+	
+	public void resetActualMunition(){
+		actualMunition =0;
+	}
 }
