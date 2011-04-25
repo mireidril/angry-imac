@@ -424,8 +424,10 @@ public class GameWorld implements Runnable{
 	private void loadNextWorld(){
 		for(int i = 0; i < m_world.physicalBodies.size(); i++) {
 			Block block = (Block) m_world.physicalBodies.get(i).getUserData();
+			block.setToDelete(true);
 			m_world.destroyBody(m_world.physicalBodies.get(i));
 			m_world.physicalBodies.remove(m_world.physicalBodies.get(i));
+			m_world.physicalBodies.clear();
 		}
 		for (int i = 0; i< m_world.munitions.size(); i++) {
 			Body tmp = m_world.munitions.get(i);
