@@ -66,6 +66,8 @@ public class GameWorld implements Runnable{
 			g2.fillRect(100, 430, 43, 107);
 			
 			//********************************* affichage des munitions/projectiles *****************
+			if(alive)
+			{
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
             
             for (int i = 0; i < catapult.projectiles.size(); i++){
@@ -76,7 +78,7 @@ public class GameWorld implements Runnable{
             		g2.setColor(p.getMaterial().getColor());
                 	g2.rotate(p.getAngle());
                 	
-            		if(p.active == true){
+            		if(p.active == true && i<m_world.munitions.size()){
             			Body b = m_world.munitions.get(i);
             			p = (Projectile) b.getUserData();            	
             			g2.translate(b.getWorldCenter().x, b.getWorldCenter().y);
@@ -120,45 +122,46 @@ public class GameWorld implements Runnable{
 			//Graphics2D g2 = (Graphics2D) g;
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
             
-            for (Body body : m_world.physicalBodies){
-            	if(body != null){
-	                resetTrans(g2);
-	                Block tmp = (Block) body.getUserData(); // recuperation du block lie a l'objet pour avoir ses caracteristiques
-		                g2.setColor(tmp.getMaterial().getColor());
-		                g2.translate(body.getWorldCenter().x, body.getWorldCenter().y);
-		                g2.rotate(body.getAngle());
-		               
-		                //chargemen de la texture
-		                g2.setPaint(tmp.getMaterial().getTexture());
-		                
-		                switch(tmp.getShape()){
-			                case RAMP : // meme tracet que pour triangle
-			                case TRIANGLE :
-			                	Polygon p = new Polygon();
-			                	List<Vec2> list = tmp.getVertices();
-			                	for(int id = 0; id < 3; id++)
-			                		p.addPoint((int)(list.get(id).x),(int)(list.get(id).y+0.2*tmp.getWidth()));
-			                	g2.fillPolygon(p);
-			                	break;
-			                case CIRCLE :
-			                	g2.fillOval((int)(-tmp.getWidth()/2), (int)(-tmp.getHeight()/2),(int)(tmp.getWidth()), (int)(tmp.getHeight()));
-			                	break;
-			                case BOX :
-			                	g2.fillRect((int)(-tmp.getWidth()/2), (int)(-tmp.getHeight()/2),(int)(tmp.getWidth()), (int)(tmp.getHeight()));
-			                	break;
-			                case TARGET :
-			                	Polygon pTar = new Polygon();
-			                	List<Vec2> listTar = tmp.getVertices();
-			                	for(int id = 0; id < listTar.size(); id++)
-			                		pTar.addPoint((int)(listTar.get(id).x),(int)(listTar.get(id).y+0.2*tmp.getWidth()));
-			                	g2.fillPolygon(pTar);
-			                	break;
-			                default :
-			                	break;
-		                }
-            	}
-            }
-            
+			if(m_world.physicalBodies.size() > 0){
+	            for (Body body : m_world.physicalBodies){
+	            	if(body != null){
+		                resetTrans(g2);
+		                Block tmp = (Block) body.getUserData(); // recuperation du block lie a l'objet pour avoir ses caracteristiques
+			                g2.setColor(tmp.getMaterial().getColor());
+			                g2.translate(body.getWorldCenter().x, body.getWorldCenter().y);
+			                g2.rotate(body.getAngle());
+			               
+			                //chargemen de la texture
+			                g2.setPaint(tmp.getMaterial().getTexture());
+			                
+			                switch(tmp.getShape()){
+				                case RAMP : // meme tracet que pour triangle
+				                case TRIANGLE :
+				                	Polygon p = new Polygon();
+				                	List<Vec2> list = tmp.getVertices();
+				                	for(int id = 0; id < 3; id++)
+				                		p.addPoint((int)(list.get(id).x),(int)(list.get(id).y+0.2*tmp.getWidth()));
+				                	g2.fillPolygon(p);
+				                	break;
+				                case CIRCLE :
+				                	g2.fillOval((int)(-tmp.getWidth()/2), (int)(-tmp.getHeight()/2),(int)(tmp.getWidth()), (int)(tmp.getHeight()));
+				                	break;
+				                case BOX :
+				                	g2.fillRect((int)(-tmp.getWidth()/2), (int)(-tmp.getHeight()/2),(int)(tmp.getWidth()), (int)(tmp.getHeight()));
+				                	break;
+				                case TARGET :
+				                	Polygon pTar = new Polygon();
+				                	List<Vec2> listTar = tmp.getVertices();
+				                	for(int id = 0; id < listTar.size(); id++)
+				                		pTar.addPoint((int)(listTar.get(id).x),(int)(listTar.get(id).y+0.2*tmp.getWidth()));
+				                	g2.fillPolygon(pTar);
+				                	break;
+				                default :
+				                	break;
+			                }
+	            	}
+	            }
+			}
             //********************************* affichage de rope **********************
 			for (int i = 0; i < catapult.getRope().size(); i++){
             	Body link = catapult.getRope().get(i);
@@ -176,7 +179,7 @@ public class GameWorld implements Runnable{
             		 g2.fillRect((int)link.localAnchor1.x, (int)link.localAnchor1.y, 10, 10);
             	}
             }   
-         
+		}
 	  } 
 	}
 	
@@ -189,8 +192,9 @@ public class GameWorld implements Runnable{
 	private ParserXML parser;
 	private TexturePaint textSky;
 	private TexturePaint textGround;
-	private String lvl;
+	private int lvl;
 	
+	private boolean runEngaged;
 	private int step_count;
 	private long step_time;
 	
@@ -201,14 +205,14 @@ public class GameWorld implements Runnable{
 	public GameWorld(){
 		alive = true;
 		catapult = new Launcher();
-		lvl = "levels/Niveau15.xml";
+		lvl = 1;
 		
 		//********************************* creation du monde *********************************
 		createWorld();
 		defineWalls();
 
 		//********************************* Creation des objets *******************************
-        parser = new ParserXML(this,lvl,false);
+        parser = new ParserXML(this,"levels/Niveau"+lvl+".xml",false);
         parser.parseAllAndCreatorLevel();
 		
 		//********************************* parametrage pour le framerate *********************
@@ -255,6 +259,7 @@ public class GameWorld implements Runnable{
 		// Ground
 		PolygonDef sd = new PolygonDef();
 		sd.setAsBox(1024.0f, 40.0f);
+		sd.friction = 2.0f;
 		BodyDef bd = new BodyDef();
 		bd.position.set(0.0f, 560.0f);
 		ground = m_world.createBody(bd);
@@ -317,28 +322,33 @@ public class GameWorld implements Runnable{
 	@Override
 	public void run() {
 		while(alive){
-			long tmpTime = System.currentTimeMillis();
-			if(tmpTime-step_time > 6){
-				step_count++;
-				step_time = System.currentTimeMillis();
-				
-				//On vérifie qu'il n'y a pas des objets à supprimer
-				for(int i = 0; i < m_world.physicalBodies.size(); i++) {
-					Block block = (Block) m_world.physicalBodies.get(i).getUserData();
-					if(block.getToDelete() == true) {
-						m_world.destroyBody(m_world.physicalBodies.get(i));
-						m_world.physicalBodies.remove(m_world.physicalBodies.get(i));
-						System.out.println("nb de body : "+ m_world.getBodyCount());
-					}
-				}
-				
-				m_world.step(1.0f/30.0f, 10);
-				gg.repaint();
-				
-				//Génant maintenant qu'on tire au lance-pierre 
-				//detectStable();
+			compute();
+			detectStable();
+		}
+	}
+
+	private void compute(){
+		runEngaged = true;
+		long tmpTime = System.currentTimeMillis();
+		if(tmpTime-step_time > 6){
+			step_count++;
+			step_time = System.currentTimeMillis();
 			
+			//On vérifie qu'il n'y a pas des objets à supprimer
+			for(int i = 0; i < m_world.physicalBodies.size(); i++) {
+				Block block = (Block) m_world.physicalBodies.get(i).getUserData();
+				if(block.getToDelete() == true) {
+					m_world.destroyBody(m_world.physicalBodies.get(i));
+					m_world.physicalBodies.remove(m_world.physicalBodies.get(i));
+					if(block instanceof Target)
+						((Target)block).finalize();
+					System.out.println("nb de body : "+ m_world.getBodyCount());
+				}
 			}
+			
+			m_world.step(1.0f/30.0f, 10);
+			gg.repaint();
+			runEngaged = false;
 		}
 	}
 	
@@ -357,9 +367,11 @@ public class GameWorld implements Runnable{
         			i++;
         	}
         }
-        if(nb == i){
-        	//System.out.println("Stable hehe");
-        	//alive = false;
+        if(nb == i && Target.getNbTarget() == 0 || Target.getNbTarget() == 0){
+        	System.out.println("Niveau gagne !");
+        	alive = false;
+        	while(runEngaged){}
+        	loadNextWorld();
         }
 		
 	}
@@ -393,7 +405,7 @@ public class GameWorld implements Runnable{
 			return false;
 		}
 	}
-	
+	/*
 	public void resetWorld() {
 		
 		//********************************* creation du monde *********************************
@@ -401,12 +413,38 @@ public class GameWorld implements Runnable{
 		defineWalls();
 
 		//********************************* Creation des objets *******************************
-        parser = new ParserXML(this, lvl,false);
+        parser = new ParserXML(this, "levels/Niveau"+lvl+".xml",false);
         parser.parseAllAndCreatorLevel();
 		
 		//********************************* parametrage pour le framerate *********************
 		step_count = 0;
 		step_time = System.currentTimeMillis();
+	}
+	*/
+	private void loadNextWorld(){
+		for(int i = 0; i < m_world.physicalBodies.size(); i++) {
+			Block block = (Block) m_world.physicalBodies.get(i).getUserData();
+			m_world.destroyBody(m_world.physicalBodies.get(i));
+			m_world.physicalBodies.remove(m_world.physicalBodies.get(i));
+		}
+		for (int i = 0; i< m_world.munitions.size(); i++) {
+			Body tmp = m_world.munitions.get(i);
+        	m_world.munitions.remove(i);
+        	tmp = null;
+        }
+		m_world.munitions=new ArrayList<Body>();
+		for(int i = 0; i<m_world.getBodyCount(); i++){
+			m_world.destroyBody(m_world.getBodyList());
+		}
+		for(int i = 0; i<catapult.projectiles.size(); i++){
+			catapult.projectiles.remove(i);
+		}
+		catapult.projectiles=new ArrayList<Projectile>();
+		catapult.resetActualMunition();
+		lvl++;
+		parser = new ParserXML(this,"levels/Niveau"+lvl+".xml",false);
+        parser.parseAllAndCreatorLevel();
+        alive = true;
 	}
 	
 }

@@ -143,7 +143,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		}
 		else if(source == resetButton){
 			System.out.println("reset");
-			g.resetWorld();
+			//g.resetWorld();
 		}
 	}
 

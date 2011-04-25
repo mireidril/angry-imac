@@ -13,7 +13,7 @@ import javax.imageio.ImageIO;
 public class Wood extends Material{
 	public Wood(){
 		density = 0.6f;
-		friction = 0.3f;
+		friction = 0.7f;
 		restitution = 0.3f;
 		weightFactor = 0;
 		breakable = true;
