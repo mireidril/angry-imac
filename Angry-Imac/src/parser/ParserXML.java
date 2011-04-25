@@ -64,7 +64,12 @@ public class ParserXML
 		   else if(current.getAttributeValue("type").equals("wood")){
 			   material = Mat.WOOD;
 		   }
-		   
+		   else if(current.getAttributeValue("type").equals("mammouth")){
+			   material = Mat.MAMMOUTH;
+		   }
+		   else if(current.getAttributeValue("type").equals("mammouth2")){
+			   material = Mat.MAMMOUTH2;
+		   }
 		   gameworld.addMunition(new Projectile(shape, width, height, new Vec2(x, y), angle, material));
       }  
 	   
@@ -124,6 +129,12 @@ public class ParserXML
          }
          else if(current.getAttributeValue("type").equals("target")){
         	 material = Mat.TARGET;
+         }
+         else if(current.getAttributeValue("type").equals("mammouth")){
+        	 material = Mat.MAMMOUTH;
+         }
+         else if(current.getAttributeValue("type").equals("mammouth2")){
+        	 material = Mat.MAMMOUTH2;
          }
          gameworld.addBlock(new Block(shape, width, height, new Vec2(x, y), angle, material));
          

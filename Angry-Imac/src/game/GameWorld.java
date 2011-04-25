@@ -57,7 +57,7 @@ public class GameWorld implements Runnable{
 			
 			//********************************* affichage rectangle du sol *************************
 			//chargemen de la texture
-			g.setColor(new Color(255, 150, 0));
+			//g.setColor(new Color(255, 150, 0));
 			g.fillRect(0, 520, 1024, 80);
 			
 			//********************************* affichage de la catapulte *************************

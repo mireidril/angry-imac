@@ -76,6 +76,14 @@ public class Block {
 				mat = new Rock();
 				break;
 				
+			case MAMMOUTH : 
+				mat = new Mammouth();
+				break;
+				
+			case MAMMOUTH2 : 
+				mat = new Mammouth2();
+				break;
+				
 			case TARGET :
 				mat = new object.materials.Target();
 				break;
