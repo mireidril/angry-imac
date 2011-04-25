@@ -10,20 +10,20 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Wood extends Material{
-	public Wood(){
-		density = 0.6f;
-		friction = 0.7f;
-		restitution = 0.3f;
+public class Mammouth  extends Material{
+	public Mammouth(){
+		density = 2.4f;
+		friction = 0.5f;
+		restitution = 0.01f;
 		weightFactor = 0;
-		breakable = true;
-		breakableForce = 180.0f;
-		color = new Color(165, 89, 4);
+		breakable = false;
+		breakableForce = 1.0f;
+		color = new Color(82, 82, 82);
 		
 		Image img=null;
 		//BufferedImage img= new BufferedImage();
         try {
-        	img=ImageIO.read(new File("textures/bois.jpg"));
+        	img=ImageIO.read(new File("textures/mammouth.png"));
         }
         catch(IOException e){
         	System.out.println("ok");System.exit(0);
