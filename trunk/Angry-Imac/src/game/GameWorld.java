@@ -493,10 +493,15 @@ public class GameWorld implements Runnable{
 		catapult.projectiles.clear();
 		catapult.resetActualMunition();
 		
+		Target.resetNbTarget();
+		
 		defineWalls();
 		
 		parser = new ParserXML(this,"levels/Niveau"+lvl+".xml",false);
         parser.parseAllAndCreatorLevel();
+        
+        gameWindow.hideNextButton();
+        
         alive = true;
 	}
 }

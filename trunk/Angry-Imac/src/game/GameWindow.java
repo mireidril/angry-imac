@@ -137,6 +137,12 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 			nextButton.setVisible(true);
 	}
 	
+	public void hideNextButton(){
+		nextButton.setVisible(false);
+		while(nextButton.isVisible())
+			nextButton.setVisible(false);
+	}
+	
 	//ajout des listeners
 	@SuppressWarnings("deprecation")
 	public void actionPerformed(ActionEvent e) {
@@ -163,7 +169,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 			if(nextButton.isVisible())
 		        nextButton.setVisible(false);
 	        alive = false;
-	        while(g.runEngaged){}
+	        //while(g.runEngaged){}
 	        g.loadWorldReset(g.lvl);
 			//g.resetWorld();
 	        
