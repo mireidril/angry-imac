@@ -22,6 +22,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JButton;
+
+import object.Target;
+
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 
@@ -30,6 +33,8 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	private JButton quitButton;
 	private JButton pauseButton;
 	private JButton resetButton;
+	private JButton nextButton;
+	
 	private JMenuBar menuBar;
 	private JPanel contenu;
 	private GameWorld g; 
@@ -105,7 +110,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		buttonPanel.setLayout(new FlowLayout());
 		buttonPanel.setSize(1024, 100);
 		
-		quitButton = new JButton("Quitter");
+		quitButton = new JButton("Exit");
 		quitButton.addActionListener(this);
 		buttonPanel.add(quitButton);
 		
@@ -117,7 +122,19 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		resetButton.addActionListener(this);
 		buttonPanel.add(resetButton);
 		
+		nextButton = new JButton("Next Level");
+		nextButton.addActionListener(this);
+		nextButton.setVisible(false);
+		buttonPanel.add(nextButton);
+		
 		return buttonPanel;
+	}
+	
+	public void displayNextButton(){
+		nextButton.setVisible(true);
+		System.out.println("affichage");
+		while(!nextButton.isVisible())
+			nextButton.setVisible(true);
 	}
 	
 	//ajout des listeners
@@ -143,7 +160,23 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		}
 		else if(source == resetButton){
 			System.out.println("reset");
+			if(nextButton.isVisible())
+		        nextButton.setVisible(false);
+	        alive = false;
+	        while(g.runEngaged){}
+	        g.loadWorldReset(g.lvl);
 			//g.resetWorld();
+	        
+		}
+		else if(source == nextButton){
+			System.out.println("next");
+			nextButton.setVisible(false);
+	        alive = false;
+	        g.lvl++;
+	        while(g.runEngaged){}
+	        g.loadWorldReset(g.lvl);
+			//g.resetWorld();
+	        nextButton.setVisible(false);
 		}
 	}
 
@@ -224,7 +257,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 			contenu.remove(start);
 			
 			//creation du monde et de son thread
-			g = new GameWorld();
+			g = new GameWorld(this);
 			gw = new Thread(g);
 			posBaseSouris = new Vec2();
 			posDragSouris = new Vec2();

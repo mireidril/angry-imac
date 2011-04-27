@@ -123,6 +123,7 @@ public class GameWorld implements Runnable{
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
             
 			if(m_world.physicalBodies.size() > 0){
+				try{
 	            for (Body body : m_world.physicalBodies){
 	            	if(body != null){
 		                resetTrans(g2);
@@ -161,6 +162,8 @@ public class GameWorld implements Runnable{
 			                }
 	            	}
 	            }
+				}
+				catch(Exception e){}
 			}
             //********************************* affichage de rope **********************
 			for (int i = 0; i < catapult.getRope().size(); i++){
@@ -184,6 +187,7 @@ public class GameWorld implements Runnable{
 	}
 	
 	private GWorld m_world;
+	private GameWindow gameWindow;
 	private Body ground;
 	public Launcher catapult; 
 	//public  ArrayList<Body> physicalBodies = new ArrayList<Body>();
@@ -192,17 +196,20 @@ public class GameWorld implements Runnable{
 	private ParserXML parser;
 	private TexturePaint textSky;
 	private TexturePaint textGround;
-	private int lvl;
+	int lvl;
 	
-	private boolean runEngaged;
+	boolean runEngaged;
 	private int step_count;
 	private long step_time;
+	
+	private long timeStable = 0;
 	
 	//Celine : a virer plus tard
 	
 	
 	
-	public GameWorld(){
+	public GameWorld(GameWindow gameWindow){
+		this.gameWindow = gameWindow;
 		alive = true;
 		catapult = new Launcher();
 		lvl = 1;
@@ -349,13 +356,15 @@ public class GameWorld implements Runnable{
 			m_world.step(1.0f/30.0f, 10);
 			gg.repaint();
 			runEngaged = false;
-		}
+		}runEngaged = false;
 	}
 	
 	private void detectStable(){
-		int nb = m_world.physicalBodies.size() + m_world.munitions.size();
+		if(alive){
+		/*int nb = m_world.physicalBodies.size() + m_world.munitions.size();
 		int i = 0;
-        for (Body body : m_world.physicalBodies) {
+        for (int j = 0; j<m_world.physicalBodies.size();j++) {
+        	Body body = m_world.physicalBodies.get(j);
         	if(body != null){
         		if(body.isSleeping())
         			i++;
@@ -366,14 +375,26 @@ public class GameWorld implements Runnable{
         		if(body.isSleeping())
         			i++;
         	}
-        }
-        if(nb == i && Target.getNbTarget() == 0 || Target.getNbTarget() == 0){
+        }*//*
+        if(nb == i && Target.getNbTarget() == 0 ){
         	System.out.println("Niveau gagne !");
         	alive = false;
         	while(runEngaged){}
         	loadNextWorld();
+        }*/
+        if(Target.getNbTarget() == 0 ){
+        	if(timeStable == 0)
+        		timeStable = System.currentTimeMillis();
+        	else{
+        		long tmpTime = System.currentTimeMillis();
+        		if(tmpTime - timeStable >= 1500){
+        			System.out.println("Niveau gagne !");
+                	gameWindow.displayNextButton();
+                	timeStable=0;
+        		}
+        	}
         }
-		
+		}
 	}
 
 	public void setWorld(GWorld m_world) {
@@ -427,21 +448,21 @@ public class GameWorld implements Runnable{
 			block.setToDelete(true);
 			m_world.destroyBody(m_world.physicalBodies.get(i));
 			m_world.physicalBodies.remove(m_world.physicalBodies.get(i));
-			m_world.physicalBodies.clear();
-		}
+			
+		}m_world.physicalBodies.clear();
 		for (int i = 0; i< m_world.munitions.size(); i++) {
 			Body tmp = m_world.munitions.get(i);
         	m_world.munitions.remove(i);
         	tmp = null;
         }
-		m_world.munitions=new ArrayList<Body>();
+		m_world.munitions.clear();
 		for(int i = 0; i<m_world.getBodyCount(); i++){
 			m_world.destroyBody(m_world.getBodyList());
 		}
 		for(int i = 0; i<catapult.projectiles.size(); i++){
 			catapult.projectiles.remove(i);
 		}
-		catapult.projectiles=new ArrayList<Projectile>();
+		catapult.projectiles.clear();
 		catapult.resetActualMunition();
 		lvl++;
 		parser = new ParserXML(this,"levels/Niveau"+lvl+".xml",false);
@@ -449,4 +470,33 @@ public class GameWorld implements Runnable{
         alive = true;
 	}
 	
+	void loadWorldReset(int lvl){
+		for(int i = 0; i < m_world.physicalBodies.size(); i++) {
+			Block block = (Block) m_world.physicalBodies.get(i).getUserData();
+			block.setToDelete(true);
+			m_world.destroyBody(m_world.physicalBodies.get(i));
+			m_world.physicalBodies.remove(m_world.physicalBodies.get(i));
+		}
+		m_world.physicalBodies.clear();
+		m_world.physicalBodies = new ArrayList<Body>();
+		
+		for (int i = 0; i< m_world.munitions.size(); i++) {
+        	m_world.munitions.remove(i);
+        }
+		m_world.munitions.clear();
+		while(m_world.getBodyCount() != 0)/*for(int i = 0; i<m_world.getBodyCount(); i++)*/{
+			m_world.destroyBody(m_world.getBodyList());
+		}
+		for(int i = 0; i<catapult.projectiles.size(); i++){
+			catapult.projectiles.remove(i);
+		}
+		catapult.projectiles.clear();
+		catapult.resetActualMunition();
+		
+		defineWalls();
+		
+		parser = new ParserXML(this,"levels/Niveau"+lvl+".xml",false);
+        parser.parseAllAndCreatorLevel();
+        alive = true;
+	}
 }
