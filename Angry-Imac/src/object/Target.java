@@ -22,4 +22,8 @@ public class Target extends Block{
 	public static int getNbTarget(){
 		return nbTarget;
 	}
+	
+	public static void resetNbTarget(){
+		nbTarget=0;
+	}
 }
