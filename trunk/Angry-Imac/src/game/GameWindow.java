@@ -53,9 +53,12 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	private boolean alive = true;
 	private JPanel start;
 	private JPanel help;
+	private JPanel credits;
 	
 	private Vec2 posBaseSouris;
 	private Vec2 posDragSouris;
+	
+	private boolean helpScreen = false;
 	
 	public GameWindow(){
 		super();
@@ -77,22 +80,25 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		playButton = new JButton(new ImageIcon("textures/home/play.png"));
 		playButton.setBounds(469,200,86,48);
 		playButton.setBorderPainted(false);
+		playButton.setContentAreaFilled(false);
 		playButton.addActionListener(this);
 		
 		helpButton = new JButton(new ImageIcon("textures/home/help.png"));
 		helpButton.setBounds(467,270,88,49);
 		helpButton.setBorderPainted(false);
+		helpButton.setContentAreaFilled(false);
 		helpButton.addActionListener(this);
 		
 		creditsButton = new JButton(new ImageIcon("textures/home/credits.png"));
 		creditsButton.setBounds(448,340,130,48);
 		creditsButton.setBorderPainted(false);
+		creditsButton.setContentAreaFilled(false);
 		creditsButton.addActionListener(this);
 		
 		//crétion du bouton retour sur la page d'accueil
 		returnHomeButton = new JButton(new ImageIcon("textures/return.png"));
-		returnHomeButton.setBounds(300,380,85,24);
 		returnHomeButton.setBorderPainted(false);
+		returnHomeButton.setContentAreaFilled(false);
 		returnHomeButton.addActionListener(this);
 		
 		buildMenu();
@@ -109,7 +115,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 				//chargement texture start
 				Image img=null;
 				try {
-		        	img=ImageIO.read(new File("textures/home/start.jpg"));
+		        	img=ImageIO.read(new File("textures/home/startScreen.jpg"));
 		        	g.drawImage(img, 0, 0, null);
 		        }
 		        catch(IOException e){
@@ -151,17 +157,21 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		quitButton = new JButton(new ImageIcon("textures/bois.jpg"));
 		quitButton.addActionListener(this);
 		quitButton.setBorderPainted(false);
+		quitButton.setContentAreaFilled(false);
 		buttonPanel.add(quitButton);
 		
 		pauseButton = new JButton("Pause");
+		pauseButton.setContentAreaFilled(false);
 		pauseButton.addActionListener(this);
 		buttonPanel.add(pauseButton);
 		
 		resetButton = new JButton("Reset");
+		resetButton.setContentAreaFilled(false);
 		resetButton.addActionListener(this);
 		buttonPanel.add(resetButton);
 		
 		nextButton = new JButton("Next Level");
+		nextButton.setContentAreaFilled(false);
 		nextButton.addActionListener(this);
 		nextButton.setVisible(false);
 		buttonPanel.add(nextButton);
@@ -250,6 +260,10 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		}
 		else if(source == helpButton)
 		{
+			helpScreen = true;
+			
+			returnHomeButton.setBounds(300,380,85,24);
+			
 			//suppression de l'ecran d'accueil
 			contenu.remove(start);
 			contenu.remove(playButton);
@@ -275,14 +289,51 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 			setContentPane(contenu);
 			this.addMouseListener(this);
 		}
+		else if(source == creditsButton)
+		{
+			returnHomeButton.setBounds(400,380,85,24);
+			
+			//suppression de l'ecran d'accueil
+			contenu.remove(start);
+			contenu.remove(playButton);
+			contenu.remove(helpButton);
+			contenu.remove(creditsButton);
+			
+			credits = new JPanel(){
+				public void paint(Graphics g){
+					//chargement texture start
+					Image img=null;
+					try {
+			        	img=ImageIO.read(new File("textures/creditsScreen.jpg"));
+			        	g.drawImage(img, 0, 0, null);
+			        }
+			        catch(IOException e){
+			        	System.out.println("ok");System.exit(0);
+			        }
+				}
+			};
+			credits.setSize(1024, 600);
+			contenu.add(returnHomeButton);
+			contenu.add(credits);
+			setContentPane(contenu);
+			this.addMouseListener(this);
+		}
 		else if(source == returnHomeButton)
 		{
 			//Suppression des élémentes de la page Help
-			contenu.remove(help);
+			if(helpScreen == true)
+			{
+				contenu.remove(help);
+			}
+			else
+			{
+				contenu.remove(credits);
+			}
 			contenu.remove(returnHomeButton);
 			//Retour a la page d'accueil
 			goToHome();
 			this.addMouseListener(this);
+			helpScreen = false;
 		}
 	}
 
