@@ -31,13 +31,20 @@ import org.jbox2d.dynamics.Body;
 
 @SuppressWarnings("serial")
 public class GameWindow extends JFrame implements ActionListener, MouseListener, KeyListener{
+
+	//boutons visibles pendant le jeu
 	private JButton quitButton;
 	private JButton pauseButton;
 	private JButton resetButton;
 	private JButton nextButton;
+	
+	//Boutons visibles sur la page de titre
 	private JButton playButton;
 	private JButton helpButton;
 	private JButton creditsButton;
+	
+	//Bouton retour sur la page d'accueil
+	private JButton returnHomeButton;
 	
 	private JMenuBar menuBar;
 	private JPanel contenu;
@@ -67,47 +74,54 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		contenu.setLayout(new BorderLayout());
 		
 		//Creation des boutons du menu de la page d'accueil
-		playButton = new JButton(new ImageIcon("textures/play.png"));
+		playButton = new JButton(new ImageIcon("textures/home/play.png"));
 		playButton.setBounds(469,200,86,48);
 		playButton.setBorderPainted(false);
 		playButton.addActionListener(this);
 		
-		helpButton = new JButton(new ImageIcon("textures/help.png"));
+		helpButton = new JButton(new ImageIcon("textures/home/help.png"));
 		helpButton.setBounds(467,270,88,49);
 		helpButton.setBorderPainted(false);
 		helpButton.addActionListener(this);
 		
-		creditsButton = new JButton(new ImageIcon("textures/credits.png"));
+		creditsButton = new JButton(new ImageIcon("textures/home/credits.png"));
 		creditsButton.setBounds(448,340,130,48);
 		creditsButton.setBorderPainted(false);
 		creditsButton.addActionListener(this);
 		
+		//crétion du bouton retour sur la page d'accueil
+		returnHomeButton = new JButton(new ImageIcon("textures/return.png"));
+		returnHomeButton.setBounds(300,380,85,24);
+		returnHomeButton.setBorderPainted(false);
+		returnHomeButton.addActionListener(this);
+		
 		buildMenu();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+	
+		goToHome();
+		this.addKeyListener(this);
+	}
+	
+	public void goToHome()
+	{
 		start = new JPanel(){
 			public void paint(Graphics g){
 				//chargement texture start
 				Image img=null;
 				try {
-		        	img=ImageIO.read(new File("textures/start.jpg"));
+		        	img=ImageIO.read(new File("textures/home/start.jpg"));
 		        	g.drawImage(img, 0, 0, null);
 		        }
 		        catch(IOException e){
 		        	System.out.println("ok");System.exit(0);
 		        }
 			}
-			
 		};
 		start.setSize(1024, 600);
-		
 		contenu.add(playButton);
 		contenu.add(helpButton);
 		contenu.add(creditsButton);
 		contenu.add(start);
-		
-		this.addKeyListener(this);
-		
 		setContentPane(contenu);
 	}
 	
@@ -236,8 +250,6 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		}
 		else if(source == helpButton)
 		{
-			System.out.println("Help");
-			
 			//suppression de l'ecran d'accueil
 			contenu.remove(start);
 			contenu.remove(playButton);
@@ -256,14 +268,20 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 			        	System.out.println("ok");System.exit(0);
 			        }
 				}
-				
 			};
 			help.setSize(1024, 600);
-			
+			contenu.add(returnHomeButton);
 			contenu.add(help);
-			
 			setContentPane(contenu);
-		
+			this.addMouseListener(this);
+		}
+		else if(source == returnHomeButton)
+		{
+			//Suppression des élémentes de la page Help
+			contenu.remove(help);
+			contenu.remove(returnHomeButton);
+			//Retour a la page d'accueil
+			goToHome();
 			this.addMouseListener(this);
 		}
 	}
