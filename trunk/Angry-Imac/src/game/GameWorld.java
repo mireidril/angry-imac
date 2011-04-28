@@ -387,7 +387,7 @@ public class GameWorld implements Runnable{
         		timeStable = System.currentTimeMillis();
         	else{
         		long tmpTime = System.currentTimeMillis();
-        		if(tmpTime - timeStable >= 1500){
+        		if(tmpTime - timeStable >= 3000){
         			System.out.println("Niveau gagne !");
                 	gameWindow.displayNextButton();
                 	timeStable=0;

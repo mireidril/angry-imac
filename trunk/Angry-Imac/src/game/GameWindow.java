@@ -16,6 +16,7 @@ import java.io.IOException;
 
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -34,6 +35,9 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	private JButton pauseButton;
 	private JButton resetButton;
 	private JButton nextButton;
+	private JButton playButton;
+	private JButton helpButton;
+	private JButton creditsButton;
 	
 	private JMenuBar menuBar;
 	private JPanel contenu;
@@ -41,6 +45,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	private Thread gw;
 	private boolean alive = true;
 	private JPanel start;
+	private JPanel help;
 	
 	private Vec2 posBaseSouris;
 	private Vec2 posDragSouris;
@@ -61,6 +66,22 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		contenu = new JPanel();
 		contenu.setLayout(new BorderLayout());
 		
+		//Creation des boutons du menu de la page d'accueil
+		playButton = new JButton(new ImageIcon("textures/play.png"));
+		playButton.setBounds(469,200,86,48);
+		playButton.setBorderPainted(false);
+		playButton.addActionListener(this);
+		
+		helpButton = new JButton(new ImageIcon("textures/help.png"));
+		helpButton.setBounds(467,270,88,49);
+		helpButton.setBorderPainted(false);
+		helpButton.addActionListener(this);
+		
+		creditsButton = new JButton(new ImageIcon("textures/credits.png"));
+		creditsButton.setBounds(448,340,130,48);
+		creditsButton.setBorderPainted(false);
+		creditsButton.addActionListener(this);
+		
 		buildMenu();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -79,13 +100,15 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 			
 		};
 		start.setSize(1024, 600);
-		contenu.add(start, "Center");
 		
+		contenu.add(playButton);
+		contenu.add(helpButton);
+		contenu.add(creditsButton);
+		contenu.add(start);
 		
 		this.addKeyListener(this);
 		
 		setContentPane(contenu);
-
 	}
 	
 	public void buildMenu(){
@@ -103,15 +126,17 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		
 		setJMenuBar(menuBar);
 	}
-	
+    
 	//creation des boutons
 	private JPanel buildButtons(){
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
-		buttonPanel.setSize(1024, 100);
+		buttonPanel.setSize(200, 100);
+		//buttonPanel.setBounds(100, 100, 500, 500);
 		
-		quitButton = new JButton("Exit");
+		quitButton = new JButton(new ImageIcon("textures/bois.jpg"));
 		quitButton.addActionListener(this);
+		quitButton.setBorderPainted(false);
 		buttonPanel.add(quitButton);
 		
 		pauseButton = new JButton("Pause");
@@ -184,11 +209,69 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 			//g.resetWorld();
 	        nextButton.setVisible(false);
 		}
+		else if(source == playButton)
+		{
+			System.out.println("Play");
+			
+			//ajout des boutons
+			contenu.add("South", buildButtons());
+			
+			//suppression de l'ecran d'accueil
+			contenu.remove(start);
+			
+			//creation du monde et de son thread
+			g = new GameWorld(this);
+			gw = new Thread(g);
+			posBaseSouris = new Vec2();
+			posDragSouris = new Vec2();
+			gw.start();
+			
+			//creation de la zone de jeu
+			contenu.add(g.gg, "Center");
+			
+			setContentPane(contenu);
+			
+			//ajout du listener de la souris
+			this.addMouseListener(this);
+		}
+		else if(source == helpButton)
+		{
+			System.out.println("Help");
+			
+			//suppression de l'ecran d'accueil
+			contenu.remove(start);
+			contenu.remove(playButton);
+			contenu.remove(helpButton);
+			contenu.remove(creditsButton);
+			
+			help = new JPanel(){
+				public void paint(Graphics g){
+					//chargement texture start
+					Image img=null;
+					try {
+			        	img=ImageIO.read(new File("textures/helpScreen.jpg"));
+			        	g.drawImage(img, 0, 0, null);
+			        }
+			        catch(IOException e){
+			        	System.out.println("ok");System.exit(0);
+			        }
+				}
+				
+			};
+			help.setSize(1024, 600);
+			
+			contenu.add(help);
+			
+			setContentPane(contenu);
+		
+			this.addMouseListener(this);
+		}
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent evt) {
-		//L'action se fait une fois qu'on a relaché le doigt sur la souris
+
+		
 	}
 
 	@Override
@@ -253,7 +336,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	@Override
 	public void keyTyped(KeyEvent evt) {
 
-		if(evt.getKeyChar() == ' '){
+		/*if(evt.getKeyChar() == ' '){
 			System.out.println("test : touche espace appuye");
 			
 			//ajout des boutons
@@ -270,13 +353,13 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 			gw.start();
 			
 			//creation de la zone de jeu
-			contenu.add(g.gg,"Center");
+			contenu.add(g.gg, "Center");
 			
 			setContentPane(contenu);
 			
 			//ajout du listener de la souris
 			this.addMouseListener(this);
-		}
+		}*/
 	}
 
 	@Override
