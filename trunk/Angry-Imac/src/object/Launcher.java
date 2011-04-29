@@ -21,6 +21,7 @@ import org.jbox2d.dynamics.joints.RevoluteJointDef;
 
 public class Launcher {
 	private final float elasticTension = 35;
+	private boolean engaged = false;
 	private ArrayList<Body> rope = new ArrayList<Body>();
 	private ArrayList<RevoluteJointDef> jointsRope = new ArrayList<RevoluteJointDef>();
 	public TexturePaint textCatapult;
@@ -160,5 +161,13 @@ public class Launcher {
 	
 	public void resetActualMunition(){
 		actualMunition =0;
+	}
+	
+	public void setEngaged(boolean value) {
+		engaged = value;
+	}
+	
+	public boolean getEngaged() {
+		return engaged;
 	}
 }
