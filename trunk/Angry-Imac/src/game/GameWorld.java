@@ -193,6 +193,7 @@ public class GameWorld implements Runnable{
 	//public  ArrayList<Body> physicalBodies = new ArrayList<Body>();
 	public GameGraphic gg = new GameGraphic();
 	private boolean alive;
+	private boolean notMunition = false;
 	private ParserXML parser;
 	private TexturePaint textSky;
 	private TexturePaint textGround;
@@ -367,6 +368,8 @@ public class GameWorld implements Runnable{
 								nextMunition.setXForm(new Vec2(120, 450), 0);
 							}
 						}
+						else
+							notMunition = true;
 					}
 				}
 			}
@@ -400,18 +403,32 @@ public class GameWorld implements Runnable{
         	while(runEngaged){}
         	loadNextWorld();
         }*/
-        if(Target.getNbTarget() == 0 ){
-        	if(timeStable == 0)
-        		timeStable = System.currentTimeMillis();
-        	else{
-        		long tmpTime = System.currentTimeMillis();
-        		if(tmpTime - timeStable >= 3000){
-        			System.out.println("Niveau gagne !");
-                	gameWindow.displayNextButton();
-                	timeStable=0;
-        		}
-        	}
-        }
+	        if(Target.getNbTarget() == 0 ){
+	        	if(timeStable == 0)
+	        		timeStable = System.currentTimeMillis();
+	        	else{
+	        		long tmpTime = System.currentTimeMillis();
+	        		if(tmpTime - timeStable >= 3000){
+	        			System.out.println("Niveau gagne !");
+	        			System.out.println(m_world.munitions.size());
+	                	gameWindow.displayNextButton();
+	                	timeStable=0;
+	        		}
+	        	}
+	        }
+	        if(notMunition == true){
+	        	if(timeStable == 0)
+	        		timeStable = System.currentTimeMillis();
+	        	else{
+	        		long tmpTime = System.currentTimeMillis();
+	        		if(tmpTime - timeStable >= 3500){
+	        			System.out.println("failed");
+	        			gameWindow.gameFailed();
+	                	timeStable=0;
+	                	notMunition = false;
+	        		}
+	        	}
+	        }
 		}
 	}
 
