@@ -355,7 +355,7 @@ public class GameWorld implements Runnable{
 			}
 			
 			//On place le prochain projectile
-			if(catapult.getActualMunition() >= m_world.munitions.size()) {
+			if(catapult.getActualMunition() >= m_world.munitions.size() && catapult.projectiles.size() > 0) {
 				int munitionPrec = catapult.getActualMunition() - 1;
 				if( munitionPrec >= 0 && munitionPrec < catapult.projectiles.size()) {
 					Body prec = getActualMunitionBody(munitionPrec);
