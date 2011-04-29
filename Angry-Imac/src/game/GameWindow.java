@@ -24,6 +24,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.SwingUtilities;
 
 import object.Target;
 
@@ -36,7 +37,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	//boutons visibles pendant le jeu
 	private JButton quitButton;
 	private JButton pauseButton;
-	private JButton resetButton;
+	JButton resetButton;
 	private JButton nextButton;
 	
 	//Boutons visibles sur la page de titre
@@ -47,14 +48,19 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	//Bouton retour sur la page d'accueil
 	private JButton returnHomeButton;
 	
+	//Bouton failed
+	private JButton quitButtonFailed;
+	private JButton retryButtonFailed;
+	
 	private JMenuBar menuBar;
-	private JPanel contenu;
+	JPanel contenu;
 	private GameWorld g; 
-	private Thread gw;
+	Thread gw;
 	private boolean alive = true;
 	private JPanel start;
 	private JPanel help;
 	private JPanel credits;
+	private JPanel failed;
 	
 	private Vec2 posBaseSouris;
 	private Vec2 posDragSouris;
@@ -102,6 +108,24 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		returnHomeButton.setContentAreaFilled(false);
 		returnHomeButton.addActionListener(this);
 		
+		resetButton = new JButton("Reset");
+		resetButton.setBounds(0,0,130,48);
+		resetButton.setContentAreaFilled(false);
+		resetButton.addActionListener(this);
+		
+		//crétion des boutons failed
+		quitButtonFailed = new JButton(new ImageIcon("textures/quit.png"));
+		quitButtonFailed.setBounds(550,340,83,48);
+		quitButtonFailed.setBorderPainted(false);
+		quitButtonFailed.setContentAreaFilled(false);
+		quitButtonFailed.addActionListener(this);
+		
+		retryButtonFailed = new JButton(new ImageIcon("textures/retry.png"));
+		retryButtonFailed.setBounds(540,280,103,48);
+		retryButtonFailed.setBorderPainted(false);
+		retryButtonFailed.setContentAreaFilled(false);
+		retryButtonFailed.addActionListener(this);
+		
 		buildMenu();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	
@@ -133,6 +157,28 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		setContentPane(contenu);
 	}
 	
+	public void gameFailed()
+	{
+		failed = new JPanel(){
+			public void paint(Graphics g){
+				Image img=null;
+				try {
+		        	img=ImageIO.read(new File("textures/failed.png"));
+		        	g.drawImage(img, 0, 0, null);
+		        }
+		        catch(IOException e){
+		        	System.out.println("ok");System.exit(0);
+		        }
+			}
+		};
+		failed.setSize(1024, 600);
+		contenu.removeAll();
+		contenu.add(retryButtonFailed);
+		contenu.add(quitButtonFailed);
+		contenu.add(failed);
+		setContentPane(contenu);
+	}
+	
 	public void buildMenu(){
 		menuBar = new JMenuBar();
 
@@ -154,7 +200,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
 		buttonPanel.setSize(200, 100);
-		//buttonPanel.setBounds(100, 100, 500, 500);
+		buttonPanel.setBounds(100, 100, 500, 500);
 		
 		quitButton = new JButton(new ImageIcon("textures/bois.jpg"));
 		quitButton.addActionListener(this);
@@ -166,11 +212,6 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		pauseButton.setContentAreaFilled(false);
 		pauseButton.addActionListener(this);
 		buttonPanel.add(pauseButton);
-		
-		resetButton = new JButton("Reset");
-		resetButton.setContentAreaFilled(false);
-		resetButton.addActionListener(this);
-		buttonPanel.add(resetButton);
 		
 		nextButton = new JButton("Next Level");
 		nextButton.setContentAreaFilled(false);
@@ -199,7 +240,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
 		
-		if(source == quitButton){
+		if(source == quitButton || source == quitButtonFailed){
 			gw.stop();
 			System.out.println("retour au menu principal");
 			System.exit(NORMAL);
@@ -213,17 +254,16 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 				gw.resume();
 				alive = true;
 			}
-			System.out.println("Pause");	
+			System.out.println("Pause");
 		}
-		else if(source == resetButton){
+		else if(source == retryButtonFailed){
 			System.out.println("reset");
-			if(nextButton.isVisible())
-		        nextButton.setVisible(false);
+			
+			contenu.removeAll();
 	        alive = false;
 	        //while(g.runEngaged){}
-	        g.loadWorldReset(g.lvl);
+	        //g.loadWorldReset(g.lvl);
 			//g.resetWorld();
-	        
 		}
 		else if(source == nextButton){
 			System.out.println("next");
@@ -239,31 +279,35 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		{
 			System.out.println("Play");
 			
-			//ajout des boutons
-			contenu.add("South", buildButtons());
-			
 			//suppression de l'ecran d'accueil
 			contenu.remove(start);
+			contenu.remove(playButton);
+			contenu.remove(helpButton);
+			contenu.remove(creditsButton);
+			
+			//ajout des boutons
+			contenu.add("South", buildButtons());
 			
 			//creation du monde et de son thread
 			g = new GameWorld(this);
 			gw = new Thread(g);
 			posBaseSouris = new Vec2();
 			posDragSouris = new Vec2();
+			
+			//creation de la zone de jeuheight
+			contenu.add(resetButton);
+			contenu.add(g.gg);
+			
 			gw.start();
 			
-			//creation de la zone de jeu
-			contenu.add(g.gg, "Center");
-			
 			setContentPane(contenu);
-			
+				
 			//ajout du listener de la souris
 			this.addMouseListener(this);
 		}
 		else if(source == helpButton)
 		{
 			helpScreen = true;
-			
 			returnHomeButton.setBounds(300,380,85,24);
 			
 			//suppression de l'ecran d'accueil
