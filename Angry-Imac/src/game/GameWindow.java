@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseMotionListener;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -30,7 +31,7 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 
 @SuppressWarnings("serial")
-public class GameWindow extends JFrame implements ActionListener, MouseListener, KeyListener{
+public class GameWindow extends JFrame implements ActionListener, MouseListener, KeyListener, MouseMotionListener{
 
 	//boutons visibles pendant le jeu
 	private JButton quitButton;
@@ -106,6 +107,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	
 		goToHome();
 		this.addKeyListener(this);
+		this.addMouseMotionListener(this); 
 	}
 	
 	public void goToHome()
@@ -339,8 +341,6 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 
 	@Override
 	public void mouseClicked(MouseEvent evt) {
-
-		
 	}
 
 	@Override
@@ -356,6 +356,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	@Override
 	public void mousePressed(MouseEvent evt) {
 		System.out.println("Souris : ("+evt.getX()+", "+evt.getY()+")");
+		System.out.println("Presssssed");
 		
 		/*for(Body link : g.catapult.getRope()) {
 			System.out.println("Souris : ("+evt.getX()+", "+evt.getY()+") Link : (" + link.getPosition().x + ", "+ link.getPosition().y);
@@ -372,6 +373,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		if( (evt.getX() >= 105 && evt.getX() <= 136) && (evt.getY() >= 485 && evt.getY() <= 529)) 
 		{
 			posBaseSouris = new Vec2(evt.getX(), evt.getY());
+			g.catapult.setEngaged(true);
 		}
 		else
 		{
@@ -383,23 +385,46 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	@Override
 	public void mouseReleased(MouseEvent evt) {
 		//System.out.println("released !");
-		if(posBaseSouris.x != 0 && posBaseSouris.y != 0) {
-			Body munition = g.getActualMunitionBody();
+		if(posBaseSouris.x != 0 && posBaseSouris.y != 0 && g.catapult.getEngaged()) {
+			g.catapult.setEngaged(false);
+			Body munition = g.getActualMunitionBody(g.catapult.getActualMunition());
 			if(munition != null && g.incrementsActualMunition()) {
+				munition.wakeUp();
 				Vec2 vectForce = new Vec2((posBaseSouris.x - evt.getX()) *munition.getMass()*g.catapult.getElasticTension(), (posBaseSouris.y - evt.getY())*munition.getMass()*g.catapult.getElasticTension());
 				munition.applyForce(vectForce, munition.getPosition());
 				
 				//Déplacement de la munition suivante sur le lance-pierre
-				Body nextMunition = g.getActualMunitionBody();
-				if(nextMunition != null) {
-					nextMunition.setXForm(new Vec2(120, 505), 0);
-				}
+				System.out.println("getActualMunition" + g.catapult.getActualMunition());
+				/*if(g.catapult.getActualMunition() < g.catapult.projectiles.size()) {
+					g.setProjectileToActive(g.catapult.projectiles.get(g.catapult.getActualMunition()));
+					Body nextMunition = g.getActualMunitionBody(g.catapult.getActualMunition());
+					if(nextMunition != null) {
+						nextMunition.setXForm(new Vec2(120, 450), 0);
+					}
+				}*/
 			}
 			posBaseSouris.x = 0;
 			posBaseSouris.y = 0;
 		}
 		else {
 		}
+	}
+	
+	@Override
+	public void mouseDragged(MouseEvent evt) {
+		if(g.catapult.getEngaged()) {
+			Body munition = g.getActualMunitionBody(g.catapult.getActualMunition());
+			if(munition != null) {
+				Vec2 position = munition.getPosition();
+				if(evt.getX() > 50 && evt.getX() < 150 && evt.getY() > 400 && evt.getY() < 520) {
+					munition.setXForm(new Vec2(evt.getX(), (evt.getY()) - 30), 0);
+				}
+			}
+		}		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent evt) {
 	}
 	
 	@Override

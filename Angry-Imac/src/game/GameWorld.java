@@ -79,7 +79,7 @@ public class GameWorld implements Runnable{
                 	g2.rotate(p.getAngle());
                 	
             		if(p.active == true && i<m_world.munitions.size()){
-            			Body b = m_world.munitions.get(i);
+            			Body b = m_world.munitions.get(i);            			
             			p = (Projectile) b.getUserData();            	
             			g2.translate(b.getWorldCenter().x, b.getWorldCenter().y);
             		}
@@ -323,6 +323,7 @@ public class GameWorld implements Runnable{
         physicalBody.setMassFromShapes();
         physicalBody.setBullet(false);
         physicalBody.setUserData(p);
+        physicalBody.putToSleep();
         m_world.munitions.add(physicalBody);
 	}
 
@@ -350,6 +351,23 @@ public class GameWorld implements Runnable{
 					if(block instanceof Target)
 						((Target)block).finalize();
 					System.out.println("nb de body : "+ m_world.getBodyCount());
+				}
+			}
+			
+			//On place le prochain projectile
+			if(catapult.getActualMunition() >= m_world.munitions.size()) {
+				int munitionPrec = catapult.getActualMunition() - 1;
+				if( munitionPrec >= 0 && munitionPrec < catapult.projectiles.size()) {
+					Body prec = getActualMunitionBody(munitionPrec);
+					if(prec.getPosition().x > 200) {
+						if (catapult.getActualMunition() < catapult.projectiles.size()) {
+							setProjectileToActive(catapult.projectiles.get(catapult.getActualMunition()));
+							Body nextMunition = getActualMunitionBody(catapult.getActualMunition());
+							if(nextMunition != null) {
+								nextMunition.setXForm(new Vec2(120, 450), 0);
+							}
+						}
+					}
 				}
 			}
 			
@@ -405,9 +423,9 @@ public class GameWorld implements Runnable{
 		return m_world;
 	}
 	
-	public Body getActualMunitionBody() {
-		if(catapult.getActualMunition() < m_world.munitions.size())
-			return m_world.munitions.get(catapult.getActualMunition());
+	public Body getActualMunitionBody(int value) {
+		if(value < m_world.munitions.size())
+			return m_world.munitions.get(value);
 		else
 			return null;
 	}
@@ -415,9 +433,6 @@ public class GameWorld implements Runnable{
 	public boolean incrementsActualMunition() {
 		if(catapult.getActualMunition() < m_world.munitions.size()) {
 			catapult.incrementsActualMunition();
-			if(catapult.getActualMunition() < catapult.projectiles.size()) {
-				setProjectileToActive(catapult.projectiles.get(catapult.getActualMunition()));
-			}
 			return true;
 			
 		}
