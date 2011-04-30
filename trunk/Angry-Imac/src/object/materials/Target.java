@@ -22,7 +22,7 @@ public class Target  extends Material{
 		
 		Image img=null;
         try {
-        	img=ImageIO.read(new File("textures/egg.png"));
+        	img=ImageIO.read(new File("textures/materiaux/egg.png"));
         }
         catch(IOException e){
         	System.out.println("ok");System.exit(0);

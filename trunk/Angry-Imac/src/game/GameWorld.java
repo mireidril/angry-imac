@@ -204,6 +204,7 @@ public class GameWorld implements Runnable{
 	private long step_time;
 	
 	private long timeStable = 0;
+	private long timeFailed = 0;
 	
 	//Celine : a virer plus tard
 	
@@ -410,24 +411,24 @@ public class GameWorld implements Runnable{
 	        		long tmpTime = System.currentTimeMillis();
 	        		if(tmpTime - timeStable >= 3000){
 	        			System.out.println("Niveau gagne !");
-	        			System.out.println(m_world.munitions.size());
-	                	gameWindow.displayNextButton();
-	                	timeStable=0;
+	        			gameWindow.gameNext();
+	                	timeStable = 0;
 	        		}
 	        	}
+            	gameWindow.displayNextButton();
 	        }
-	        if(notMunition == true){
-	        	if(timeStable == 0)
-	        		timeStable = System.currentTimeMillis();
+	        else if(notMunition == true){
+	        	if(timeFailed == 0)
+	        		timeFailed = System.currentTimeMillis();
 	        	else{
 	        		long tmpTime = System.currentTimeMillis();
-	        		if(tmpTime - timeStable >= 3500){
+	        		if(tmpTime - timeFailed >= 3000){
 	        			System.out.println("failed");
 	        			gameWindow.gameFailed();
-	                	timeStable=0;
-	                	notMunition = false;
+	        			timeFailed = 0;
 	        		}
 	        	}
+	        	notMunition = false;
 	        }
 		}
 	}

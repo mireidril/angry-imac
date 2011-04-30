@@ -23,7 +23,7 @@ public class Ice  extends Material{
 		Image img=null;
 		//BufferedImage img= new BufferedImage();
         try {
-        	img=ImageIO.read(new File("textures/glace.jpg"));
+        	img=ImageIO.read(new File("textures/materiaux/glace.jpg"));
         }
         catch(IOException e){
         	System.out.println("ok");System.exit(0);
