@@ -23,7 +23,7 @@ public class Wood extends Material{
 		Image img=null;
 		//BufferedImage img= new BufferedImage();
         try {
-        	img=ImageIO.read(new File("textures/bois.jpg"));
+        	img=ImageIO.read(new File("textures/materiaux/bois.jpg"));
         }
         catch(IOException e){
         	System.out.println("ok");System.exit(0);

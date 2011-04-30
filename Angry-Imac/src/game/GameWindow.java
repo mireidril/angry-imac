@@ -61,6 +61,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	private JPanel help;
 	private JPanel credits;
 	private JPanel failed;
+	private JPanel next;
 	
 	private Vec2 posBaseSouris;
 	private Vec2 posDragSouris;
@@ -114,17 +115,24 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		resetButton.addActionListener(this);
 		
 		//crétion des boutons failed
-		quitButtonFailed = new JButton(new ImageIcon("textures/quit.png"));
+		quitButtonFailed = new JButton(new ImageIcon("textures/failed/quit.png"));
 		quitButtonFailed.setBounds(550,340,83,48);
 		quitButtonFailed.setBorderPainted(false);
 		quitButtonFailed.setContentAreaFilled(false);
 		quitButtonFailed.addActionListener(this);
 		
-		retryButtonFailed = new JButton(new ImageIcon("textures/retry.png"));
+		retryButtonFailed = new JButton(new ImageIcon("textures/failed/retry.png"));
 		retryButtonFailed.setBounds(540,280,103,48);
 		retryButtonFailed.setBorderPainted(false);
 		retryButtonFailed.setContentAreaFilled(false);
 		retryButtonFailed.addActionListener(this);
+		
+		nextButton = new JButton(new ImageIcon("textures/nextButton.png"));
+		nextButton.setBounds(540,280,103,48);
+		nextButton.setVisible(false);
+		nextButton.setBorderPainted(false);
+		nextButton.setContentAreaFilled(false);
+		nextButton.addActionListener(this);
 		
 		buildMenu();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -163,7 +171,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 			public void paint(Graphics g){
 				Image img=null;
 				try {
-		        	img=ImageIO.read(new File("textures/failed.png"));
+		        	img=ImageIO.read(new File("textures/failed/failed.png"));
 		        	g.drawImage(img, 0, 0, null);
 		        }
 		        catch(IOException e){
@@ -173,10 +181,38 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		};
 		failed.setSize(1024, 600);
 		contenu.removeAll();
+		
+		contenu.add("South", buildButtons());
 		contenu.add(retryButtonFailed);
 		contenu.add(quitButtonFailed);
 		contenu.add(failed);
 		setContentPane(contenu);
+		
+		gw.suspend();
+	}
+	public void gameNext()
+	{
+		next = new JPanel(){
+			public void paint(Graphics g){
+				Image img=null;
+				try {
+		        	img=ImageIO.read(new File("textures/next.png"));
+		        	g.drawImage(img, 0, 0, null);
+		        }
+		        catch(IOException e){
+		        	System.out.println("ok");System.exit(0);
+		        }
+			}
+		};
+		next.setSize(1024, 600);
+		contenu.removeAll();
+		
+		contenu.add("South", buildButtons());
+		contenu.add(nextButton);
+		contenu.add(next);
+		setContentPane(contenu);
+		
+		gw.suspend();
 	}
 	
 	public void buildMenu(){
@@ -212,12 +248,6 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		pauseButton.setContentAreaFilled(false);
 		pauseButton.addActionListener(this);
 		buttonPanel.add(pauseButton);
-		
-		nextButton = new JButton("Next Level");
-		nextButton.setContentAreaFilled(false);
-		nextButton.addActionListener(this);
-		nextButton.setVisible(false);
-		buttonPanel.add(nextButton);
 		
 		return buttonPanel;
 	}
@@ -258,12 +288,16 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		}
 		else if(source == retryButtonFailed){
 			System.out.println("reset");
-			
-			contenu.removeAll();
 	        alive = false;
-	        //while(g.runEngaged){}
-	        //g.loadWorldReset(g.lvl);
-			//g.resetWorld();
+	        g.loadWorldReset(g.lvl);
+			
+			//creation de la zone de jeuheight
+	        contenu.add(g.gg);	
+			gw.resume();
+			setContentPane(contenu);
+				
+			//ajout du listener de la souris
+			this.addMouseListener(this);
 		}
 		else if(source == nextButton){
 			System.out.println("next");
@@ -272,7 +306,12 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	        g.lvl++;
 	        while(g.runEngaged){}
 	        g.loadWorldReset(g.lvl);
-			//g.resetWorld();
+	        
+			//creation de la zone de jeuheight
+	        contenu.add(g.gg);	
+			gw.resume();
+			setContentPane(contenu);
+	        
 	        nextButton.setVisible(false);
 		}
 		else if(source == playButton)
@@ -295,7 +334,6 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 			posDragSouris = new Vec2();
 			
 			//creation de la zone de jeuheight
-			contenu.add(resetButton);
 			contenu.add(g.gg);
 			
 			gw.start();

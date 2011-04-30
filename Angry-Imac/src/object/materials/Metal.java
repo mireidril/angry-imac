@@ -23,7 +23,7 @@ public class Metal  extends Material{
 		Image img=null;
 		//BufferedImage img= new BufferedImage();
         try {
-        	img=ImageIO.read(new File("textures/metal.jpg"));
+        	img=ImageIO.read(new File("textures/materiaux/metal.jpg"));
         }
         catch(IOException e){
         	System.out.println("ok");System.exit(0);

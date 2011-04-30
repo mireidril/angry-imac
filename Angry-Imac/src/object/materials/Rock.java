@@ -23,7 +23,7 @@ public class Rock extends Material{
 		Image img=null;
 		//BufferedImage img= new BufferedImage();
         try {
-        	img=ImageIO.read(new File("textures/pierre.jpg"));
+        	img=ImageIO.read(new File("textures/materiaux/pierre.jpg"));
         }
         catch(IOException e){
         	System.out.println("ok");System.exit(0);

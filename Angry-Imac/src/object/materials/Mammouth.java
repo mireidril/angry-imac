@@ -23,7 +23,7 @@ public class Mammouth  extends Material{
 		Image img=null;
 		//BufferedImage img= new BufferedImage();
         try {
-        	img=ImageIO.read(new File("textures/mammouth.png"));
+        	img=ImageIO.read(new File("textures/materiaux/mammouth.png"));
         }
         catch(IOException e){
         	System.out.println("ok");System.exit(0);
