@@ -410,12 +410,12 @@ public class GameWorld implements Runnable{
 	        	else{
 	        		long tmpTime = System.currentTimeMillis();
 	        		if(tmpTime - timeStable >= 3000){
-	        			System.out.println("Niveau gagne !");
+	        			//System.out.println("Niveau gagne !");
 	        			gameWindow.gameNext();
 	                	timeStable = 0;
 	        		}
 	        	}
-            	gameWindow.displayNextButton();
+	        	notMunition = false;
 	        }
 	        else if(notMunition == true){
 	        	if(timeFailed == 0)
@@ -423,7 +423,7 @@ public class GameWorld implements Runnable{
 	        	else{
 	        		long tmpTime = System.currentTimeMillis();
 	        		if(tmpTime - timeFailed >= 3000){
-	        			System.out.println("failed");
+	        			//System.out.println("failed");
 	        			gameWindow.gameFailed();
 	        			timeFailed = 0;
 	        		}
@@ -532,8 +532,6 @@ public class GameWorld implements Runnable{
 		
 		parser = new ParserXML(this,"levels/Niveau"+lvl+".xml",false);
         parser.parseAllAndCreatorLevel();
-        
-        gameWindow.hideNextButton();
         
         alive = true;
 	}

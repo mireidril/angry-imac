@@ -128,8 +128,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		retryButtonFailed.addActionListener(this);
 		
 		nextButton = new JButton(new ImageIcon("textures/nextButton.png"));
-		nextButton.setBounds(540,280,103,48);
-		nextButton.setVisible(false);
+		nextButton.setBounds(480,280,187,48);
 		nextButton.setBorderPainted(false);
 		nextButton.setContentAreaFilled(false);
 		nextButton.addActionListener(this);
@@ -252,19 +251,6 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		return buttonPanel;
 	}
 	
-	public void displayNextButton(){
-		nextButton.setVisible(true);
-		System.out.println("affichage");
-		while(!nextButton.isVisible())
-			nextButton.setVisible(true);
-	}
-	
-	public void hideNextButton(){
-		nextButton.setVisible(false);
-		while(nextButton.isVisible())
-			nextButton.setVisible(false);
-	}
-	
 	//ajout des listeners
 	@SuppressWarnings("deprecation")
 	public void actionPerformed(ActionEvent e) {
@@ -288,31 +274,34 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		}
 		else if(source == retryButtonFailed){
 			System.out.println("reset");
+			contenu.removeAll();
 	        alive = false;
 	        g.loadWorldReset(g.lvl);
 			
 			//creation de la zone de jeuheight
-	        contenu.add(g.gg);	
-			gw.resume();
+	        contenu.add(g.gg);
 			setContentPane(contenu);
+			gw.resume();
 				
 			//ajout du listener de la souris
 			this.addMouseListener(this);
 		}
 		else if(source == nextButton){
 			System.out.println("next");
-			nextButton.setVisible(false);
+			contenu.removeAll();
 	        alive = false;
 	        g.lvl++;
+	        
 	        while(g.runEngaged){}
 	        g.loadWorldReset(g.lvl);
 	        
 			//creation de la zone de jeuheight
-	        contenu.add(g.gg);	
-			gw.resume();
+	        contenu.add(g.gg);
 			setContentPane(contenu);
-	        
-	        nextButton.setVisible(false);
+			gw.resume();
+			
+			//ajout du listener de la souris
+			this.addMouseListener(this);
 		}
 		else if(source == playButton)
 		{
