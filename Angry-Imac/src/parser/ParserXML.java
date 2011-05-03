@@ -36,6 +36,7 @@ public class ParserXML
 		racine = document.getRootElement();
    }
    
+   
    public int parseSave(){
 	   SAXBuilder sxb = new SAXBuilder();
 	   try{
@@ -46,8 +47,7 @@ public class ParserXML
 		racineSave = documentSave.getRootElement();
 		List<?> listLvl = racineSave.getChildren("level");
 	    Iterator<?> i = listLvl.iterator();
-	    while(i.hasNext())
-	    {
+	    while(i.hasNext()){
 	       Element courant = (Element)i.next();
 	       if(courant.getAttributeValue("unlock").equals("true") && courant.getAttributeValue("heightscore").equals("0"))
 		       return Integer.parseInt(courant.getAttributeValue("num"));
@@ -58,25 +58,34 @@ public class ParserXML
    public void unlockWorld(int lvl){
 	  List<?> listLvl = racineSave.getChildren("level");
       Iterator<?> i = listLvl.iterator();
-      while(i.hasNext())
-      {
+      while(i.hasNext()){
          Element courant = (Element)i.next();
-         if(courant.getAttributeValue("num").equals(Integer.toString(lvl)))
-         {
+         if(courant.getAttributeValue("num").equals(Integer.toString(lvl))){
             courant.setAttribute("unlock", "true");
          }
-        	 
       }
+   }
+   
+   public boolean isUnlock(int lvl){
+	   List<?> listLvl = racineSave.getChildren("level");
+	      Iterator<?> i = listLvl.iterator();
+	      while(i.hasNext()){
+	         Element courant = (Element)i.next();
+	         if(courant.getAttributeValue("num").equals(Integer.toString(lvl))){
+	            if(courant.getAttribute("unlock").getValue().equals("true")) return true;
+	            else return false;
+	         }
+	        	 
+	      }
+	   return false;
    }
    
    public int getScore(int lvl){
 		  List<?> listLvl = racineSave.getChildren("level");
 	      Iterator<?> i = listLvl.iterator();
-	      while(i.hasNext())
-	      {
+	      while(i.hasNext()){
 	         Element courant = (Element)i.next();
-	         if(courant.getAttributeValue("num") == Integer.toString(lvl))
-	         {
+	         if(courant.getAttributeValue("num").equals(Integer.toString(lvl))){
 	            return Integer.parseInt(courant.getAttributeValue("heightscore"));
 	         }
 	      }
@@ -86,20 +95,16 @@ public class ParserXML
    public void setScore(int lvl, int score){
 		  List<?> listLvl = racineSave.getChildren("level");
 	      Iterator<?> i = listLvl.iterator();
-	      while(i.hasNext())
-	      {
+	      while(i.hasNext()){
 	         Element courant = (Element)i.next();
-	         if(courant.getAttributeValue("num").equals(Integer.toString(lvl)))
-	         {
+	         if(courant.getAttributeValue("num").equals(Integer.toString(lvl))){
 	            courant.setAttribute("heightscore", Integer.toString(score));
 	         }
 	      }
 	   }
    
-   public void save()
-   {
-      try
-      {
+   public void save(){
+      try{
          XMLOutputter sortie = new XMLOutputter(Format.getPrettyFormat());
          sortie.output(documentSave, new FileOutputStream("levels/save.xml"));
       }

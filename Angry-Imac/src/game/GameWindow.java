@@ -1,6 +1,8 @@
 package game;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 
@@ -19,6 +21,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -30,6 +33,8 @@ import object.Target;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
+
+import parser.ParserXML;
 
 @SuppressWarnings("serial")
 public class GameWindow extends JFrame implements ActionListener, MouseListener, KeyListener, MouseMotionListener{
@@ -44,6 +49,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	private JButton playButton;
 	private JButton helpButton;
 	private JButton creditsButton;
+	private JButton selectWorldButton;
 	
 	//Bouton retour sur la page d'accueil
 	private JButton returnHomeButton;
@@ -60,6 +66,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	private JPanel start;
 	private JPanel help;
 	private JPanel credits;
+	private JPanel selectWorld;
 	private JPanel failed;
 	private JPanel next;
 	
@@ -67,6 +74,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	private Vec2 posDragSouris;
 	
 	private boolean helpScreen = false;
+	private boolean creditsScreen = false;
 	
 	public GameWindow(){
 		super();
@@ -102,6 +110,12 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		creditsButton.setBorderPainted(false);
 		creditsButton.setContentAreaFilled(false);
 		creditsButton.addActionListener(this);
+		
+		selectWorldButton = new JButton(new ImageIcon("textures/home/select.png"));
+		selectWorldButton.setBounds(448,410,130,48);
+		selectWorldButton.setBorderPainted(false);
+		selectWorldButton.setContentAreaFilled(false);
+		selectWorldButton.addActionListener(this);
 		
 		//crétion du bouton retour sur la page d'accueil
 		returnHomeButton = new JButton(new ImageIcon("textures/return.png"));
@@ -160,6 +174,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		contenu.add(playButton);
 		contenu.add(helpButton);
 		contenu.add(creditsButton);
+		contenu.add(selectWorldButton);
 		contenu.add(start);
 		setContentPane(contenu);
 	}
@@ -251,6 +266,26 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		return buttonPanel;
 	}
 	
+	private void launchGame(int lvl, boolean forcage){
+		contenu.add("South", buildButtons());
+		
+		//creation du monde et de son thread
+		g = new GameWorld(this, lvl, forcage);
+		gw = new Thread(g);
+		posBaseSouris = new Vec2();
+		posDragSouris = new Vec2();
+		
+		//creation de la zone de jeuheight
+		contenu.add(g.gg);
+		
+		gw.start();
+		
+		setContentPane(contenu);
+			
+		//ajout du listener de la souris
+		this.addMouseListener(this);
+	}
+	
 	//ajout des listeners
 	@SuppressWarnings("deprecation")
 	public void actionPerformed(ActionEvent e) {
@@ -312,25 +347,9 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 			contenu.remove(playButton);
 			contenu.remove(helpButton);
 			contenu.remove(creditsButton);
+			contenu.remove(selectWorldButton);
 			
-			//ajout des boutons
-			contenu.add("South", buildButtons());
-			
-			//creation du monde et de son thread
-			g = new GameWorld(this);
-			gw = new Thread(g);
-			posBaseSouris = new Vec2();
-			posDragSouris = new Vec2();
-			
-			//creation de la zone de jeuheight
-			contenu.add(g.gg);
-			
-			gw.start();
-			
-			setContentPane(contenu);
-				
-			//ajout du listener de la souris
-			this.addMouseListener(this);
+			launchGame(1, false);
 		}
 		else if(source == helpButton)
 		{
@@ -342,6 +361,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 			contenu.remove(playButton);
 			contenu.remove(helpButton);
 			contenu.remove(creditsButton);
+			contenu.remove(selectWorldButton);
 			
 			help = new JPanel(){
 				public void paint(Graphics g){
@@ -364,6 +384,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		}
 		else if(source == creditsButton)
 		{
+			creditsScreen = true;
 			returnHomeButton.setBounds(400,380,85,24);
 			
 			//suppression de l'ecran d'accueil
@@ -371,6 +392,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 			contenu.remove(playButton);
 			contenu.remove(helpButton);
 			contenu.remove(creditsButton);
+			contenu.remove(selectWorldButton);
 			
 			credits = new JPanel(){
 				public void paint(Graphics g){
@@ -391,22 +413,99 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 			setContentPane(contenu);
 			this.addMouseListener(this);
 		}
+		else if(source == selectWorldButton)
+		{
+			returnHomeButton.setBounds(860,480,85,24);
+			
+			//suppression de l'ecran d'accueil
+			contenu.remove(start);
+			contenu.remove(playButton);
+			contenu.remove(helpButton);
+			contenu.remove(creditsButton);
+			contenu.remove(selectWorldButton);
+			
+			selectWorld = new JPanel(){
+				public void paint(Graphics g){
+					Image img=null;
+					try {
+			        	img=ImageIO.read(new File("textures/selectScreen.jpg"));
+			        	g.drawImage(img, 0, 0, null);
+			        }
+			        catch(IOException e){
+			        	System.out.println("ok");System.exit(0);
+			        }
+				}
+			};
+			selectWorld.setSize(1024, 600);
+			ParserXML parser = new ParserXML();
+			parser.parseSave();
+			int i;
+			int j;
+			for(i = 1; i <= 3; i++){
+				for(j = 1; j<=5; j++){
+					JButton lvl1;
+					//System.out.println(parser.isUnlock(1));
+					if(parser.isUnlock(5*(i-1)+j)){
+						lvl1=  new JButton(new ImageIcon("textures/unlock.png"));
+					}
+					else{
+						lvl1=  new JButton(new ImageIcon("textures/lock.png"));
+						lvl1.setEnabled(false);
+					}
+					lvl1.setBounds(95+j*130,150+i*100,30,30);
+					lvl1.setBorderPainted(false);
+					lvl1.setContentAreaFilled(false);
+					final int lvltmp = 5*(i-1)+j;
+					System.out.println(5*(i-1)+j);
+					lvl1.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							helpScreen = false;
+							creditsScreen = false;
+							contenu.removeAll();
+							launchGame(lvltmp, true);
+						}
+					});
+					contenu.add(lvl1);
+					JLabel title = new JLabel("Level "+(5*(i-1)+j));
+					title.setFont(new Font("Arial", Font.BOLD, 18));
+					title.setForeground(new Color(255,255,255));
+					title.setBounds(80+j*130,50+i*100,100,160);
+					JLabel score;
+					if(parser.isUnlock(5*(i-1)+j))
+						score = new JLabel(Integer.toString(parser.getScore(5*(i-1)+j))+" pts");
+					else
+						score = new JLabel("----------");
+					score.setBounds(90+j*130,150+i*100,100,100);
+					score.setForeground(new Color(255,255,255));
+					contenu.add(title);
+					contenu.add(score);
+				}
+			}
+			contenu.add(returnHomeButton);
+			contenu.add(selectWorld);
+			setContentPane(contenu);
+			this.addMouseListener(this);
+		}
 		else if(source == returnHomeButton)
 		{
 			//Suppression des élémentes de la page Help
-			if(helpScreen == true)
-			{
+			if(helpScreen){
 				contenu.remove(help);
 			}
-			else
-			{
+			else if(creditsScreen){
 				contenu.remove(credits);
+			}
+			else{
+				contenu.remove(selectWorld);
+				contenu.removeAll();
 			}
 			contenu.remove(returnHomeButton);
 			//Retour a la page d'accueil
 			goToHome();
 			this.addMouseListener(this);
 			helpScreen = false;
+			creditsScreen = false;
 		}
 	}
 
