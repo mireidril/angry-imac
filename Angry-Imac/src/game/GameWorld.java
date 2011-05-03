@@ -391,54 +391,38 @@ public class GameWorld implements Runnable{
 	}
 	
 	private void detectStable(){
-		if(alive){
-		/*int nb = m_world.physicalBodies.size() + m_world.munitions.size();
-		int i = 0;
-        for (int j = 0; j<m_world.physicalBodies.size();j++) {
-        	Body body = m_world.physicalBodies.get(j);
-        	if(body != null){
-        		if(body.isSleeping())
-        			i++;
-        	}
-        }
-        for (Body body : m_world.munitions) {
-        	if(body != null){
-        		if(body.isSleeping())
-        			i++;
-        	}
-        }*//*
-        if(nb == i && Target.getNbTarget() == 0 ){
-        	System.out.println("Niveau gagne !");
-        	alive = false;
-        	while(runEngaged){}
-        	loadNextWorld();
-        }*/
-	        if(Target.getNbTarget() == 0 ){
-	        	if(timeStable == 0)
-	        		timeStable = System.currentTimeMillis();
-	        	else{
-	        		long tmpTime = System.currentTimeMillis();
-	        		if(tmpTime - timeStable >= 3000){
-	        			//System.out.println("Niveau gagne !");
-	        			gameWindow.gameNext();
-	                	timeStable = 0;
-	        		}
+		if(alive)
+		{
+			int nb = m_world.physicalBodies.size() + m_world.munitions.size();
+			int i = 0;
+	        for (int j = 0; j<m_world.physicalBodies.size();j++) {
+	        	Body body = m_world.physicalBodies.get(j);
+	        	if(body != null){
+	        		if(body.isSleeping())
+	        			i++;
 	        	}
+	        }
+	        for (Body body : m_world.munitions) {
+	        	if(body != null){
+	        		if(body.isSleeping())
+	        			i++;
+	        	}
+	        }
+	        if(Target.getNbTarget() == 0 && nb == i){
+	        	gameWindow.gameNext();
 	        	notMunition = false;
 	        }
-	        else if(notMunition == true){
-	        	if(timeFailed == 0)
-	        		timeFailed = System.currentTimeMillis();
-	        	else{
-	        		long tmpTime = System.currentTimeMillis();
-	        		if(tmpTime - timeFailed >= 3000){
-	        			//System.out.println("failed");
-	        			gameWindow.gameFailed();
-	        			timeFailed = 0;
-	        		}
-	        	}
-	        	notMunition = false;
+	        else if(notMunition == true && nb == i){
+    			gameWindow.gameFailed();
+    			notMunition = false;
 	        }
+	        /*
+	        if(nb == i && Target.getNbTarget() == 0 ){
+	        	System.out.println("Niveau gagne !");
+	        	alive = false;
+	        	while(runEngaged){}
+	        	loadNextWorld();
+	        }*/
 		}
 	}
 
