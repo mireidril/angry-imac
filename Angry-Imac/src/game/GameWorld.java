@@ -198,6 +198,7 @@ public class GameWorld implements Runnable{
 	private TexturePaint textSky;
 	private TexturePaint textGround;
 	int lvl;
+	int score;
 	
 	boolean runEngaged;
 	private int step_count;
@@ -214,16 +215,19 @@ public class GameWorld implements Runnable{
 		this.gameWindow = gameWindow;
 		alive = true;
 		catapult = new Launcher();
-		lvl = 1;
 		
 		//********************************* creation du monde *********************************
 		createWorld();
 		defineWalls();
 
+        parser = new ParserXML();
+        //********************************* Variables de jeu *******************************
+        lvl = parser.parseSave();
+        score = 0;
 		//********************************* Creation des objets *******************************
-        parser = new ParserXML(this,"levels/Niveau"+lvl+".xml",false);
+        parser.parseXML(this,"levels/Niveau"+lvl+".xml",false);
         parser.parseAllAndCreatorLevel();
-		
+        
 		//********************************* parametrage pour le framerate *********************
 		step_count = 0;
 		step_time = System.currentTimeMillis();
@@ -348,6 +352,8 @@ public class GameWorld implements Runnable{
 			for(int i = 0; i < m_world.physicalBodies.size(); i++) {
 				Block block = (Block) m_world.physicalBodies.get(i).getUserData();
 				if(block.getToDelete() == true) {
+					score += block.getScore();
+					System.out.println(score);
 					m_world.destroyBody(m_world.physicalBodies.get(i));
 					m_world.physicalBodies.remove(m_world.physicalBodies.get(i));
 					if(block instanceof Target)
@@ -498,8 +504,10 @@ public class GameWorld implements Runnable{
 		catapult.projectiles.clear();
 		catapult.resetActualMunition();
 		lvl++;
-		parser = new ParserXML(this,"levels/Niveau"+lvl+".xml",false);
+		parser.parseXML(this,"levels/Niveau"+lvl+".xml",false);
         parser.parseAllAndCreatorLevel();
+        
+       
         alive = true;
 	}
 	
@@ -530,9 +538,19 @@ public class GameWorld implements Runnable{
 		
 		defineWalls();
 		
-		parser = new ParserXML(this,"levels/Niveau"+lvl+".xml",false);
+		parser.parseSave();
+		if(parser.getScore(lvl-1) < score)
+			parser.setScore(lvl-1, score);
+        parser.save();
+		score = 0;
+        
+		parser.parseXML(this,"levels/Niveau"+lvl+".xml",false);
         parser.parseAllAndCreatorLevel();
         
+        parser.parseSave();
+        parser.unlockWorld(lvl);
+        parser.save();
+
         alive = true;
 	}
 }
