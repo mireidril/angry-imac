@@ -1,11 +1,15 @@
 package parser;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.Iterator;
 import java.util.List;
 
 import org.jbox2d.common.Vec2;
 import org.jdom.Element;
+import org.jdom.input.DOMBuilder;
 import org.jdom.input.SAXBuilder;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 
 import object.*;
 import game.*;
@@ -14,11 +18,13 @@ import game.*;
 public class ParserXML
 {
    private org.jdom.Document document;
+   private org.jdom.Document documentSave;
    private Element racine;
+   private Element racineSave;
    private GameWorld gameworld;
    private boolean display;
    
-   public ParserXML(GameWorld gameworld, String path, boolean display){
+   public void parseXML(GameWorld gameworld, String path, boolean display){
 	   this.gameworld = gameworld;
 	   this.display = display;
 	   SAXBuilder sxb = new SAXBuilder();
@@ -28,6 +34,76 @@ public class ParserXML
 		catch(Exception e){}
 
 		racine = document.getRootElement();
+   }
+   
+   public int parseSave(){
+	   SAXBuilder sxb = new SAXBuilder();
+	   try{
+		   documentSave = sxb.build(new File("levels/save.xml"));
+		}
+		catch(Exception e){}
+
+		racineSave = documentSave.getRootElement();
+		List<?> listLvl = racineSave.getChildren("level");
+	    Iterator<?> i = listLvl.iterator();
+	    while(i.hasNext())
+	    {
+	       Element courant = (Element)i.next();
+	       if(courant.getAttributeValue("unlock").equals("true") && courant.getAttributeValue("heightscore").equals("0"))
+		       return Integer.parseInt(courant.getAttributeValue("num"));
+	    }
+	    return 1;
+   }
+   
+   public void unlockWorld(int lvl){
+	  List<?> listLvl = racineSave.getChildren("level");
+      Iterator<?> i = listLvl.iterator();
+      while(i.hasNext())
+      {
+         Element courant = (Element)i.next();
+         if(courant.getAttributeValue("num").equals(Integer.toString(lvl)))
+         {
+            courant.setAttribute("unlock", "true");
+         }
+        	 
+      }
+   }
+   
+   public int getScore(int lvl){
+		  List<?> listLvl = racineSave.getChildren("level");
+	      Iterator<?> i = listLvl.iterator();
+	      while(i.hasNext())
+	      {
+	         Element courant = (Element)i.next();
+	         if(courant.getAttributeValue("num") == Integer.toString(lvl))
+	         {
+	            return Integer.parseInt(courant.getAttributeValue("heightscore"));
+	         }
+	      }
+	      return 0;
+	   }
+   
+   public void setScore(int lvl, int score){
+		  List<?> listLvl = racineSave.getChildren("level");
+	      Iterator<?> i = listLvl.iterator();
+	      while(i.hasNext())
+	      {
+	         Element courant = (Element)i.next();
+	         if(courant.getAttributeValue("num").equals(Integer.toString(lvl)))
+	         {
+	            courant.setAttribute("heightscore", Integer.toString(score));
+	         }
+	      }
+	   }
+   
+   public void save()
+   {
+      try
+      {
+         XMLOutputter sortie = new XMLOutputter(Format.getPrettyFormat());
+         sortie.output(documentSave, new FileOutputStream("levels/save.xml"));
+      }
+      catch (java.io.IOException e){}
    }
 
    public void parseAllAndCreatorLevel()

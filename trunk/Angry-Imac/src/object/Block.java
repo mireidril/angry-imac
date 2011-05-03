@@ -24,6 +24,7 @@ public class Block {
 	private List<Vec2> vertices;
 	private ShapeDef shapeDef;
 	private boolean toDelete;
+	private int score;
 	
 	//Va contenir les textures de la destruction d'un block
 	private ArrayList<TexturePaint> animationDestruction;
@@ -62,18 +63,22 @@ public class Block {
 		switch (m) {
 			case WOOD : 
 				mat = new Wood();
+				score = 20;
 				break;
 				
 			case METAL : 
 				mat = new Metal();
+				score = 3000;
 				break;
 				
 			case ICE : 
 				mat = new Ice();
+				score = 10;
 				break;
 				
 			case ROCK : 
 				mat = new Rock();
+				score = 100;
 				break;
 				
 			case MAMMOUTH : 
@@ -86,6 +91,7 @@ public class Block {
 				
 			case TARGET :
 				mat = new object.materials.Target();
+				score = 500;
 				break;
 			
 			default :
@@ -226,6 +232,10 @@ public class Block {
 	
 	public boolean getToDelete() {
 		return toDelete;
+	}
+	
+	public int getScore(){
+		return score;
 	}
 
 }
