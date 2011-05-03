@@ -211,7 +211,7 @@ public class GameWorld implements Runnable{
 	
 	
 	
-	public GameWorld(GameWindow gameWindow){
+	public GameWorld(GameWindow gameWindow, int lvlForcage, boolean forcage){
 		this.gameWindow = gameWindow;
 		alive = true;
 		catapult = new Launcher();
@@ -222,7 +222,10 @@ public class GameWorld implements Runnable{
 
         parser = new ParserXML();
         //********************************* Variables de jeu *******************************
-        lvl = parser.parseSave();
+        if(forcage)
+        	lvl = lvlForcage;
+        else
+        	lvl = parser.parseSave();
         score = 0;
 		//********************************* Creation des objets *******************************
         parser.parseXML(this,"levels/Niveau"+lvl+".xml",false);
