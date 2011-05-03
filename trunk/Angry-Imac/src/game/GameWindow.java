@@ -100,19 +100,19 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		playButton.addActionListener(this);
 		
 		helpButton = new JButton(new ImageIcon("textures/home/help.png"));
-		helpButton.setBounds(467,270,88,49);
+		helpButton.setBounds(467,260,88,49);
 		helpButton.setBorderPainted(false);
 		helpButton.setContentAreaFilled(false);
 		helpButton.addActionListener(this);
 		
 		creditsButton = new JButton(new ImageIcon("textures/home/credits.png"));
-		creditsButton.setBounds(448,340,130,48);
+		creditsButton.setBounds(448,320,130,48);
 		creditsButton.setBorderPainted(false);
 		creditsButton.setContentAreaFilled(false);
 		creditsButton.addActionListener(this);
 		
 		selectWorldButton = new JButton(new ImageIcon("textures/home/select.png"));
-		selectWorldButton.setBounds(448,410,130,48);
+		selectWorldButton.setBounds(415,380,200,48);
 		selectWorldButton.setBorderPainted(false);
 		selectWorldButton.setContentAreaFilled(false);
 		selectWorldButton.addActionListener(this);
@@ -415,7 +415,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		}
 		else if(source == selectWorldButton)
 		{
-			returnHomeButton.setBounds(860,480,85,24);
+			returnHomeButton.setBounds(840,340,85,24);
 			
 			//suppression de l'ecran d'accueil
 			contenu.remove(start);
@@ -469,15 +469,15 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 					contenu.add(lvl1);
 					JLabel title = new JLabel("Level "+(5*(i-1)+j));
 					title.setFont(new Font("Arial", Font.BOLD, 18));
-					title.setForeground(new Color(255,255,255));
+					title.setForeground(new Color(110,47,2));
 					title.setBounds(80+j*130,50+i*100,100,160);
 					JLabel score;
 					if(parser.isUnlock(5*(i-1)+j))
 						score = new JLabel(Integer.toString(parser.getScore(5*(i-1)+j))+" pts");
 					else
-						score = new JLabel("----------");
-					score.setBounds(90+j*130,150+i*100,100,100);
-					score.setForeground(new Color(255,255,255));
+						score = new JLabel(" Lock");
+					score.setBounds(90+j*130,140+i*100,100,100);
+					score.setForeground(new Color(255,150,0));
 					contenu.add(title);
 					contenu.add(score);
 				}
