@@ -6,8 +6,8 @@
 	<block shape="box" width="250" height="100" posX="891" posY="170" angle="0" type="metal"/>
 	<block shape="box" width="410" height="120" posX="820" posY="60" angle="0" type="metal"/>
 	
-	<block shape="box" width="50" height="90" posX="650" posY="170" angle="0" type="ice"/>
+	<block shape="box" width="50" height="90" posX="650" posY="180" angle="0" type="ice"/>
 	
-	<target shape="circle" width="30" height="50" posX="740" posY="170" angle="0" type="target"/>
+	<target shape="circle" width="30" height="50" posX="740" posY="200" angle="0" type="target"/>
 	
 </angrImac>

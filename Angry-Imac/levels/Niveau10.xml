@@ -2,8 +2,8 @@
 <angrImac>
 	<munition shape="box" width="38" height="50" posX="120" posY="505" angle="0" type="mammouth"/>
     
-    <block shape="box" width="50" height="300" posX="570" posY="380" angle="0" type="metal"/>
-    <block shape="box" width="30" height="70" posX="570" posY="190" angle="0" type="wood"/>
+    <block shape="box" width="50" height="300" posX="590" posY="380" angle="0" type="metal"/>
+    <block shape="box" width="30" height="70" posX="590" posY="190" angle="0" type="wood"/>
     
 	<block shape="box" width="50" height="200" posX="700" posY="420" angle="0" type="metal"/>
 	<block shape="box" width="30" height="70" posX="700" posY="290" angle="0" type="wood"/>
