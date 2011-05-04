@@ -3,9 +3,9 @@
 	<munition shape="box" width="38" height="50" posX="120" posY="505" angle="0" type="mammouth2"/>
     
     <block shape="circle" width="20" height="20" posX="50" posY="180" angle="0" type="wood"/>
-    <block shape="box" width="40" height="350" posX="650" posY="360" angle="0" type="metal"/>
-	<block shape="box" width="40" height="350" posX="730" posY="360" angle="0" type="metal"/>
-	<block shape="box" width="40" height="270" posX="690" posY="380" angle="0" type="wood"/>
+    <block shape="box" width="40" height="205" posX="650" posY="420" angle="0" type="metal"/>
+	<block shape="box" width="40" height="220" posX="730" posY="420" angle="0" type="metal"/>
+	<block shape="box" width="40" height="170" posX="690" posY="440" angle="0" type="wood"/>
 	
-	<target shape="circle" width="30" height="40" posX="690" posY="240" angle="0" type="target"/>
+	<target shape="circle" width="30" height="40" posX="690" posY="330" angle="0" type="target"/>
 </angrImac>
