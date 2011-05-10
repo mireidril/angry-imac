@@ -13,22 +13,33 @@ import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.contacts.ContactPoint;
 import org.jbox2d.dynamics.contacts.ContactResult;
 
+/**
+ * Classe du monde
+ * @author BRUNELIERE Adrien, CHARBONNIER Fiona, COGNY Céline, KIELB Adrien et ROLDAO Timothée
+ * @version 1.5
+ */
 public class GWorld extends World implements ContactListener {
+
+	public  ArrayList<Body> physicalBodies = new ArrayList<Body>();
+	public ArrayList<Body> munitions = new ArrayList<Body>();
+	
 	/**
 	* 	Constructeur d'un World.
 	*  
 		@param  worldAABB 	Systeme de collision.
 		@param  gravity		Gravite qui s'applique sur le monde.
-		@param  doSleep		???.                  
+		@param  doSleep		Detection de la stabilite.                  
 	*/
 	public GWorld(AABB worldAABB, Vec2 gravity, boolean doSleep) {
 		super(worldAABB, gravity, doSleep);
 		setContactListener(this);
 	}
-
-	public  ArrayList<Body> physicalBodies = new ArrayList<Body>();
-	public ArrayList<Body> munitions = new ArrayList<Body>();
 	
+	/**
+	* 	Ajout d'un listener de contact
+	*  
+		@param  arg0 	Point de contact entre deux blocs.                 
+	*/
 	@Override
 	public void add(ContactPoint arg0) {
 		Block block1 = (Block) arg0.shape1.getBody().getUserData();
@@ -58,14 +69,32 @@ public class GWorld extends World implements ContactListener {
 			}
 		}
 	}
+	
+	/**
+	* 	Contact persistant
+	*  
+		@param  arg0 	Point de contact entre deux blocs.                 
+	*/
 	@Override
 	public void persist(ContactPoint arg0) {
 		
 	}
+	
+	/**
+	* 	Separation des blocs
+	*  
+		@param  arg0 	Point de contact entre deux blocs.                 
+	*/
 	@Override
 	public void remove(ContactPoint arg0) {
 		
 	}
+	
+	/**
+	* 	Resultat du contact entre les deux blocs
+	*  
+		@param  arg0 	Point de contact entre deux blocs.                 
+	*/
 	@Override
 	public void result(ContactResult arg0) {
 		

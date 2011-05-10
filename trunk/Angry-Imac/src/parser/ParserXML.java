@@ -14,7 +14,11 @@ import org.jdom.output.XMLOutputter;
 import object.*;
 import game.*;
 
-
+/**
+ * Classe du parser XML
+ * @author BRUNELIERE Adrien, CHARBONNIER Fiona, COGNY Céline, KIELB Adrien et ROLDAO Timothée
+ * @version 1.0
+ */
 public class ParserXML
 {
    private org.jdom.Document document;
@@ -24,6 +28,13 @@ public class ParserXML
    private GameWorld gameworld;
    private boolean display;
    
+	/**
+	* 	Constructeur du parser XML
+	*  
+		@param  gameworld Contexte du jeu
+		@param  path Chemin du fichier XML à charger
+		@param  display ???              
+	*/
    public void parseXML(GameWorld gameworld, String path, boolean display){
 	   this.gameworld = gameworld;
 	   this.display = display;
@@ -36,7 +47,9 @@ public class ParserXML
 		racine = document.getRootElement();
    }
    
-   
+	/**
+	* 	Parse un fichier XML de sauvegarde
+	*/
    public int parseSave(){
 	   SAXBuilder sxb = new SAXBuilder();
 	   try{
@@ -55,6 +68,11 @@ public class ParserXML
 	    return 1;
    }
    
+	/**
+	* 	Deverouille le niveau gagne
+		
+		@param lvl Niveau a debloquer
+	*/
    public void unlockWorld(int lvl){
 	  List<?> listLvl = racineSave.getChildren("level");
       Iterator<?> i = listLvl.iterator();
@@ -66,6 +84,11 @@ public class ParserXML
       }
    }
    
+	/**
+	* 	Accesseur (Get) pour savoir si le niveau est debloque
+		
+		@param lvl Niveau dont on veut connaitre s'il est bloque ou non
+	*/
    public boolean isUnlock(int lvl){
 	   List<?> listLvl = racineSave.getChildren("level");
 	      Iterator<?> i = listLvl.iterator();
@@ -80,6 +103,11 @@ public class ParserXML
 	   return false;
    }
    
+	/**
+	* 	Accesseur (Get) pour connaitre le score au niveau demande
+		
+		@param lvl Niveau dont on veut connaitre le score
+	*/
    public int getScore(int lvl){
 		  List<?> listLvl = racineSave.getChildren("level");
 	      Iterator<?> i = listLvl.iterator();
@@ -92,6 +120,12 @@ public class ParserXML
 	      return 0;
 	   }
    
+	/**
+	* 	Accesseur (Set) pour changer le score
+		
+		@param lvl Niveau dont on veut changer le score
+		@param score Score du niveau concerne
+	*/
    public void setScore(int lvl, int score){
 		  List<?> listLvl = racineSave.getChildren("level");
 	      Iterator<?> i = listLvl.iterator();
@@ -103,6 +137,9 @@ public class ParserXML
 	      }
 	   }
    
+   /**
+	* 	Enregistre les donnees du joueur
+	*/
    public void save(){
       try{
          XMLOutputter sortie = new XMLOutputter(Format.getPrettyFormat());
@@ -111,6 +148,9 @@ public class ParserXML
       catch (java.io.IOException e){}
    }
 
+   /**
+	* 	Mega parser du jeu : parse le niveau et le cree
+	*/
    public void parseAllAndCreatorLevel()
    {
 	   /*RÈcupÈration des munitions */
@@ -265,85 +305,4 @@ public class ParserXML
       }
    }
    
-  /*
-   * Fonction searchFilter (bonus) pour faire des recherches dans le xml
-   */ 
-   /*
-	@SuppressWarnings("serial")
-	static void searchFilter()
-   {
-	   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-      //On cree un nouveau filtre
-      Filter filter = new Filter()
-      {
-		//On defini les proprietes du filtre a l'aide de la methode matches
-         public boolean matches(Object ob)
-         {
-            //1 ere verification : on verifie que les objets qui seront filtres sont bien des Elements
-            if(!(ob instanceof Element)){return false;}
-
-            //On cree alors un Element sur lequel on va faire les verifications suivantes.
-            Element element = (Element)ob;
-
-            //test par couleur
-            int testColor = 0;
-            Element color = element.getChild("color");
-            if(color == null){return false;}          
-            if(color.getText().equals("red"))
-        	   testColor = 1;
-
-            //Si nos conditions sont remplies on retourne true, false sinon
-            if(testColor == 1)
-               return true;
-            return false;
-         }
-      };
-
-      //On fait une liste des resultats correspondant a nos criteres
-      List<?> resultat = racine.getContent(filter);
-      
-      //Affichage du resultat
-      Iterator<?> i = resultat.iterator();
-      while(i.hasNext())
-      {
-         Element current = (Element)i.next();
-         System.out.println("______FiltreColor____");
-         System.out.println(current.getAttributeValue("type"));
-         System.out.println("_____________________");
-      }
-      //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-      //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-      //On crée un nouveau filtre pour trouver tous les blocks "wood"
-      Filter filterTypeBlock = new Filter()
-      {
-         public boolean matches(Object ob)
-         {
-            if(!(ob instanceof Element))
-            	return false;
-
-            Element element = (Element)ob;
-            int testType = 0;
-            
-            if(element.getAttributeValue("type").equals("wood"))
-            	testType = 1;
-
-            if(testType == 1)
-               return true;
-            
-            return false;
-         }
-      };
-      List<?> resultatTypeBlock = racine.getContent(filterTypeBlock);
-      
-      Iterator<?> iTypeBlock = resultatTypeBlock.iterator();
-      while(iTypeBlock.hasNext())
-      {
-         Element current = (Element)iTypeBlock.next();
-         System.out.println("++++++++FiltreTypeBlock++++++++");
-         System.out.println(current.getAttributeValue("type"));
-         System.out.println("++"+current.getChildText("color"));
-         System.out.println("+++++++++++++++++++++++++++++++");
-      }
-      //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   }*/
 }

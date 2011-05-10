@@ -10,7 +10,15 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+/**
+ * Classe du materiau mammouth
+ * @author BRUNELIERE Adrien, CHARBONNIER Fiona, COGNY Céline, KIELB Adrien et ROLDAO Timothée
+ * @version 1.0
+ */
 public class Mammouth  extends Material{
+	/**
+	* 	Constructeur d'un materiau Mammouth normal               
+	*/
 	public Mammouth(){
 		density = 2.4f;
 		friction = 0.5f;

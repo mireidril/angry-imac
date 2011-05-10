@@ -12,6 +12,11 @@ import org.jbox2d.collision.ShapeDef;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 
+/**
+ * Classe d'un block
+ * @author BRUNELIERE Adrien, CHARBONNIER Fiona, COGNY Céline, KIELB Adrien et ROLDAO Timothée
+ * @version 1.3
+ */
 public class Block {
 
 	private Shape sh;
@@ -226,14 +231,24 @@ public class Block {
 		return shapeDef;
 	}
 	
+	/**
+	 * 	accesseur (Set) pour savoir si le bloc est a supprimer                          
+		@param value booleen designant la suppression               
+	*/	
 	public void setToDelete(boolean value) {
 		toDelete = value;
 	}
 	
+	/**
+	 * 	accesseur (Get) pour savoir si le bloc est a supprimer                              
+	*/	
 	public boolean getToDelete() {
 		return toDelete;
 	}
 	
+	/**
+	 * 	accesseur (Get) pour connaitre le score                                   
+	*/	
 	public int getScore(){
 		return score;
 	}

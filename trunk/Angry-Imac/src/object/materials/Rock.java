@@ -10,7 +10,15 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+/**
+ * Classe du materiau pierre
+ * @author BRUNELIERE Adrien, CHARBONNIER Fiona, COGNY Céline, KIELB Adrien et ROLDAO Timothée
+ * @version 1.0
+ */
 public class Rock extends Material{
+	/**
+	 * Constructeur du materiau pierre
+	 */
 	public Rock(){
 		density = 2.4f;
 		friction = 0.5f;
