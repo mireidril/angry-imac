@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <angrImac>
-	<munition shape="box" width="38" height="50" posX="120" posY="505" angle="0" type="mammouth"/>
+	<munition shape="box" width="38" height="50" posX="120" posY="450" angle="0" type="mammouth"/>
     
     <block shape="box" width="90" height="150" posX="500" posY="450" angle="0" type="metal"/>
     <block shape="box" width="75" height="60" posX="490" posY="345" angle="0" type="metal"/>
