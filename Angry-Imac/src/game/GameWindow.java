@@ -29,6 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.SwingUtilities;
 
+import object.Projectile;
 import object.Target;
 
 import org.jbox2d.common.Vec2;
@@ -562,10 +563,12 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 				munition.wakeUp();
 				Vec2 vectForce = new Vec2((posBaseSouris.x - evt.getX()) *munition.getMass()*g.catapult.getElasticTension(), (posBaseSouris.y - evt.getY())*munition.getMass()*g.catapult.getElasticTension());
 				munition.applyForce(vectForce, munition.getPosition());
+				Projectile p = (Projectile) munition.getUserData();
+				p.throwed = true;
 				
-				//Déplacement de la munition suivante sur le lance-pierre
-				System.out.println("getActualMunition" + g.catapult.getActualMunition());
-				/*if(g.catapult.getActualMunition() < g.catapult.projectiles.size()) {
+				//Deplacement de la munition suivante sur le lance-pierre
+				/*System.out.println("getActualMunition" + g.catapult.getActualMunition());
+				if(g.catapult.getActualMunition() < g.catapult.projectiles.size()) {
 					g.setProjectileToActive(g.catapult.projectiles.get(g.catapult.getActualMunition()));
 					Body nextMunition = g.getActualMunitionBody(g.catapult.getActualMunition());
 					if(nextMunition != null) {
@@ -586,9 +589,26 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 			Body munition = g.getActualMunitionBody(g.catapult.getActualMunition());
 			if(munition != null) {
 				Vec2 position = munition.getPosition();
-				if(evt.getX() > 50 && evt.getX() < 150 && evt.getY() > 400 && evt.getY() < 520) {
+				if(evt.getX() > 0 && evt.getX() < 150 && evt.getY() > 350 && evt.getY() < 520) {
 					munition.setXForm(new Vec2(evt.getX(), (evt.getY()) - 30), 0);
 				}
+				else {
+					if(evt.getX() > 150){
+						munition.setXForm(new Vec2(150, (evt.getY()) - 30), 0);
+					}
+					if(evt.getX() < 0 ) {
+						munition.setXForm(new Vec2(10, (evt.getY()) - 30), 0);
+					}
+					
+					if(evt.getY() > 520){
+						munition.setXForm(new Vec2(evt.getX(), 520 - 30), 0);
+						
+					}
+					if(evt.getY() < 350 ) {
+						munition.setXForm(new Vec2(evt.getX(), 350 - 30), 0);
+					}
+				}
+				munition.allowSleeping(true);
 			}
 		}		
 	}

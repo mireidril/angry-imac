@@ -49,6 +49,8 @@ public class GameWorld implements Runnable{
 		public void paintComponent(Graphics g){
 			super.paintComponent(g);
 			Graphics2D g2 = (Graphics2D) g;
+			int xProjectile = -1, yProjectile = -1;
+			boolean throwed = true;
 			
 			//********************************* affichage du ciel *********************************
 			g2.setPaint(textSky);
@@ -65,7 +67,7 @@ public class GameWorld implements Runnable{
 			//g2.setColor(new Color(150, 150, 255));
 			g2.fillRect(100, 430, 43, 107);
 			
-			//********************************* affichage des munitions/projectiles *****************
+			//********************************* affichage des munitions/projectiles + elastique*****************
 			if(alive)
 			{
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
@@ -82,9 +84,14 @@ public class GameWorld implements Runnable{
             			Body b = m_world.munitions.get(i);            			
             			p = (Projectile) b.getUserData();            	
             			g2.translate(b.getWorldCenter().x, b.getWorldCenter().y);
+            			xProjectile = (int)b.getWorldCenter().x;
+            			yProjectile = (int)b.getWorldCenter().y;
+            			throwed = p.throwed;
             		}
             		else {
             			g2.translate(p.getPosition().x, p.getPosition().y);
+            			xProjectile = (int)p.getPosition().x;
+            			yProjectile = (int)p.getPosition().y;
             		}
 	               
 	                //chargemen de la texture
@@ -116,8 +123,18 @@ public class GameWorld implements Runnable{
 		                	break;
 	                }
             	}
+            	//********************************** affichage elastique *****************************
+                g2.setColor(new Color(0, 0, 0));
+                g2.translate(-xProjectile, -yProjectile);
+                if(!throwed) {
+                	g2.drawLine(xProjectile, yProjectile, 108, 450);
+                	g2.drawLine(xProjectile, yProjectile, 130, 450);
+                	xProjectile = -1;
+                	yProjectile = -1;
+                	throwed = true;
+                }
             }
-
+            
 			//********************************* affichage des objets mouvants **********************
 			//Graphics2D g2 = (Graphics2D) g;
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
@@ -164,24 +181,7 @@ public class GameWorld implements Runnable{
 	            }
 				}
 				catch(Exception e){}
-			}
-            //********************************* affichage de rope **********************
-			for (int i = 0; i < catapult.getRope().size(); i++){
-            	Body link = catapult.getRope().get(i);
-            	if(link != null){
-            		 resetTrans(g2);
-            		 g2.setColor(new Color(255, 0, 0));
-            		 g2.fillRect((int)link.getPosition().x, (int)link.getPosition().y, 10, 10);
-            	}
-            }
-			for (int i = 0; i < catapult.getRopeJoints().size(); i++){
-            	RevoluteJointDef link = catapult.getRopeJoints().get(i);
-            	if(link != null){
-            		 resetTrans(g2);
-            		 g2.setColor(new Color(0, 255, 0));
-            		 g2.fillRect((int)link.localAnchor1.x, (int)link.localAnchor1.y, 10, 10);
-            	}
-            }   
+			} 
 		}
 	  } 
 	}
@@ -370,7 +370,7 @@ public class GameWorld implements Runnable{
 				int munitionPrec = catapult.getActualMunition() - 1;
 				if( munitionPrec >= 0 && munitionPrec < catapult.projectiles.size()) {
 					Body prec = getActualMunitionBody(munitionPrec);
-					if(prec.getPosition().x > 200) {
+					if(prec.getPosition().x > 200 || prec.isSleeping()) {
 						if (catapult.getActualMunition() < catapult.projectiles.size()) {
 							setProjectileToActive(catapult.projectiles.get(catapult.getActualMunition()));
 							Body nextMunition = getActualMunitionBody(catapult.getActualMunition());
@@ -395,6 +395,7 @@ public class GameWorld implements Runnable{
 		{
 			int nb = m_world.physicalBodies.size() + m_world.munitions.size();
 			int i = 0;
+			int k = 0;
 	        for (int j = 0; j<m_world.physicalBodies.size();j++) {
 	        	Body body = m_world.physicalBodies.get(j);
 	        	if(body != null){
@@ -406,6 +407,7 @@ public class GameWorld implements Runnable{
 	        	if(body != null){
 	        		if(body.isSleeping())
 	        			i++;
+	        			k++;
 	        	}
 	        }
 	        if(Target.getNbTarget() == 0 && nb == i){
