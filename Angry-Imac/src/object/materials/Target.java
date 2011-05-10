@@ -10,7 +10,15 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+/**
+ * Classe du materiau cible (oeuf)
+ * @author BRUNELIERE Adrien, CHARBONNIER Fiona, COGNY Céline, KIELB Adrien et ROLDAO Timothée
+ * @version 1.0
+ */
 public class Target  extends Material{
+	/**
+	 * Constructeur du materiau cible
+	 */
 	public Target(){
 		density = 0.6f;
 		friction = 0.3f;

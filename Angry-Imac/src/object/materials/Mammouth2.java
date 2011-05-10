@@ -9,8 +9,16 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-
+/**
+ * Classe du materiau mammouth 2
+ * @author BRUNELIERE Adrien, CHARBONNIER Fiona, COGNY Céline, KIELB Adrien et ROLDAO Timothée
+ * @version 1.0
+ */
 public class Mammouth2  extends Material{
+	
+	/**
+	 * Constructeur d'un matériau de mammouth qui se divise en deux
+	 */
 	public Mammouth2(){
 		density = 2.4f;
 		friction = 0.5f;

@@ -10,7 +10,15 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+/**
+ * Classe du materiau metal
+ * @author BRUNELIERE Adrien, CHARBONNIER Fiona, COGNY Céline, KIELB Adrien et ROLDAO Timothée
+ * @version 1.0
+ */
 public class Metal  extends Material{
+	/**
+	 * Constructeur d'un materiau en metal
+	 */
 	public Metal(){
 		density = 7.32f;
 		friction = 0.4f;

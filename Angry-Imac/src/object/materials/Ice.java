@@ -10,7 +10,16 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+/**
+ * Classe du materiau glace
+ * @author BRUNELIERE Adrien, CHARBONNIER Fiona, COGNY Céline, KIELB Adrien et ROLDAO Timothée
+ * @version 1.0
+ */
+
 public class Ice  extends Material{
+	/**
+	* 	Constructeur d'un bloc de glace                
+	*/
 	public Ice(){
 		density = 0.9f;
 		friction = 0.03f;

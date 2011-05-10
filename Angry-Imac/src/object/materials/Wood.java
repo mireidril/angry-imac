@@ -10,7 +10,15 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+/**
+ * Classe du materiau bois
+ * @author BRUNELIERE Adrien, CHARBONNIER Fiona, COGNY Céline, KIELB Adrien et ROLDAO Timothée
+ * @version 1.0
+ */
 public class Wood extends Material{
+	/**
+	 * Constructeur du materiau bois
+	 */
 	public Wood(){
 		density = 0.6f;
 		friction = 0.7f;
