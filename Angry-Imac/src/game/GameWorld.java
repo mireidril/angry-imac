@@ -34,9 +34,18 @@ import org.jbox2d.common.*;
 import object.*;
 import parser.ParserXML;
 
-
+/**
+ * Classe de l'application du jeu
+ * @author BRUNELIERE Adrien, CHARBONNIER Fiona, COGNY Céline, KIELB Adrien et ROLDAO Timothée
+ * @version 1.0
+ */
 public class GameWorld implements Runnable{
 	
+	/**
+	 * Classe du rendu graphique du jeu
+	 * @author BRUNELIERE Adrien, CHARBONNIER Fiona, COGNY Céline, KIELB Adrien et ROLDAO Timothée
+	 * @version 1.0
+	 */
 	@SuppressWarnings("serial")
 	private class GameGraphic extends JPanel{
 		
@@ -207,10 +216,6 @@ public class GameWorld implements Runnable{
 	private long timeStable = 0;
 	private long timeFailed = 0;
 	
-	//Celine : a virer plus tard
-	
-	
-	
 	public GameWorld(GameWindow gameWindow, int lvlForcage, boolean forcage){
 		this.gameWindow = gameWindow;
 		alive = true;
@@ -297,9 +302,6 @@ public class GameWorld implements Runnable{
         bd.position.set(0, 0);
         sd.setAsBox(1024, 1);
         m_world.createBody(bd).createShape(sd);
-        
-        //TEST CORDE/ELASTIQUE CELINE - 
-        //catapult.createElastic(m_world);
         
 	}
 	

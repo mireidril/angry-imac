@@ -37,6 +37,11 @@ import org.jbox2d.dynamics.Body;
 
 import parser.ParserXML;
 
+/**
+ * Classe de la fenêtre du jeu
+ * @author BRUNELIERE Adrien, CHARBONNIER Fiona, COGNY Céline, KIELB Adrien et ROLDAO Timothée
+ * @version 1.0
+ */
 @SuppressWarnings("serial")
 public class GameWindow extends JFrame implements ActionListener, MouseListener, KeyListener, MouseMotionListener{
 
@@ -77,6 +82,9 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	private boolean helpScreen = false;
 	private boolean creditsScreen = false;
 	
+	/**
+	 * Constructeur de la fenêtre de jeu
+	 */
 	public GameWindow(){
 		super();
 		buildWindow();
@@ -84,7 +92,9 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		this.requestFocus();
 	}
 	
-	//creation de la fenetre
+	/**
+	 * Création de la fenêtre de jeu
+	 */
 	public void buildWindow(){
 		setTitle("AngrIMAC");
 		setSize(1024,700);
@@ -156,6 +166,9 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		this.addMouseMotionListener(this); 
 	}
 	
+	/**
+	 * Affichage du menu de jeu
+	 */
 	public void goToHome()
 	{
 		start = new JPanel(){
