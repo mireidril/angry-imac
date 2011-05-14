@@ -107,7 +107,7 @@ public class GameWorld implements Runnable{
 	                g2.setPaint(p.getMaterial().getTexture());
 	                
 	                switch(p.getShape()){
-		                case RAMP : // meme tracet que pour triangle
+		                case RAMP : // meme trace que pour triangle
 		                case TRIANGLE :
 		                	Polygon pol = new Polygon();
 		                	List<Vec2> list = p.getVertices();
@@ -135,7 +135,7 @@ public class GameWorld implements Runnable{
             	//********************************** affichage elastique *****************************
                 g2.setColor(new Color(0, 0, 0));
                 g2.translate(-xProjectile, -yProjectile);
-                if(!throwed) {
+                if(!throwed && catapult.getEngaged()) {
                 	g2.drawLine(xProjectile, yProjectile, 108, 450);
                 	g2.drawLine(xProjectile, yProjectile, 130, 450);
                 	xProjectile = -1;

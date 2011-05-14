@@ -32,14 +32,15 @@ import javax.swing.SwingUtilities;
 import object.Projectile;
 import object.Target;
 
+import org.jbox2d.collision.MassData;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 
 import parser.ParserXML;
 
 /**
- * Classe de la fentre du jeu
- * @author BRUNELIERE Adrien, CHARBONNIER Fiona, COGNY CŽline, KIELB Adrien et ROLDAO TimothŽe
+ * Classe de la fenï¿½tre du jeu
+ * @author BRUNELIERE Adrien, CHARBONNIER Fiona, COGNY CÅ½line, KIELB Adrien et ROLDAO TimothÅ½e
  * @version 1.0
  */
 @SuppressWarnings("serial")
@@ -83,7 +84,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	private boolean creditsScreen = false;
 	
 	/**
-	 * Constructeur de la fentre de jeu
+	 * Constructeur de la fenï¿½tre de jeu
 	 */
 	public GameWindow(){
 		super();
@@ -93,7 +94,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	}
 	
 	/**
-	 * CrŽation de la fentre de jeu
+	 * CrÅ½ation de la fenï¿½tre de jeu
 	 */
 	public void buildWindow(){
 		setTitle("AngrIMAC");
@@ -128,7 +129,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		selectWorldButton.setContentAreaFilled(false);
 		selectWorldButton.addActionListener(this);
 		
-		//crŽtion du bouton retour sur la page d'accueil
+		//crÅ½tion du bouton retour sur la page d'accueil
 		returnHomeButton = new JButton(new ImageIcon("textures/return.png"));
 		returnHomeButton.setBorderPainted(false);
 		returnHomeButton.setContentAreaFilled(false);
@@ -139,7 +140,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		resetButton.setContentAreaFilled(false);
 		resetButton.addActionListener(this);
 		
-		//crŽtion des boutons failed
+		//crÅ½tion des boutons failed
 		quitButtonFailed = new JButton(new ImageIcon("textures/failed/quit.png"));
 		quitButtonFailed.setBounds(550,340,83,48);
 		quitButtonFailed.setBorderPainted(false);
@@ -503,7 +504,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		}
 		else if(source == returnHomeButton)
 		{
-			//Suppression des ŽlŽmentes de la page Help
+			//Suppression des Å½lÅ½mentes de la page Help
 			if(helpScreen){
 				contenu.remove(help);
 			}
@@ -559,8 +560,20 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 			posBaseSouris = new Vec2(evt.getX(), evt.getY());
 			g.catapult.setEngaged(true);
 		}
-		else
+		else 
 		{
+			//On rÃ©cupÃ¨re la munition prÃ©cÃ©demment lancÃ©e
+			int actual = g.catapult.getActualMunition() - 1;
+			if(actual >= 0 && actual < g.getWorld().munitions.size()) {
+				Body munition = g.getWorld().munitions.get(actual);
+				Projectile p = (Projectile) munition.getUserData();
+				if(p.type == 1) {
+					System.out.println("Ecrasement !!!!");
+					munition.applyForce(new Vec2(0, 1000*1000*1000), munition.getPosition());
+					p.type--;
+				}
+			}
+				
 			posBaseSouris = new Vec2(0, 0);
 		}
 		
@@ -578,16 +591,6 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 				munition.applyForce(vectForce, munition.getPosition());
 				Projectile p = (Projectile) munition.getUserData();
 				p.throwed = true;
-				
-				//Deplacement de la munition suivante sur le lance-pierre
-				/*System.out.println("getActualMunition" + g.catapult.getActualMunition());
-				if(g.catapult.getActualMunition() < g.catapult.projectiles.size()) {
-					g.setProjectileToActive(g.catapult.projectiles.get(g.catapult.getActualMunition()));
-					Body nextMunition = g.getActualMunitionBody(g.catapult.getActualMunition());
-					if(nextMunition != null) {
-						nextMunition.setXForm(new Vec2(120, 450), 0);
-					}
-				}*/
 			}
 			posBaseSouris.x = 0;
 			posBaseSouris.y = 0;
@@ -600,26 +603,33 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	public void mouseDragged(MouseEvent evt) {
 		if(g.catapult.getEngaged()) {
 			Body munition = g.getActualMunitionBody(g.catapult.getActualMunition());
+			munition.putToSleep();
 			if(munition != null) {
 				Vec2 position = munition.getPosition();
 				if(evt.getX() > 0 && evt.getX() < 150 && evt.getY() > 350 && evt.getY() < 520) {
 					munition.setXForm(new Vec2(evt.getX(), (evt.getY()) - 30), 0);
 				}
 				else {
+					int x = evt.getX(), y = evt.getY();
 					if(evt.getX() > 150){
-						munition.setXForm(new Vec2(150, (evt.getY()) - 30), 0);
+						x = 150;
 					}
 					if(evt.getX() < 0 ) {
-						munition.setXForm(new Vec2(10, (evt.getY()) - 30), 0);
+						x = 0;
 					}
 					
-					if(evt.getY() > 520){
-						munition.setXForm(new Vec2(evt.getX(), 520 - 30), 0);
+					if(evt.getY() > 540){
+						y =  540 - 30;
 						
 					}
 					if(evt.getY() < 350 ) {
-						munition.setXForm(new Vec2(evt.getX(), 350 - 30), 0);
+						y = 350 - 30;
 					}
+					
+					if(x != -1) {
+						
+					}
+					munition.setXForm(new Vec2(x, y), 0);
 				}
 				munition.allowSleeping(true);
 			}

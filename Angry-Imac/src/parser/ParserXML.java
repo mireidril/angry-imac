@@ -157,8 +157,7 @@ public class ParserXML
 	   List<?> listMunitions = racine.getChildren("munition");
 	   Iterator<?> iMunitions = listMunitions.iterator();
 	   while(iMunitions.hasNext()) {
-		   Element current = (Element)iMunitions.next();
-		   
+		   Element current = (Element)iMunitions.next();		   
 		   Shape shape = Shape.BOX;
 		   if(current.getAttributeValue("shape").equals("circle")) {
 			   shape = Shape.CIRCLE;
@@ -176,6 +175,7 @@ public class ParserXML
 		   float y = Float.parseFloat(current.getAttributeValue("posY"));
 		   float angle = Float.parseFloat(current.getAttributeValue("angle"));
 		   Mat material = Mat.ICE;
+		   int type = -1;
 		   if(current.getAttributeValue("type").equals("metal")){
 			   material = Mat.METAL;
 		   }
@@ -187,11 +187,13 @@ public class ParserXML
 		   }
 		   else if(current.getAttributeValue("type").equals("mammouth")){
 			   material = Mat.MAMMOUTH;
+			   type = 0;
 		   }
 		   else if(current.getAttributeValue("type").equals("mammouth2")){
 			   material = Mat.MAMMOUTH2;
+			   type = 1;
 		   }
-		   gameworld.addMunition(new Projectile(shape, width, height, new Vec2(x, y), angle, material));
+		   gameworld.addMunition(new Projectile(type, shape, width, height, new Vec2(x, y), angle, material));
       }  
 	   
       //On cree une Liste contenant tous les noeuds "block" de l'Element racine
