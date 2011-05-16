@@ -20,12 +20,12 @@ public class Wood extends Material{
 	 * Constructeur du materiau bois
 	 */
 	public Wood(){
-		density = 0.6f;
+		density = 0.4f;// * 20;
 		friction = 0.7f;
 		restitution = 0.3f;
 		weightFactor = 0;
 		breakable = true;
-		breakableForce = 180.0f;
+		breakableForce = 200.0f;
 		color = new Color(165, 89, 4);
 		
 		Image img=null;
