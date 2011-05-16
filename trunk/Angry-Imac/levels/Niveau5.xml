@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<angrImac>
+	<munition shape="box" width="38" height="38" posX="120" posY="450" angle="0" type="mammouth2"/>
+    
+    <block shape="box" width="40" height="70" posX="500" posY="480" angle="0" type="metal"/>
+	<block shape="circle" width="50" height="50" posX="690" posY="500" angle="0" type="wood"/>
+	<block shape="box" width="50" height="150" posX="690" posY="400" angle="0" type="metal"/>
+	<block shape="box" width="50" height="150" posX="690" posY="250" angle="0" type="metal"/>
+	
+	<target shape="circle" width="30" height="40" posX="550" posY="500" angle="0" type="target"/>
+</angrImac>

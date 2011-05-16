@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<angrImac>
+	<munition shape="box" width="38" height="38" posX="120" posY="450" angle="0" type="mammouth2"/>
+    <munition shape="box" width="38" height="50" posX="80" posY="505" angle="0" type="mammouth"/>
+    <munition shape="box" width="38" height="50" posX="40" posY="505" angle="0" type="mammouth"/>
+    
+    <block shape="box" width="30" height="50" posX="550" posY="500" angle="0" type="wood"/>
+	<block shape="box" width="30" height="50" posX="750" posY="500" angle="0" type="wood"/>
+	
+	<block shape="box" width="250" height="50" posX="650" posY="450" angle="0" type="wood"/>
+	
+	<block shape="box" width="30" height="50" posX="570" posY="390" angle="0" type="ice"/>
+	<block shape="box" width="30" height="50" posX="730" posY="390" angle="0" type="ice"/>
+	
+	<block shape="box" width="200" height="30" posX="650" posY="350" angle="0" type="wood"/>
+	
+	<block shape="box" width="30" height="50" posX="600" posY="310" angle="0" type="ice"/>
+	<block shape="box" width="30" height="50" posX="700" posY="310" angle="0" type="ice"/>
+	
+	<block shape="triangle" width="200" height="100" posX="655" posY="250" angle="3.14159" type="wood"/>
+	
+	<target shape="circle" width="30" height="40" posX="650" posY="500" angle="0" type="target"/>
+</angrImac>
