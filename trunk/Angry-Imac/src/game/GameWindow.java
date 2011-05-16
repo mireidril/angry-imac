@@ -426,7 +426,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		else if(source == helpButton)
 		{
 			helpScreen = true;
-			returnHomeButton.setBounds(300,380,85,24);
+			returnHomeButton.setBounds(750,410,85,24);
 			
 			//suppression de l'ecran d'accueil
 			contenu.remove(start);
