@@ -212,6 +212,7 @@ public class GameWorld implements Runnable{
 	boolean runEngaged;
 	private int step_count;
 	private long step_time;
+	private long timer;
 	
 	private long timeStable = 0;
 	private long timeFailed = 0;
@@ -220,6 +221,9 @@ public class GameWorld implements Runnable{
 		this.gameWindow = gameWindow;
 		alive = true;
 		catapult = new Launcher();
+		
+		this.gameWindow.setFocusable(true);
+		this.gameWindow.requestFocus();
 		
 		//********************************* creation du monde *********************************
 		createWorld();
@@ -420,13 +424,17 @@ public class GameWorld implements Runnable{
     			gameWindow.gameFailed();
     			notMunition = false;
 	        }
-	        /*
-	        if(nb == i && Target.getNbTarget() == 0 ){
-	        	System.out.println("Niveau gagne !");
-	        	alive = false;
-	        	while(runEngaged){}
-	        	loadNextWorld();
-	        }*/
+	        
+	        if(Target.getNbTarget() == 0 ){
+	        	if(timer == 0) timer = System.currentTimeMillis();
+	        	else if(System.currentTimeMillis() - timer > 3000){
+	        		alive = false;
+	        		timer = 0;
+	        		while(runEngaged){}
+	        		gameWindow.gameNext();
+	        	}
+	        	
+	        }
 		}
 	}
 
@@ -543,5 +551,7 @@ public class GameWorld implements Runnable{
         parser.save();
 
         alive = true;
+        this.gameWindow.setFocusable(true);
+		this.gameWindow.requestFocus();
 	}
 }
