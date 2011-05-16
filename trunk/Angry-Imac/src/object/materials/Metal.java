@@ -20,8 +20,8 @@ public class Metal  extends Material{
 	 * Constructeur d'un materiau en metal
 	 */
 	public Metal(){
-		density = 7.32f;
-		friction = 0.4f;
+		density = 10.32f;
+		friction = 0.1f;
 		restitution = 0.05f;
 		weightFactor = 0;
 		breakable = false;
