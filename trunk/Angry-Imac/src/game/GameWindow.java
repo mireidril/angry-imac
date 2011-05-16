@@ -39,7 +39,7 @@ import org.jbox2d.dynamics.Body;
 import parser.ParserXML;
 
 /**
- * Classe de la fenï¿½tre du jeu
+ * Classe de la fenetre du jeu
  * @author BRUNELIERE Adrien, CHARBONNIER Fiona, COGNY CÅ½line, KIELB Adrien et ROLDAO TimothÅ½e
  * @version 1.0
  */
@@ -84,17 +84,21 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	private boolean creditsScreen = false;
 	
 	/**
-	 * Constructeur de la fenï¿½tre de jeu
+	 * Constructeur de la fenetre de jeu
 	 */
 	public GameWindow(){
 		super();
-		buildWindow();
+		
 		this.setFocusable(true);
 		this.requestFocus();
+		this.addKeyListener(this);
+		this.addMouseMotionListener(this);
+		
+		buildWindow();
 	}
 	
 	/**
-	 * CrÅ½ation de la fenï¿½tre de jeu
+	 * Creation de la fenetre de jeu
 	 */
 	public void buildWindow(){
 		setTitle("AngrIMAC");
@@ -129,7 +133,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		selectWorldButton.setContentAreaFilled(false);
 		selectWorldButton.addActionListener(this);
 		
-		//crÅ½tion du bouton retour sur la page d'accueil
+		//creation du bouton retour sur la page d'accueil
 		returnHomeButton = new JButton(new ImageIcon("textures/return.png"));
 		returnHomeButton.setBorderPainted(false);
 		returnHomeButton.setContentAreaFilled(false);
@@ -140,7 +144,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		resetButton.setContentAreaFilled(false);
 		resetButton.addActionListener(this);
 		
-		//crÅ½tion des boutons failed
+		//creation des boutons failed
 		quitButtonFailed = new JButton(new ImageIcon("textures/failed/quit.png"));
 		quitButtonFailed.setBounds(550,340,83,48);
 		quitButtonFailed.setBorderPainted(false);
@@ -163,8 +167,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	
 		goToHome();
-		this.addKeyListener(this);
-		this.addMouseMotionListener(this); 
+		
 	}
 	
 	/**
@@ -299,13 +302,15 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 			
 		//ajout du listener de la souris
 		this.addMouseListener(this);
+		
+	
 	}
 	
 	//ajout des listeners
 	@SuppressWarnings("deprecation")
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
-		
+
 		if(source == quitButton || source == quitButtonFailed){
 			gw.stop();
 			System.out.println("retour au menu principal");
@@ -562,7 +567,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		}
 		else 
 		{
-			//On rÃ©cupÃ¨re la munition prÃ©cÃ©demment lancÃ©e
+			//On rŽcupre la munition prŽcŽdemment lancŽe
 			int actual = g.catapult.getActualMunition() - 1;
 			if(actual >= 0 && actual < g.getWorld().munitions.size()) {
 				Body munition = g.getWorld().munitions.get(actual);
@@ -614,8 +619,8 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 					if(evt.getX() > 150){
 						x = 150;
 					}
-					if(evt.getX() < 0 ) {
-						x = 0;
+					if(evt.getX() < 10 ) {
+						x = 10;
 					}
 					
 					if(evt.getY() > 540){
@@ -636,37 +641,29 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		}		
 	}
 
+	
 	@Override
 	public void mouseMoved(MouseEvent evt) {
 	}
 	
+
+	
 	@Override
 	public void keyTyped(KeyEvent evt) {
-
-		/*if(evt.getKeyChar() == ' '){
-			System.out.println("test : touche espace appuye");
-			
-			//ajout des boutons
-			contenu.add("South", buildButtons());
-			
-			//suppression de l'ecran d'accueil
-			contenu.remove(start);
-			
-			//creation du monde et de son thread
-			g = new GameWorld(this);
-			gw = new Thread(g);
-			posBaseSouris = new Vec2();
-			posDragSouris = new Vec2();
-			gw.start();
-			
-			//creation de la zone de jeu
-			contenu.add(g.gg, "Center");
-			
-			setContentPane(contenu);
-			
-			//ajout du listener de la souris
-			this.addMouseListener(this);
-		}*/
+		System.out.println("tamere");
+		if(evt.getKeyChar() == ' '){
+			//On rŽcupre la munition prŽcŽdemment lancŽe
+			int actual = g.catapult.getActualMunition() - 1;
+			if(actual >= 0 && actual < g.getWorld().munitions.size()) {
+				Body munition = g.getWorld().munitions.get(actual);
+				Projectile p = (Projectile) munition.getUserData();
+				if(p.type == 1) {
+					System.out.println("Ecrasement !!!!");
+					munition.applyForce(new Vec2(0, 1000*1000*1000), munition.getPosition());
+					p.type--;
+				}
+			}
+		}
 	}
 
 	@Override
@@ -674,6 +671,6 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	}
 
 	@Override
-	public void keyPressed(KeyEvent e) {
+	public void keyPressed(KeyEvent evt) {
 	}
 }

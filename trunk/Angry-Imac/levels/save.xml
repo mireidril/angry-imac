@@ -4,10 +4,10 @@
   <level num="2" unlock="true" heightscore="680" />
   <level num="3" unlock="true" heightscore="510" />
   <level num="4" unlock="true" heightscore="500" />
-  <level num="5" unlock="true" heightscore="0" />
-  <level num="6" unlock="false" heightscore="0" />
-  <level num="7" unlock="false" heightscore="0" />
-  <level num="8" unlock="false" heightscore="0" />
+  <level num="5" unlock="true" heightscore="500" />
+  <level num="6" unlock="true" heightscore="500" />
+  <level num="7" unlock="true" heightscore="520" />
+  <level num="8" unlock="true" heightscore="0" />
   <level num="9" unlock="false" heightscore="0" />
   <level num="10" unlock="false" heightscore="0" />
   <level num="11" unlock="false" heightscore="0" />
