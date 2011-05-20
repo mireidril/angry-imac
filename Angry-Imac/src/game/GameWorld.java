@@ -395,7 +395,9 @@ public class GameWorld implements Runnable{
 	        			i++;
 	        	}
 	        }
-	        for (Body body : m_world.munitions) {
+	       // for (Body body : m_world.munitions) {
+	        for(int j = 0; j < m_world.munitions.size(); j++) {
+	        	Body body = m_world.munitions.get(j);
 	        	if(body != null){
 	        		if(body.isSleeping())
 	        			i++;

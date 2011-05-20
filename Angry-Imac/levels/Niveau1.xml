@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <angrImac>
+    <munition shape="box" width="38" height="50" posX="120" posY="450" angle="0" type="mammouth"/>
     <munition shape="box" width="38" height="50" posX="80" posY="505" angle="0" type="mammouth"/>
-    <munition shape="box" width="38" height="50" posX="40" posY="505" angle="0" type="mammouth"/>
     
     <block shape="box" width="30" height="50" posX="550" posY="500" angle="0" type="wood"/>
 	<block shape="box" width="30" height="50" posX="750" posY="500" angle="0" type="wood"/>
