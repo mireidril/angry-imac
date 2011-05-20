@@ -102,6 +102,8 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		buildWindow();
 		this.setFocusable(true);
 		this.requestFocus();
+		posBaseSouris = new Vec2();
+		posDragSouris = new Vec2();
 	}
 	
 	/**
@@ -333,8 +335,6 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		//creation du monde et de son thread
 		g = new GameWorld(this, lvl, forcage);
 		gw = new Thread(g);
-		posBaseSouris = new Vec2();
-		posDragSouris = new Vec2();
 		
 		buildButtons();
 		
@@ -628,8 +628,8 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	public void mouseDragged(MouseEvent evt) {
 		if(g.catapult.getEngaged()) {
 			Body munition = g.getActualMunitionBody(g.catapult.getActualMunition());
-			munition.putToSleep();
 			if(munition != null) {
+				munition.putToSleep();
 				Vec2 position = munition.getPosition();
 				if(evt.getX() > 0 && evt.getX() < 150 && evt.getY() > 350 && evt.getY() < 520) {
 					munition.setXForm(new Vec2(evt.getX(), (evt.getY()) - 30), 0);
