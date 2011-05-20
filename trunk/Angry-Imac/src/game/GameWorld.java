@@ -344,7 +344,7 @@ public class GameWorld implements Runnable{
 			//On vérifie qu'il n'y a pas des objets à supprimer
 			for(int i = 0; i < m_world.physicalBodies.size(); i++) {
 				Block block = (Block) m_world.physicalBodies.get(i).getUserData();
-				if(block.getToDelete() == true) {
+				if(block != null && block.getToDelete() == true) {
 					score += block.getScore();
 					gameWindow.getScoreLabel().setText(Integer.toString(score)+" pts");
 					System.out.println(score);
@@ -361,7 +361,7 @@ public class GameWorld implements Runnable{
 				int munitionPrec = catapult.getActualMunition() - 1;
 				if( munitionPrec >= 0 && munitionPrec < catapult.projectiles.size()) {
 					Body prec = getActualMunitionBody(munitionPrec);
-					if(prec.getPosition().x > 200 || prec.isSleeping()) {
+					if(prec != null && (prec.getPosition().x > 200 || prec.isSleeping()) ) {
 						if (catapult.getActualMunition() < catapult.projectiles.size()) {
 							setProjectileToActive(catapult.projectiles.get(catapult.getActualMunition()));
 							Body nextMunition = getActualMunitionBody(catapult.getActualMunition());
@@ -405,18 +405,21 @@ public class GameWorld implements Runnable{
 	        	}
 	        }
 	        if(Target.getNbTarget() == 0 && nb == i){
+	        	System.out.println("SOUCI 1 ?");
 	        	gameWindow.gameNext();
 	        	notMunition = false;
 	        }
 	        else if(notMunition == true && nb == i){
+	        	System.out.println("SOUCI 2 ?");
     			gameWindow.gameFailed();
     			notMunition = false;
 	        }
 	        
 	        if(Target.getNbTarget() == 0 ){
 	        	if(timer == 0) timer = System.currentTimeMillis();
-	        	if(System.currentTimeMillis()-timer > 3000)
+	        	if(System.currentTimeMillis()-timer > 3000 && Target.getNbTarget() == 0)
 	        	{
+	        		System.out.println("SOUCI 3 ?");
 		        	timer = 0;
 		        	gameWindow.gameNext();
 		        	notMunition = false;
@@ -457,7 +460,6 @@ public class GameWorld implements Runnable{
 		this.gameWindow.requestFocus();
 		for(int i = 0; i < m_world.physicalBodies.size(); i++) {
 			Block block = (Block) m_world.physicalBodies.get(i).getUserData();
-			block.setToDelete(true);
 			m_world.destroyBody(m_world.physicalBodies.get(i));
 			m_world.physicalBodies.remove(m_world.physicalBodies.get(i));
 		}
