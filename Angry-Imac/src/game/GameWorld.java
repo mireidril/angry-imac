@@ -70,11 +70,11 @@ public class GameWorld implements Runnable{
 			gameWindow.getQuitButtonHUD().paint(g2);
 			resetTrans(g2);
 			
-			g2.translate(70,10);
+			g2.translate(120,10);
 			gameWindow.getReloadButtonHUD().paint(g2);
 			resetTrans(g2);
 			
-			g2.translate(120,10);
+			g2.translate(170,10);
 			gameWindow.getPauseButtonHUD().paint(g2);
 			resetTrans(g2);
 			
