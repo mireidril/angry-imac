@@ -119,24 +119,28 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		
 		//Creation des boutons du menu de la page d'accueil
 		playButton = new JButton(new ImageIcon("textures/home/play.png"));
+		playButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		playButton.setBounds(469,200,86,48);
 		playButton.setBorderPainted(false);
 		playButton.setContentAreaFilled(false);
 		playButton.addActionListener(this);
 		
 		helpButton = new JButton(new ImageIcon("textures/home/help.png"));
+		helpButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		helpButton.setBounds(467,260,88,49);
 		helpButton.setBorderPainted(false);
 		helpButton.setContentAreaFilled(false);
 		helpButton.addActionListener(this);
 		
 		creditsButton = new JButton(new ImageIcon("textures/home/credits.png"));
+		creditsButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		creditsButton.setBounds(448,320,130,48);
 		creditsButton.setBorderPainted(false);
 		creditsButton.setContentAreaFilled(false);
 		creditsButton.addActionListener(this);
 		
 		selectWorldButton = new JButton(new ImageIcon("textures/home/select.png"));
+		selectWorldButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		selectWorldButton.setBounds(415,380,200,48);
 		selectWorldButton.setBorderPainted(false);
 		selectWorldButton.setContentAreaFilled(false);
@@ -144,29 +148,34 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		
 		//crŽtion du bouton retour sur la page d'accueil
 		returnHomeButton = new JButton(new ImageIcon("textures/return.png"));
+		returnHomeButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		returnHomeButton.setBorderPainted(false);
 		returnHomeButton.setContentAreaFilled(false);
 		returnHomeButton.addActionListener(this);
 		
 		resetButton = new JButton("Reset");
+		resetButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		resetButton.setBounds(0,0,130,48);
 		resetButton.setContentAreaFilled(false);
 		resetButton.addActionListener(this);
 		
 		//crŽtion des boutons failed
 		quitButtonFailed = new JButton(new ImageIcon("textures/failed/quit.png"));
+		quitButtonFailed.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		quitButtonFailed.setBounds(550,340,83,48);
 		quitButtonFailed.setBorderPainted(false);
 		quitButtonFailed.setContentAreaFilled(false);
 		quitButtonFailed.addActionListener(this);
 		
 		retryButtonFailed = new JButton(new ImageIcon("textures/failed/retry.png"));
+		retryButtonFailed.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		retryButtonFailed.setBounds(540,280,103,48);
 		retryButtonFailed.setBorderPainted(false);
 		retryButtonFailed.setContentAreaFilled(false);
 		retryButtonFailed.addActionListener(this);
 		
 		nextButton = new JButton(new ImageIcon("textures/nextButton.png"));
+		nextButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		nextButton.setBounds(480,280,187,48);
 		nextButton.setBorderPainted(false);
 		nextButton.setContentAreaFilled(false);
@@ -302,7 +311,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		contenu.add(score);
 		
 		quitButtonHUD = new JButton(new ImageIcon("textures/quit_btn.png"));
-		quitButtonHUD.setBounds(20,10,50,70);
+		quitButtonHUD.setBounds(20,10,100,70);
 		quitButtonHUD.setBorderPainted(false);
 		quitButtonHUD.setContentAreaFilled(false);
 		quitButtonHUD.addActionListener(this);
@@ -311,7 +320,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		contenu.add(quitButtonHUD);
 		
 		reloadButtonHUD = new JButton(new ImageIcon("textures/reload.png"));
-		reloadButtonHUD.setBounds(70,10,50,70);
+		reloadButtonHUD.setBounds(120,10,50,70);
 		reloadButtonHUD.setBorderPainted(false);
 		reloadButtonHUD.setContentAreaFilled(false);
 		reloadButtonHUD.addActionListener(this);
@@ -320,7 +329,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		contenu.add(reloadButtonHUD);
 		
 		pauseButtonHUD = new JButton(new ImageIcon("textures/pause.png"));
-		pauseButtonHUD.setBounds(120,10,50,70);
+		pauseButtonHUD.setBounds(170,10,50,70);
 		pauseButtonHUD.setBorderPainted(false);
 		pauseButtonHUD.setContentAreaFilled(false);
 		pauseButtonHUD.addActionListener(this);
