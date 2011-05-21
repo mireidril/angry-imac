@@ -15,8 +15,10 @@ import java.awt.event.MouseMotionListener;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 
 import javax.imageio.ImageIO;
@@ -100,6 +102,12 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	public GameWindow(){
 		super();
 		buildWindow();
+		
+		//chargement du son
+		Sound player = new Sound("./sounds/jeu.wav");
+		//lecture du son
+		player.start();
+		
 		this.setFocusable(true);
 		this.requestFocus();
 		posBaseSouris = new Vec2();
