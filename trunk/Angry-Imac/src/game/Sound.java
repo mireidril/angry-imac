@@ -13,13 +13,24 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
+/**
+ * Classe d'un son
+ * @author BRUNELIERE Adrien, CHARBONNIER Fiona, COGNY Céline, KIELB Adrien et ROLDAO Timothée
+ * @version 1.0
+ */
 public class Sound extends Thread{
 
 	private AudioFormat format;
 
 	private byte[] samples;
 	InputStream finalStream;
-
+	
+	/**
+	* 	Constructeur d'un Son. 
+	*  	Construit un son a partir dun fichier wav.
+	*  
+		@param  filename chemin et nom du fichier WAV.                   
+	*/
 	public Sound(String filename) {
 		try {
 			AudioInputStream stream = AudioSystem.getAudioInputStream(new File(filename));
@@ -30,10 +41,21 @@ public class Sound extends Thread{
 		finalStream = new ByteArrayInputStream(this.getSamples());
 	}
 
+	/**
+	* 	Accesseur(Get) du sample 
+	*  
+		@return  sample Sample du son (tableau de d octets).                   
+	*/
 	public byte[] getSamples() {
 		return samples;
 	}
 
+	/**
+	* 	Accesseur(Get) du sample 
+	*  
+	  	@param  stream Stream (input) du son.
+		@return  sample Sample du son (tableau de d'octets).                   
+	*/
 	public byte[] getSamples(AudioInputStream stream) {
 		int length = (int) (stream.getFrameLength() * format.getFrameSize());
 		byte[] samples = new byte[length];
@@ -45,6 +67,11 @@ public class Sound extends Thread{
 		return samples;
 	}
 
+	/**
+	* 	Met le son en Play et le joue dans l'application 
+	*  
+	  	@param  stream Stream (input) du son.                  
+	*/
 	public void play(InputStream source) {
 		int bufferSize = format.getFrameSize() * Math.round(format.getSampleRate() / 10);
 		byte[] buffer = new byte[bufferSize];
@@ -72,6 +99,10 @@ public class Sound extends Thread{
 		line.close();
 	}
 	
+	/**
+	* 	Joue le son en boucle 
+	*                  
+	*/
 	public void loop(){
 		this.play(finalStream);
 		try {
@@ -83,6 +114,10 @@ public class Sound extends Thread{
 		this.loop();
 	}
 	
+	/**
+	* 	fonction execute par le thread 
+	*                  
+	*/
 	public void run(){
 		this.loop();
 	}

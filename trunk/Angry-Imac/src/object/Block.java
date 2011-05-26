@@ -237,14 +237,16 @@ public class Block {
 	}
 	
 	/**
-	 * 	accesseur (Get) pour savoir si le bloc est a supprimer                              
+	 * 	accesseur (Get) pour savoir si le bloc est a supprimer 
+	 	@return toDelete booleen designant la suppression                             
 	*/	
 	public boolean getToDelete() {
 		return toDelete;
 	}
 	
 	/**
-	 * 	accesseur (Get) pour connaitre le score                                   
+	 * 	accesseur (Get) pour connaitre le score  
+	 	@return score Le score fait par la destruction du bloc                                  
 	*/	
 	public int getScore(){
 		return score;

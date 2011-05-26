@@ -29,7 +29,6 @@ public class Metal  extends Material{
 		color = new Color(161, 161, 161);
 		
 		Image img=null;
-		//BufferedImage img= new BufferedImage();
         try {
         	img=ImageIO.read(new File("textures/materiaux/metal.jpg"));
         }
@@ -37,7 +36,6 @@ public class Metal  extends Material{
         	System.out.println("ok");System.exit(0);
         }
         
-        ///g2.drawImage(img,0, 0, gg);
         this.texture = new TexturePaint((BufferedImage) img, new Rectangle((int)(-img.getWidth(null)/2), (int)(-img.getHeight(null)/2),(int)(img.getWidth(null)), (int)(img.getHeight(null))));
 	}
 }
