@@ -11,7 +11,7 @@ import org.jbox2d.common.Vec2;
 
 /**
  * Classe d'un block
- * @author BRUNELIERE Adrien, CHARBONNIER Fiona, COGNY Céline, KIELB Adrien et ROLDAO Timothée
+ * @author BRUNELIERE Adrien, CHARBONNIER Fiona, COGNY Celine, KIELB Adrien et ROLDAO Timothee
  * @version 1.3
  */
 public class Block {
