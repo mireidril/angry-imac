@@ -35,7 +35,7 @@ import org.jbox2d.dynamics.Body;
 import parser.ParserXML;
 
 /**
- * Classe de la fen�tre du jeu
+ * Classe de la fenetre du jeu
  * @author BRUNELIERE Adrien, CHARBONNIER Fiona, COGNY CŽline, KIELB Adrien et ROLDAO TimothŽe
  * @version 1.0
  */
@@ -86,7 +86,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	private boolean creditsScreen = false;
 	
 	/**
-	 * Constructeur de la fen�tre de jeu
+	 * Constructeur de la fenetre de jeu
 	 */
 	public GameWindow(){
 		super();
@@ -103,7 +103,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	}
 	
 	/**
-	 * CrŽation de la fenetre de jeu
+	 * Creation de la fenetre de jeu
 	 */
 	public void buildWindow(){
 		setTitle("AngrIMAC");
@@ -142,7 +142,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		selectWorldButton.setContentAreaFilled(false);
 		selectWorldButton.addActionListener(this);
 		
-		//crŽtion du bouton retour sur la page d'accueil
+		//cretion du bouton retour sur la page d'accueil
 		returnHomeButton = new JButton(new ImageIcon("textures/return.png"));
 		returnHomeButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		returnHomeButton.setBorderPainted(false);
@@ -155,7 +155,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		resetButton.setContentAreaFilled(false);
 		resetButton.addActionListener(this);
 		
-		//crŽtion des boutons failed
+		//cretion des boutons failed
 		quitButtonFailed = new JButton(new ImageIcon("textures/failed/quit.png"));
 		quitButtonFailed.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		quitButtonFailed.setBounds(550,340,83,48);
@@ -212,6 +212,9 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		setContentPane(contenu);
 	}
 	
+	/**
+	 * Affiche le pop-up de defaite
+	 */
 	@SuppressWarnings({ "deprecation" })
 	public void gameFailed()
 	{
@@ -238,6 +241,10 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		
 		gw.suspend();
 	}
+	
+	/**
+	 * Affiche le pop-up de victoire
+	 */
 	@SuppressWarnings("deprecation")
 	public void gameNext()
 	{
@@ -264,6 +271,9 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		gw.suspend();
 	}
 	
+	/**
+	 * Construit de le menu de l'ecran principal
+	 */
 	public void buildMenu(){
 		menuBar = new JMenuBar();
 
@@ -280,27 +290,10 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		setJMenuBar(menuBar);
 	}
     
-	//creation des boutons
+	/**
+	 * Construit les boutons Quitter, Rejouer et Pause de l'ecran de jeu
+	 */
 	private void buildButtons(){
-		/*
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.setLayout(new FlowLayout());
-		buttonPanel.setSize(200, 100);
-		buttonPanel.setBounds(100, 100, 500, 500);
-		
-		quitButton = new JButton(new ImageIcon("textures/bois.jpg"));
-		quitButton.addActionListener(this);
-		quitButton.setBorderPainted(false);
-		quitButton.setContentAreaFilled(false);
-		buttonPanel.add(quitButton);
-		
-		pauseButton = new JButton("Pause");
-		pauseButton.setContentAreaFilled(false);
-		pauseButton.addActionListener(this);
-		buttonPanel.add(pauseButton);
-		
-
-		return buttonPanel;*/
 		score = new JLabel("0 pts");
 		score.setBounds(50, 30, 100, 50);
 		score.setForeground(Color.DARK_GRAY);
@@ -336,6 +329,11 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		contenu.add(pauseButtonHUD);
 	}
 	
+	/**
+	 * Demarre le jeu
+	 * @param lvl : niveau a charger
+	 * @param forcage : si true on charge le niveau numero "lvl", sinon on charge le dernier niveau debloque
+	 */
 	private void launchGame(int lvl, boolean forcage){
 		//contenu.add("South", buildButtons());
 		
@@ -358,7 +356,9 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		this.addMouseListener(this);
 	}
 	
-	//ajout des listeners
+	/**
+	 * Action effectuee des que le joueur interagit avec la fenetre
+	 */
 	@SuppressWarnings("deprecation")
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
@@ -588,20 +588,32 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		}
 	}
 
+	/**
+	 * Action effectuee apres un clic
+	 */
 	@Override
 	public void mouseClicked(MouseEvent evt) {
 	}
 
+	/**
+	 * Action effectuee quand la souris entre dans la fenetre de l'application
+	 */
 	@Override
 	public void mouseEntered(MouseEvent evt) {
 		//System.out.println("Enter !");
 	}
 
+	/**
+	 * Action effectuee quand la souris sort de la fenetre de l'application
+	 */
 	@Override
 	public void mouseExited(MouseEvent evt) {
 		//System.out.println("Exit ! ");
 	}
 
+	/**
+	 * Action effectuee quand un bouton de la souris est presse 
+	 */
 	@Override
 	public void mousePressed(MouseEvent evt) {
 
@@ -612,6 +624,9 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		}
 	}
 
+	/**
+	 * Action effectuee quand un bouton de la souris est relache apres avoir ete enfonce
+	 */
 	@Override
 	public void mouseReleased(MouseEvent evt) {
 		if(posBaseSouris.x != 0 && posBaseSouris.y != 0 && g.catapult.getEngaged()) {
@@ -631,6 +646,9 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		}
 	}
 	
+	/**
+	 * Action effectuee quand on a le doigt enfonce sur un bouton et qu'on fait glisse la souris
+	 */
 	@Override
 	public void mouseDragged(MouseEvent evt) {
 		if(g.catapult.getEngaged()) {
@@ -667,10 +685,16 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		}		
 	}
 
+	/**
+	 * Action effectuee quand la souris bouge
+	 */
 	@Override
 	public void mouseMoved(MouseEvent evt) {
 	}
 	
+	/**
+	 * Action effectuee quand on appuie sur une touche du clavier
+	 */
 	@Override
 	public void keyTyped(KeyEvent evt) {
 		int actual = g.catapult.getActualMunition() - 1;
@@ -685,10 +709,16 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		}
 	}
 
+	/**
+	 * Action effectuee quand on relache une touche du clavier
+	 */
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 	}
 
+	/**
+	 * Action effectuee tant qu'un touche du clavier est pressee
+	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
 	}
