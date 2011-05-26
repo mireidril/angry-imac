@@ -38,13 +38,18 @@ public class GameWorld implements Runnable{
 	 */
 	@SuppressWarnings("serial")
 	private class GameGraphic extends JPanel{
-		
+		/**
+		 * fonction permettant la remise a 0 des translations pour l'affichage
+		 * @param g2 element de dessin 2D
+		 */
         public void resetTrans(Graphics2D g2){
             AffineTransform at = new AffineTransform();
             at.setToIdentity();
             g2.setTransform(at);
         }
-        
+        /**
+         * fonction affichant les differents elements du jeu (boutons, objets, fond, score, ...)
+         */
 		public void paintComponent(Graphics g){
 			super.paintComponent(g);
 			Graphics2D g2 = (Graphics2D) g;
@@ -215,6 +220,12 @@ public class GameWorld implements Runnable{
 	private long timer = 0;
 	public void resetTimer(){timer=0;}
 	
+	/**
+	 * Constructeur de GameWorld permet d'instancier le jeu
+	 * @param gameWindow pointeur vers la fenetre d'affichage
+	 * @param lvlForcage niveau par lequel on souhaite faire commencer le jeu
+	 * @param forcage booleen permettant de forcer le jeu a commencer par le niveau passer par le parametre lvlForcage
+	 */
 	public GameWorld(GameWindow gameWindow, int lvlForcage, boolean forcage){
 		this.gameWindow = gameWindow;
 		this.gameWindow.setFocusable(true);
@@ -241,7 +252,9 @@ public class GameWorld implements Runnable{
 		step_count = 0;
 		step_time = System.currentTimeMillis();
 	}
-	
+	/**
+	 * Fonction permettant de creer le monde physique avec JBox2D
+	 */
 	private void createWorld(){
 		// creation du monde physique
 		AABB m_worldAABB = new AABB();
@@ -263,7 +276,9 @@ public class GameWorld implements Runnable{
         this.textSky = new TexturePaint((BufferedImage) img, new Rectangle(0, 0,1024, 600));
 
 	}
-	
+	/**
+	 * Fonction definissant les limites du terrain en placant des murs invisibles
+	 */
 	private void defineWalls(){
 		// Ground
 		PolygonDef sd = new PolygonDef();
@@ -292,7 +307,10 @@ public class GameWorld implements Runnable{
         m_world.createBody(bd).createShape(sd);
         
 	}
-	
+	/**
+	 * Fonction permettant d'ajouter des elements physiques au jeu
+	 * @param block objet derivant de la classe Block contenant les parametres physiques a ajouter
+	 */
 	public void addBlock(Block block){
 		BodyDef bodyDef = new BodyDef();
         bodyDef.position.set((int)(block.getPosition().x), (int)(block.getPosition().y));
@@ -304,14 +322,20 @@ public class GameWorld implements Runnable{
         physicalBody.setUserData(block);
         m_world.physicalBodies.add(physicalBody);
 	}
-	
+	/**
+	 * Fonction permettant d'ajouter un projectile au chargeur
+	 * @param p projectile a ajouter
+	 */
 	public void addMunition(Projectile p){
 		catapult.projectiles.add(p);
 		if(catapult.getActualMunition() == catapult.projectiles.size() - 1) {
 			setProjectileToActive(p);
 		}
 	}
-	
+	/**
+	 * Function permettant de rendre un projectile afin de pouvoir le lancer ou declencher des actions speciales
+	 * @param p projectile a rendtre actif
+	 */
 	public void setProjectileToActive(Projectile p) {
 		p.active = true;
 		BodyDef bodyDef = new BodyDef();
@@ -326,6 +350,9 @@ public class GameWorld implements Runnable{
         m_world.munitions.add(physicalBody);
 	}
 
+	/**
+	 * Fonction du thread permettant de faire fonctionner le jeu
+	 */
 	@Override
 	public void run() {
 		while(alive){
@@ -334,6 +361,9 @@ public class GameWorld implements Runnable{
 		}
 	}
 
+	/**
+	 * Fonction permettant de supprimer les blocks a detruire, placer les nouveaux projectiles, calculer la physique et lancer l'actualisation de l'affichage
+	 */
 	private void compute(){
 		runEngaged = true;
 		long tmpTime = System.currentTimeMillis();
@@ -381,7 +411,9 @@ public class GameWorld implements Runnable{
 		gg.repaint();
 		runEngaged = false;
 	}
-	
+	/**
+	 * Fonction gerant les conditions de victoire
+	 */
 	private void detectStable(){
 		if(alive)
 		{
@@ -428,14 +460,27 @@ public class GameWorld implements Runnable{
 		}
 	}
 
+	/**
+	 * Setteur permettant de changer l'attribut m_world
+	 * @param m_world
+	 */
 	public void setWorld(GWorld m_world) {
 		this.m_world = m_world;
 	}
 
+	/**
+	 * Accesseur a l'attribut m_world
+	 * @return m_world
+	 */
 	public GWorld getWorld() {
 		return m_world;
 	}
 	
+	/**
+	 * Fonction retournant un projectile en fonction de son index
+	 * @param value index de l'objet a retourner
+	 * @return le projectile ou null si il n'est pas trouve
+	 */
 	public Body getActualMunitionBody(int value) {
 		if(value < m_world.munitions.size())
 			return m_world.munitions.get(value);
@@ -443,6 +488,10 @@ public class GameWorld implements Runnable{
 			return null;
 	}
 	
+	/**
+	 * Fonction permettant d'incrementer le nombre de munitions disponibles
+	 * @return true si l'incrementation c'est correctement deroule, sinon false
+	 */
 	public boolean incrementsActualMunition() {
 		if(catapult.getActualMunition() < m_world.munitions.size()) {
 			catapult.incrementsActualMunition();
@@ -455,6 +504,10 @@ public class GameWorld implements Runnable{
 		}
 	}
 
+	/**
+	 * Fonction permettant de nettoyer le jeu et de changer le niveau passer en parametre
+	 * @param lvl numero du niveau a charger
+	 */
 	void loadWorldReset(int lvl){
 		this.gameWindow.setFocusable(true);
 		this.gameWindow.requestFocus();
