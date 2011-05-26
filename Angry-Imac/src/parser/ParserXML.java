@@ -48,6 +48,8 @@ public class ParserXML
    
 	/**
 	* 	Parse un fichier XML de sauvegarde
+	* 
+		@return  num Numero du niveau a enregistrer ou return '1'
 	*/
    public int parseSave(){
 	   SAXBuilder sxb = new SAXBuilder();
@@ -87,6 +89,7 @@ public class ParserXML
 	* 	Accesseur (Get) pour savoir si le niveau est debloque
 		
 		@param lvl Niveau dont on veut connaitre s'il est bloque ou non
+		@return  true ou false   
 	*/
    public boolean isUnlock(int lvl){
 	   List<?> listLvl = racineSave.getChildren("level");
@@ -106,6 +109,7 @@ public class ParserXML
 	* 	Accesseur (Get) pour connaitre le score au niveau demande
 		
 		@param lvl Niveau dont on veut connaitre le score
+		@return  heightscore Score obtenu au niveau ou return '0'.
 	*/
    public int getScore(int lvl){
 		  List<?> listLvl = racineSave.getChildren("level");
