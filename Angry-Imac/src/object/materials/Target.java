@@ -36,7 +36,6 @@ public class Target  extends Material{
         	System.out.println("ok");System.exit(0);
         }
         
-        ///g2.drawImage(img,0, 0, gg);
         this.texture = new TexturePaint((BufferedImage) img, new Rectangle((int)(-img.getWidth(null)/2), (int)(-img.getHeight(null)/2),(int)(img.getWidth(null)), (int)(img.getHeight(null))));
 		
 	}
