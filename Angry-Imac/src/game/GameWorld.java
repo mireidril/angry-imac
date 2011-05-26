@@ -459,7 +459,6 @@ public class GameWorld implements Runnable{
 		this.gameWindow.setFocusable(true);
 		this.gameWindow.requestFocus();
 		for(int i = 0; i < m_world.physicalBodies.size(); i++) {
-			Block block = (Block) m_world.physicalBodies.get(i).getUserData();
 			m_world.destroyBody(m_world.physicalBodies.get(i));
 			m_world.physicalBodies.remove(m_world.physicalBodies.get(i));
 		}

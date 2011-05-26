@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.jbox2d.common.Vec2;
 import org.jdom.Element;
-import org.jdom.input.DOMBuilder;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;

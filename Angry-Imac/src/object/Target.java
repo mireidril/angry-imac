@@ -9,8 +9,6 @@ import org.jbox2d.common.Vec2;
  */
 public class Target extends Block{
 	
-	private static int nbPoint = 0;
-	private static int nbLaunch = 0;
 	private static int nbTarget = 0;
 	private static Mat enumMat = Mat.TARGET;
 	

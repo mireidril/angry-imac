@@ -3,7 +3,6 @@ package game;
 import java.util.ArrayList;
 
 import object.Block;
-import object.Projectile;
 
 import org.jbox2d.collision.AABB;
 import org.jbox2d.common.Vec2;
@@ -48,8 +47,8 @@ public class GWorld extends World implements ContactListener {
 		if(block1 != null){
 			if(block1.getMaterial().getBreakableForce() <= arg0.velocity.length()){
 				//Impossible de supprimer des Body ici, il faut le faire avant le m_world.step()
-				Body p = arg0.shape1.getBody();
-				int pos = physicalBodies.indexOf(p);
+				//Body p = arg0.shape1.getBody();
+				//int pos = physicalBodies.indexOf(p);
 				block1.setToDelete(true);
 				//arg0.shape1.destructor(); // utile ?
 				
@@ -60,8 +59,8 @@ public class GWorld extends World implements ContactListener {
 		if(block2 != null){
 			if(block2.getMaterial().getBreakableForce() <= arg0.velocity.length()){
 				//Impossible de supprimer des Body ici, il faut le faire avant le m_world.step()
-				Body p = arg0.shape2.getBody();
-				int pos = physicalBodies.indexOf(p);
+				//Body p = arg0.shape2.getBody();
+				//int pos = physicalBodies.indexOf(p);
 				block2.setToDelete(true);			
 				//arg0.shape2.destructor(); //utile ?
 				

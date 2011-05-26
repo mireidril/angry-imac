@@ -1,7 +1,5 @@
 package object;
 
-import game.GWorld;
-
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.TexturePaint;
@@ -11,13 +9,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
-
-import org.jbox2d.collision.PolygonDef;
-import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.Body;
-import org.jbox2d.dynamics.BodyDef;
-import org.jbox2d.dynamics.joints.DistanceJointDef;
-import org.jbox2d.dynamics.joints.RevoluteJointDef;
 
 /**
  * Classe du Lance-Pierre
