@@ -14,7 +14,7 @@ import org.jbox2d.dynamics.contacts.ContactResult;
 
 /**
  * Classe du monde
- * @author BRUNELIERE Adrien, CHARBONNIER Fiona, COGNY Céline, KIELB Adrien et ROLDAO Timothée
+ * @author BRUNELIERE Adrien, CHARBONNIER Fiona, COGNY Celine, KIELB Adrien et ROLDAO Timothee
  * @version 1.5
  */
 public class GWorld extends World implements ContactListener {

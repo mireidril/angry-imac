@@ -4,7 +4,7 @@ import org.jbox2d.common.Vec2;
 
 /**
  * Classe de la cible
- * @author BRUNELIERE Adrien, CHARBONNIER Fiona, COGNY Céline, KIELB Adrien et ROLDAO Timothée
+ * @author BRUNELIERE Adrien, CHARBONNIER Fiona, COGNY Celine, KIELB Adrien et ROLDAO Timothee
  * @version 1.0
  */
 public class Target extends Block{
