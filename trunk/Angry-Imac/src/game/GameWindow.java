@@ -331,8 +331,8 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	
 	/**
 	 * Demarre le jeu
-	 * @param lvl : niveau a charger
-	 * @param forcage : si true on charge le niveau numero "lvl", sinon on charge le dernier niveau debloque
+	 * @param lvl niveau a charger
+	 * @param forcage si true on charge le niveau numero "lvl", sinon on charge le dernier niveau debloque
 	 */
 	private void launchGame(int lvl, boolean forcage){
 		//contenu.add("South", buildButtons());
