@@ -1,6 +1,4 @@
 package object;
-import java.awt.TexturePaint;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -10,7 +8,6 @@ import org.jbox2d.collision.CircleDef;
 import org.jbox2d.collision.PolygonDef;
 import org.jbox2d.collision.ShapeDef;
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.Body;
 
 /**
  * Classe d'un block
@@ -32,7 +29,7 @@ public class Block {
 	private int score;
 	
 	//Va contenir les textures de la destruction d'un block
-	private ArrayList<TexturePaint> animationDestruction;
+	//private ArrayList<TexturePaint> animationDestruction;
 	
 /**
 * 	Constructeur d'un Block. 
@@ -54,7 +51,7 @@ public class Block {
 		this.height = height;
 		this.vertices = null;
 		toDelete = false;
-		animationDestruction = new ArrayList<TexturePaint>();
+		//animationDestruction = new ArrayList<TexturePaint>();
 
 		//********************************* verif des longueurs *********************************
 		if(s == Shape.CIRCLE || s == Shape.TRIANGLE){

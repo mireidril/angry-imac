@@ -2,7 +2,6 @@ package game;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -30,12 +29,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JButton;
-import javax.swing.SwingUtilities;
 
 import object.Projectile;
-import object.Target;
-
-import org.jbox2d.collision.MassData;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 
@@ -50,8 +45,6 @@ import parser.ParserXML;
 public class GameWindow extends JFrame implements ActionListener, MouseListener, KeyListener, MouseMotionListener{
 
 	//boutons visibles pendant le jeu
-	private JButton quitButton;
-	private JButton pauseButton;
 	JButton resetButton;
 	private JButton nextButton;
 	
@@ -80,9 +73,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 	private JPanel failed;
 	private JPanel next;
 	
-	private Vec2 posBaseSouris;
-	private Vec2 posDragSouris;
-	
+	private Vec2 posBaseSouris;	
 	
 	private JLabel score;
 	public JLabel getScoreLabel(){return score;}
@@ -111,7 +102,6 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		this.setFocusable(true);
 		this.requestFocus();
 		posBaseSouris = new Vec2();
-		posDragSouris = new Vec2();
 	}
 	
 	/**
@@ -224,6 +214,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		setContentPane(contenu);
 	}
 	
+	@SuppressWarnings({ "deprecation" })
 	public void gameFailed()
 	{
 		failed = new JPanel(){
@@ -249,6 +240,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 		
 		gw.suspend();
 	}
+	@SuppressWarnings("deprecation")
 	public void gameNext()
 	{
 		next = new JPanel(){
@@ -647,7 +639,6 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener,
 			Body munition = g.getActualMunitionBody(g.catapult.getActualMunition());
 			if(munition != null) {
 				munition.putToSleep();
-				Vec2 position = munition.getPosition();
 				if(evt.getX() > 0 && evt.getX() < 150 && evt.getY() > 350 && evt.getY() < 520) {
 					munition.setXForm(new Vec2(evt.getX(), (evt.getY()) - 30), 0);
 				}
