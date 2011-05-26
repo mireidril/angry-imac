@@ -31,8 +31,8 @@ public class ParserXML
 	* 	Constructeur du parser XML
 	*  
 		@param  gameworld Contexte du jeu
-		@param  path Chemin du fichier XML ˆ charger
-		@param  display ???              
+		@param  path Chemin du fichier XML a charger
+		@param  display              
 	*/
    public void parseXML(GameWorld gameworld, String path, boolean display){
 	   this.gameworld = gameworld;
